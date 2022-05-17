@@ -1,0 +1,245 @@
+.car-container {
+  height: 500px;
+  @media (max-width: 900px) {
+    height: auto;
+  }
+}
+.car-main-params-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -5%;
+  @media (max-width: 900px) {
+    margin-top: 5%;
+    height: auto;
+    margin-bottom: 5%;
+  }
+}
+.car-main-params {
+  margin-left: 5%;
+  height: 70%;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  @media (max-width: 900px) {
+    height: 100%;
+    width: 90%;
+    margin: auto;
+  }
+}
+
+.car {
+  &-title {
+    font-size: 24px;
+  }
+  &-price {
+    font-size: 20px;
+    color: red;
+  }
+  &-table-main-param {
+    width: (100%);
+    font-size: 14px;
+    & tr {
+      border: 1px solid #dee2e6 !important;
+    }
+    & .table-first-el {
+      width: 30% !important;
+      padding: 5px 10px;
+    }
+  }
+  &-swiper-2 {
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+  &-descriptions {
+    min-height: 100px;
+  }
+}
+.img-gallary {
+  height: 100%;
+}
+
+.table-title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  color: red;
+}
+
+.car-p-strong {
+  padding: 1rem 0 1rem 0;
+}
+.introImg-wrapper {
+  margin-top: 2rem;
+  width: 100%;
+  height: 280px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.img-intro-item {
+  width: 100%;
+  height: 100%;
+}
+.starring-container {
+  max-width: 100%;
+  height: auto;
+}
+.car-staring {
+  height: 72px;
+  width: 95%;
+  display: flex;
+  margin: auto;
+  border-color: #dee2e6;
+  @apply px-2 py-2 border-2 rounded-xl;
+}
+.starring-text {
+  width: 50%;
+  height: 100%;
+  @apply flex  flex-col justify-evenly;
+}
+.starring-number {
+  width: 50%;
+  height: 100%;
+  @apply flex flex-row justify-center align-middle items-center;
+}
+
+.related-cars-container {
+  width: 100%;
+  height: 500px;
+}
+.related-cars-text-wrapper {
+  height: 30px;
+  width: 100%;
+  border-color: black;
+  text-align: center;
+  @apply border-t-2 mt-10;
+}
+.related-cars-text {
+  position: relative;
+  background-color: white;
+  padding: 15px;
+  bottom: 50%;
+  line-height: 30px;
+  font-size: 30px;
+  color: red;
+}
+.car-comments {
+  @apply my-8;
+  .writing-comment-area {
+  }
+  .comments-area {
+    @apply mt-8;
+    .slight-gray-bg {
+      background-color: #f9f9f9;
+    }
+    .comment-wrapper {
+      position: relative;
+      z-index: 999;
+      @apply mt-8 flex flex-row;
+      .subComment-line {
+        position: absolute;
+        height: calc(100% + 2rem - 10px);
+        width: 100%;
+        left: 28px;
+        top: 60px;
+        border-left: 1px solid var(--commentLine);
+        z-index: -1;
+      }
+      .hide-subcomment-line {
+        position: absolute;
+        height: calc(100% - 60px);
+        width: 100%;
+        left: 28px;
+        top: 60px;
+        border-left: 1px solid var(--commentLine);
+        z-index: -1;
+      }
+      .user-avatar {
+        width: 10%;
+        @apply flex justify-start;
+      }
+      .user-comment {
+        width: 90%;
+        border-bottom: 1px solid #e8ebee;
+        .user-name {
+          font-weight: 600;
+        }
+        .comment {
+          @apply pt-2;
+        }
+        .user-action-area {
+          @apply flex items-center;
+          .user-rep {
+            margin-left: 2rem;
+            user-select: none;
+            cursor: pointer;
+          }
+          .like-area {
+            user-select: none;
+            @apply mr-4;
+          }
+          .dislike-area {
+            user-select: none;
+          }
+        }
+      }
+    }
+
+    .reply-area {
+      padding-left: 1rem;
+      width: 100%;
+      @apply flex pt-4 items-center;
+      .reply-text {
+        width: 100%;
+        @apply pl-4;
+      }
+    }
+    .cancel-reply {
+      @apply flex justify-end;
+    }
+  }
+}
+.child {
+  .child-wrapper {
+    position: relative;
+  }
+  .see-more-wrapper {
+    position: relative;
+    height: 30px;
+    background-color: antiquewhite;
+    z-index: 999;
+    @apply flex items-center;
+    .open-hide-action {
+      width: 100%;
+    }
+    .curly-line {
+      bottom: 50% !important;
+      z-index: -9;
+    }
+  }
+  .line {
+    position: absolute;
+    height: calc(100% + 2rem);
+    width: 100%;
+    right: 72px;
+    border-left: 1px solid var(--commentLine);
+  }
+  .curly-line {
+    position: absolute;
+    height: 28px;
+    width: 100px;
+    left: -72px;
+    border-bottom-left-radius: 10px;
+    border-left: 1px solid var(--commentLine);
+    border-bottom: 1px solid var(--commentLine);
+    z-index: -9;
+  }
+  .cut-curly-line {
+    width: 60px !important;
+  }
+}

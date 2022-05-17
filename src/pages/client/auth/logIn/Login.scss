@@ -1,0 +1,44 @@
+.login {
+  &-container {
+    @apply xl:px-28 py-10;
+  }
+
+  &-heading {
+    color: #008c7a;
+    @apply font-bold text-5xl text-center tracking-wide mt-4;
+  }
+
+  &-form {
+    @apply flex flex-col;
+  }
+
+  &-directly-wrapper {
+    width: 40px;
+    height: 40px;
+
+    @apply rounded-full shadow-md flex justify-center items-center border mr-5 cursor-pointer;
+  }
+}
+
+.layout-text {
+  transform: translateY(-10px);
+  background-color: #ffffff;
+  z-index: 3;
+
+  @apply h-fit px-2 text-sm;
+}
+
+.text-redirect {
+  color: #008c7a;
+  @apply text-base font-semibold;
+}
+
+.error-box {
+  background-color: #ff5b5b;
+  color: #ffffff;
+  @apply py-4 px-4 rounded-md mb-2;
+}
+
+.text-low-opacity {
+  @apply opacity-80;
+}

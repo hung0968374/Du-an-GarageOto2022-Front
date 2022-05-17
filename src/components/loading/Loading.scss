@@ -1,0 +1,50 @@
+@import '../../common/sass/variable';
+
+.loading {
+  &-pc {
+    @apply flex items-center justify-center;
+  }
+
+  &-box {
+    width: rem(380px, 16px);
+    height: rem(120px, 16px);
+    background-color: $primary-color;
+
+    @apply flex justify-evenly items-center rounded-2xl transform-none;
+  }
+
+  &-pin {
+    @apply h-5/6 w-1/6 bg-white;
+  }
+
+  .circle {
+    width: 40px;
+    height: 80px;
+    shape-outside: circle(50% at 30%);
+    clip-path: circle(50% at 0%);
+    background-color: $primary-color;
+
+    @apply ml-3 float-right opacity-90;
+  }
+
+  &-text {
+    @apply text-center text-4xl font-semibold mt-8 tracking-wider;
+  }
+
+  &-ball {
+    width: rem(100px, 16px);
+    height: rem(100px, 16px);
+    border-radius: 50%;
+    background: $primary-color;
+
+    @apply mt-40;
+  }
+
+  &-text_mobile {
+    @apply text-center mt-5 text-lg;
+  }
+
+  &-container {
+    height: 210px;
+  }
+}

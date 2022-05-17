@@ -1,0 +1,62 @@
+.blog-news {
+  font-size: 36px;
+  font-weight: 600;
+  @apply mb-4;
+}
+.blogs-container {
+  user-select: none;
+  & .item-container {
+    height: 180px;
+    cursor: pointer;
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+    @media (max-width: 900px) {
+      height: auto;
+    }
+  }
+  & .blog-content-container {
+    height: 100%;
+    @apply p-3;
+    & .blog-content-title {
+      height: calc(20% -10px);
+      font-size: 20px;
+      font-weight: 700;
+      text-align: justify;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    & .descriptions-container {
+      height: calc(80%);
+      text-align: justify;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+    }
+  }
+}
+.blogs-pagination-contaier {
+  @apply flex flex-row items-center justify-center mt-8;
+}
+.skeleton-container {
+  @apply flex flex-row mb-4;
+  & .left {
+    margin-right: 1rem;
+    width: 33%;
+    height: 180px;
+  }
+  .right {
+    height: 180px;
+    width: 66%;
+    @apply block py-3;
+    .upper-right {
+      @apply mb-2;
+    }
+  }
+}

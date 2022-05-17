@@ -1,0 +1,78 @@
+.home-background {
+  background-image: url('../../../../public/imgs/ferrari-background.jpg');
+  background-size: cover;
+}
+
+.home-container {
+  padding: 0 !important;
+}
+
+.home-paragraph-center {
+  text-align: center;
+  padding-inline: 10rem;
+  margin-block: 2rem;
+  opacity: 0.8;
+
+  @media (max-width: 800px) {
+    padding-inline: 0;
+  }
+}
+
+.home-image {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.h2-text {
+  color: #008c7a;
+  text-align: center;
+  margin-bottom: 2rem;
+  @apply text-3xl md:text-left;
+}
+
+.h3-text {
+  color: #008c7a;
+  margin-bottom: 1.5rem;
+  @apply text-2xl text-left;
+}
+
+.text-black-import {
+  color: black !important;
+}
+
+.recommendations-image {
+  width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.avatar-image-holder {
+  height: 15rem;
+}
+
+.text-center-import {
+  text-align: center !important;
+}
+
+.avatar-image {
+  &-Quang {
+    background-image: url('../../../../public/imgs/members/Quang.jpg');
+    background-size: cover;
+  }
+  &-Hieu {
+    background-image: url('../../../../public/imgs/members/Hieu.jpg');
+    background-size: cover;
+  }
+  &-Hau {
+    background-image: url('../../../../public/imgs/members/Hau.jpg');
+    background-size: cover;
+  }
+  &-Hung {
+    background-image: url('../../../../public/imgs/members/Hung.jpg');
+    background-size: cover;
+  }
+  &-Khiem {
+    background-image: url('../../../../public/imgs/members/Khiem.jpg');
+    background-size: cover;
+  }
+}

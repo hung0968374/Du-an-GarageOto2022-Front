@@ -1,0 +1,22 @@
+.sign_up_success {
+  &-container {
+    @apply xl:px-28 py-10;
+  }
+
+  &-heading {
+    color: #008c7a;
+    @apply font-bold text-4xl text-center tracking-wide mt-4;
+  }
+
+  &-img {
+    @apply m-auto mt-8;
+  }
+
+  &-title {
+    @apply text-center font-semibold text-2xl mt-6;
+  }
+
+  &-description {
+    @apply text-center font-light mt-2 mb-6;
+  }
+}
