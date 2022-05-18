@@ -6,6 +6,7 @@ import { calculateCommentLikeDislike, toggleShowSubComment } from '../../../comm
 
 import './CarDetail.scss';
 import RenderComents from './RenderComents';
+import Comment from './Comment';
 
 export type CommentReaction = {
   carId: number;
@@ -43,37 +44,8 @@ const CarDetailComment: React.FC<{
   setCommentReactions,
   params,
 }) => {
-  const [sendingComment, setSendingComment] = useState(false);
   const [replyingCommentIds, setReplyingCommentIds] = useState<any>([]);
-  const userCommentRef = useRef<any>(null);
-  const commentRef = useRef<any>(null);
   const [updateComment, setUpdateComment] = useState(false);
-
-  const onCommentChange = (event: any) => {
-    userCommentRef.current = event.target.value;
-  };
-
-  const keyDown = async (e: any) => {
-    if (e.key === 'Enter' && e.shiftKey) {
-      return;
-    } else if (e.key === 'Enter') {
-      setSendingComment(true);
-      const { data } = await clientService.postComment({
-        carId: carInfo.id,
-        comment: userCommentRef.current,
-        mom: '',
-        userId: userInfo.id,
-      });
-      const commentCreated = { ...data.newCreatedComment, like: 0, dislike: 0 };
-      setCarComments([commentCreated, ...carComments]);
-
-      commentRef.current.value = '';
-      commentRef.current.blur();
-      userCommentRef.current = '';
-
-      setSendingComment(false);
-    }
-  };
 
   const findCurrUserReactedComment = (commentId: number) => {
     let comment;
@@ -234,17 +206,15 @@ const CarDetailComment: React.FC<{
   return (
     <>
       <Container maxWidth="lg" className="car-comments">
-        <TextField
-          label={userStatus === 'Unauthorized' ? 'Please log in to comment' : 'Binh luan'}
-          multiline
-          rows={4}
-          fullWidth
-          InputLabelProps={{ style: { fontSize: 18 } }}
-          onChange={onCommentChange}
-          onKeyDown={keyDown}
-          className="writing-comment-area"
-          inputRef={commentRef}
-          disabled={sendingComment || userStatus === 'Unauthorized'}
+        <Comment
+          carInfo={carInfo}
+          userInfo={userInfo}
+          mom=""
+          setCarComments={setCarComments}
+          setReplyingCommentIds={setReplyingCommentIds}
+          carComments={carComments}
+          isMomComment={true}
+          userStatus={userStatus}
         />
         <Box className="comments-area">
           <RenderComents
@@ -259,6 +229,7 @@ const CarDetailComment: React.FC<{
             setCarComments={setCarComments}
             toggleComment={toggleComment}
             updateComment={updateComment}
+            setUpdateComment={setUpdateComment}
           />
         </Box>
       </Container>

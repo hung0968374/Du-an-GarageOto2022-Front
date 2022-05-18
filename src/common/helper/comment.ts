@@ -1,3 +1,7 @@
+import { io } from 'socket.io-client';
+
+export const socket = io('http://localhost:5001');
+
 const assignCommentToMom = (comment: any, value: any) => {
   if (+comment.id === +value.mom) {
     if (!comment.child) {
@@ -35,8 +39,13 @@ export const addComment = (carComments: Array<any>, comment: any) => {
   // carComments: initial array
   //comment: comment will be added to array
 
-  checkAllElement(carComments, comment);
-  return carComments;
+  if (comment.mom === '') {
+    carComments = [comment, ...carComments];
+    return carComments;
+  } else {
+    checkAllElement(carComments, comment);
+    return carComments;
+  }
 };
 
 const assignCountLike = (comment: any, countCommentLike: any, countCommentDislike: any, currUserReaction: any) => {

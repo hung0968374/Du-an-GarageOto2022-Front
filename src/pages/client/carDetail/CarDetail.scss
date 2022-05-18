@@ -160,12 +160,13 @@
         z-index: -1;
       }
       .user-avatar {
-        width: 10%;
+        width: 56px;
         @apply flex justify-start;
       }
       .user-comment {
-        width: 90%;
+        width: calc(100% - 56px);
         border-bottom: 1px solid #e8ebee;
+        margin-left: 56px;
         .user-name {
           font-weight: 600;
         }
@@ -191,9 +192,35 @@
     }
 
     .reply-area {
-      padding-left: 1rem;
-      width: 100%;
+      margin-left: 56px;
+      width: calc(100% - 56px);
+      position: relative;
       @apply flex pt-4 items-center;
+      .reply-line {
+        position: absolute;
+        width: 20px;
+        left: -28px;
+        border-left: 1px solid var(--commentLine);
+        height: calc(100% + 4rem + 5px);
+        width: 10px;
+        top: 0;
+        // background-color: antiquewhite;
+      }
+      .reply-line-has-mom-no-child {
+        height: calc(100% + 2rem);
+      }
+      .reply-line-has-mom-has-child {
+        height: calc(100% + 2rem);
+      }
+      .reply-line-has-mom-show-child {
+        height: calc(100% + 6rem + 5px);
+      }
+      .reply-line-mom-show-child {
+        height: calc(100% + 6rem + 5px);
+      }
+      .reply-line-mom-not-show-child {
+        height: calc(100% + 2rem + 5px);
+      }
       .reply-text {
         width: 100%;
         @apply pl-4;
@@ -211,11 +238,11 @@
   .see-more-wrapper {
     position: relative;
     height: 30px;
-    background-color: antiquewhite;
     z-index: 999;
     @apply flex items-center;
     .open-hide-action {
       width: 100%;
+      @apply px-8;
     }
     .curly-line {
       bottom: 50% !important;

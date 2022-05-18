@@ -4,11 +4,17 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { styled } from '@mui/material/styles';
+import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
 import { toggleShowSubComment } from '../../../common/helper/comment';
 
 import './CarDetail.scss';
 import Comment from './Comment';
+const CustomButton = styled(Button)({
+  textTransform: 'none',
+});
 
 const RenderOneComment = ({
   comment,
@@ -23,6 +29,7 @@ const RenderOneComment = ({
   carComments,
   toggleComment,
   updateComment,
+  setUpdateComment,
 }: any) => {
   return (
     <Box className="comment-rep-wrapper">
@@ -89,6 +96,16 @@ const RenderOneComment = ({
       {Array.isArray(replyingCommentIds) && replyingCommentIds.indexOf(comment.id) !== -1 && (
         <>
           <Box className="reply-area">
+            <Box
+              className={`${comment.child && 'reply-line'}  ${
+                comment.mom !== '' && !comment.child && 'reply-line-has-mom-no-child'
+              }
+              ${comment.child && comment.mom && 'reply-line-has-mom-has-child'}
+              ${comment.child && comment.mom && comment.showSubComment && 'reply-line-has-mom-show-child'}
+              ${comment.child && !comment.mom && comment.showSubComment && 'reply-line-mom-show-child'}
+              ${comment.child && !comment.mom && !comment.showSubComment && 'reply-line-mom-not-show-child'}
+              `}
+            ></Box>
             <Box>
               <Avatar alt="" src={userInfo?.avatar}></Avatar>
             </Box>
@@ -100,6 +117,7 @@ const RenderOneComment = ({
                 setCarComments={setCarComments}
                 setReplyingCommentIds={setReplyingCommentIds}
                 carComments={carComments}
+                setUpdateComment={setUpdateComment}
               />
             </Box>
           </Box>
@@ -124,14 +142,18 @@ const RenderOneComment = ({
           {!comment.showSubComment ? (
             <Box className="see-more-wrapper">
               <Box onClick={() => toggleComment(true, comment.id)} className="open-hide-action">
-                Xem {comment.child.length} phản hồi
+                <CustomButton startIcon={<ArrowDropDownRoundedIcon />}>
+                  Xem {comment.child.length} phản hồi
+                </CustomButton>
               </Box>
               <Box className={`curly-line  cut-curly-line`}></Box>
             </Box>
           ) : (
             <>
               <Box className="see-more-wrapper">
-                <Box onClick={() => toggleComment(false, comment.id)}>Ẩn {comment.child.length} phản hồi</Box>
+                <Box className="open-hide-action" onClick={() => toggleComment(false, comment.id)}>
+                  <CustomButton startIcon={<ArrowDropUpRoundedIcon />}>Ẩn {comment.child.length} phản hồi</CustomButton>
+                </Box>
               </Box>
               {comment.child.map((commentChild: any, idx: number) => {
                 return (
@@ -154,6 +176,7 @@ const RenderOneComment = ({
                         carComments,
                         toggleComment,
                         updateComment,
+                        setUpdateComment,
                       })}
                     </Box>
                   </Box>
@@ -179,6 +202,7 @@ const RenderComents = ({
   setCarComments,
   toggleComment,
   updateComment,
+  setUpdateComment,
 }: any) => {
   console.log('carComments', carComments);
   return (
@@ -199,6 +223,7 @@ const RenderComents = ({
               carComments,
               toggleComment,
               updateComment,
+              setUpdateComment,
             })}
           </Box>
         );

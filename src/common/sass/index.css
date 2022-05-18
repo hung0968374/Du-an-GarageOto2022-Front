@@ -25,7 +25,7 @@ code {
 }
 
 :root {
-  --commentLine:rgb(0 0 0 / 72%);
+  --commentLine:#958e8e;
   --commentBackground:#242526;
 }
 
