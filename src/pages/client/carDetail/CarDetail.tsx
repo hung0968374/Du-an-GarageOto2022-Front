@@ -1,10 +1,12 @@
 import React, { useState, useEffect, memo } from 'react';
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Button, Grid, IconButton, Typography, Skeleton } from '@mui/material';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import './CarDetail.scss';
 import 'swiper/css';
@@ -12,15 +14,22 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
+
+import { setWishList } from '../../../reduxToolKit-Saga/common/User/ClientSlice';
+import { setPaymentId } from '../../../reduxToolKit-Saga/common/General/GeneralSlice';
+import useBlog from '../../../common/hooks/useBlog';
+import { getAverageStarPoint } from '../../../common/helper/starRating';
 import { UndefinedObject } from '../../../common/interfaces/Client';
 import { DarkAccordion } from '../../../components/MuiStyling/MuiStyling';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import clientService from '../../../services/clientService';
 import { ImageGallary } from '../../../components/ImageGallary/ImageGallery';
-import { useAppSelector } from '../../../common/hooks/ReduxHook';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
 import { restructureCarComments } from '../../../common/helper/comment';
+import useCarDetail from '../../../common/hooks/useCarDetail';
 
-import CarDetailComment, { CommentReaction } from './CarDetailComment';
+import RelatedCarsAndBlogs from './components/RelatedCarsAndBlogs';
+import CarDetailComment, { CommentReaction } from './components/CommentField';
 
 const accordionProps: Array<UndefinedObject> = [
   {
@@ -41,27 +50,52 @@ const mainParams: UndefinedObject = {
   yearOfManufacture: 'Năm sản xuất',
 };
 
+export interface RatingInterFace {
+  id: number;
+  carId: number;
+  userId: number;
+  ratingPoint: number;
+}
+export type RatingCreation = Omit<RatingInterFace, 'id'>;
+
 const CarDetail: React.FC = () => {
   const [carInfo, setCarInfo] = useState<any>(undefined);
   const { imgObj, downloadImgsFromFirebase } = useFetchImgs();
+  const { reformatCars } = useCarDetail();
+  const { reformatBlogs } = useBlog();
+
+  const navigate = useNavigate();
+  const params: any = useParams();
+  const currCarId = +params.id;
 
   const [carComments, setCarComments] = useState<any>([]);
   const [commentReactions, setCommentReactions] = useState<Array<CommentReaction>>([]);
+  const [relatedCars, setRelatedCars] = useState<any>([]);
+  const [relatedBlogs, setRelatedBlogs] = useState<any>([]);
+  const [currUserRating, setCurrUserRating] = useState<number | null>(0);
+  const [ratingPoints, setRatingPoints] = useState<Array<RatingInterFace>>([]);
+  const [fetchingCarInfos, setFetchingCarInfos] = useState(false);
 
-  const params: any = useParams();
-  const userInfo: any = useAppSelector((globalState) => globalState.login.userInfo);
+  const dispatch = useAppDispatch();
+  const userInfo = useAppSelector((globalState) => globalState.clientInfo);
   const userStatus: any = useAppSelector((globalState) => globalState.login.status);
+
+  const unauthorized = userStatus === 'Unauthorized';
+  const userWishList: Array<any> = userInfo.wishlist;
+
+  const averagePoint = React.useMemo(() => {
+    return getAverageStarPoint(ratingPoints);
+  }, [ratingPoints]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [currCarId]);
 
   useEffect(() => {
     const fetchCar = async () => {
-      const { comments, carInfo, commentReactions } = await clientService.getCar(
-        params.car as string,
-        +params?.id as any,
-      );
+      setFetchingCarInfos(true);
+      const { comments, carInfo, commentReactions, relatedCars, relatedBlogs, ratingPoints } =
+        await clientService.getCar(params.brandName, params.car as string, +params?.id as any);
       setCarInfo(carInfo);
       const sortedComments = comments.sort((a: any, b: any) => {
         const aDate = new Date(a.createdAt);
@@ -69,7 +103,17 @@ const CarDetail: React.FC = () => {
         return bDate.getTime() - aDate.getTime();
       });
       const newComments = restructureCarComments(sortedComments);
-      setCarComments(newComments);
+      setCarComments(() => newComments);
+      for (const rating of ratingPoints) {
+        if (rating.userId === userInfo?.id && rating.carId === +params.id) {
+          setCurrUserRating(rating.ratingPoint);
+        }
+      }
+      setRatingPoints(ratingPoints);
+      const cars = await reformatCars(relatedCars);
+      setRelatedCars(cars);
+      const blogs = await Promise.all(reformatBlogs(relatedBlogs));
+      setRelatedBlogs(blogs);
       const newReactions = commentReactions.map((reaction: any) => {
         delete reaction.car_id;
         delete reaction.comment_id;
@@ -77,9 +121,10 @@ const CarDetail: React.FC = () => {
         return reaction;
       });
       setCommentReactions(newReactions);
+      setFetchingCarInfos(false);
     };
     fetchCar();
-  }, [params.car, params.id]);
+  }, [params.car, params.id, params.brandName, reformatCars, unauthorized, userInfo?.id, reformatBlogs]);
 
   useEffect(() => {
     const fetchAllImgs = async () => {
@@ -95,140 +140,253 @@ const CarDetail: React.FC = () => {
     fetchAllImgs();
   }, [carInfo, downloadImgsFromFirebase]);
 
+  const handleUserRatingCar = async (_e: any, value: number | null) => {
+    if (unauthorized) {
+      navigate('/auth/user/log-in');
+      return;
+    }
+    setCurrUserRating(value);
+    const response = await clientService.rateCar({ carId: +params.id, ratingPoint: value || 0, userId: userInfo.id });
+    const ratingResponse = response.data.result;
+    setRatingPoints((ratingPoints: Array<RatingInterFace>) => {
+      ratingPoints = ratingPoints.filter((element: any) => {
+        return element.id !== ratingResponse.id;
+      });
+      return [...ratingPoints, ratingResponse] as any;
+    });
+  };
+
+  const handleUserToggleWishList = async () => {
+    if (unauthorized) {
+      navigate('/auth/user/log-in');
+      return;
+    }
+    let newWishList;
+    if (userWishList.includes(currCarId)) {
+      newWishList = userWishList.filter((el: number) => {
+        return el !== currCarId;
+      });
+    } else {
+      newWishList = [...userWishList, currCarId];
+    }
+    dispatch(setWishList(newWishList));
+    await clientService.updateUserWishList({ listCarId: newWishList, takeAction: true });
+  };
+
+  const handleUserBuyingCar = async () => {
+    if (unauthorized) {
+      return;
+    }
+    dispatch(setPaymentId(currCarId));
+    await clientService.callPaymentApi({ carId: currCarId, quantity: 1 });
+    return;
+  };
+
   return (
     <Container maxWidth={false}>
       <Box sx={{ marginTop: '154px' }}>
         <Container maxWidth="lg" className="car-container">
-          <Grid
-            container
-            sx={{ height: '100%', borderColor: '#C3CAD8', borderWidth: '1px', borderRadius: '5px', padding: '15px' }}
-          >
-            <Grid item sm={12} md={7}>
-              <ImageGallary urls={imgObj.imgs} />
-            </Grid>
-            <Grid item sm={12} md={5}>
-              <div className="car-main-params-wrapper">
-                <div className="car-main-params">
-                  <h1 className="car-title">
-                    <strong>{carInfo?.name}</strong>
-                  </h1>
-                  <p className="car-price">{carInfo?.price}</p>
-                  <div className="table-title">
-                    <strong>Thông số chính</strong>
-                  </div>
-                  <table className="car-table-main-param">
-                    <tbody>
-                      {Object.keys(mainParams)?.map((carParam, idx) => {
-                        return (
+          {fetchingCarInfos ? (
+            <>
+              <Skeleton variant="rectangular" width={'100%'} height={'100%'} />
+            </>
+          ) : (
+            <>
+              <Grid
+                container
+                sx={{
+                  height: '100%',
+                  borderColor: '#C3CAD8',
+                  borderWidth: '1px',
+                  borderRadius: '5px',
+                  padding: '15px',
+                }}
+              >
+                <Grid item sm={12} md={7}>
+                  <ImageGallary urls={imgObj.imgs} />
+                </Grid>
+                <Grid item sm={12} md={5}>
+                  <div className="car-main-params-wrapper">
+                    <div className="car-main-params">
+                      <Box className="title-wrapper">
+                        <h1 className="car-title">
+                          <strong>{carInfo?.name}</strong>
+                        </h1>
+                        <IconButton onClick={handleUserToggleWishList}>
+                          {userWishList.includes(+params.id) ? (
+                            <>
+                              <FavoriteIcon sx={{ color: 'red' }} />
+                            </>
+                          ) : (
+                            <>
+                              <FavoriteBorderIcon />
+                            </>
+                          )}
+                        </IconButton>
+                      </Box>
+                      <p className="car-price">{carInfo?.price}</p>
+                      <div className="table-title">
+                        <strong>Thông số chính</strong>
+                      </div>
+                      <table className="car-table-main-param">
+                        <tbody>
+                          {Object.keys(mainParams)?.map((carParam, idx) => {
+                            return (
+                              <tr key={idx}>
+                                <td className="table-first-el">
+                                  <strong>{mainParams[carParam]}</strong>
+                                </td>
+                                {carInfo && <td className="table-second-el">{carInfo?.[carParam]}</td>}
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      <Box onClick={handleUserBuyingCar} className="payment-area">
+                        {unauthorized ? (
                           <>
-                            <tr key={idx}>
-                              <td className="table-first-el">
-                                <strong>{mainParams[carParam]}</strong>
-                              </td>
-                              {carInfo && <td className="table-second-el">{carInfo?.[carParam]}</td>}
-                            </tr>
+                            <Link to="/auth/user/log-in">
+                              <Button variant="contained">Thanh toán</Button>
+                            </Link>
                           </>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </Grid>
-          </Grid>
+                        ) : (
+                          <>
+                            <Link to="/auth/my-account" target="_blank">
+                              <Button variant="contained">Thanh toán</Button>
+                            </Link>
+                          </>
+                        )}
+                      </Box>
+                    </div>
+                  </div>
+                </Grid>
+              </Grid>
+            </>
+          )}
         </Container>
         <Container maxWidth="lg" sx={{ marginTop: '5rem' }}>
           <Grid container>
             <Grid item sm={12} md={8}>
-              <div className="car-descriptions">
-                {carInfo !== undefined && (
-                  <>
-                    {accordionProps?.map((element, idx) => {
-                      return (
-                        <DarkAccordion
-                          disableGutters={true}
-                          defaultExpanded={[0].includes(idx) ? true : false}
-                          key={idx}
-                        >
-                          <AccordionSummary
-                            expandIcon={<ExpandMoreIcon color="primary" />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
+              {fetchingCarInfos ? (
+                <Skeleton variant="rectangular" width={'100%'} height={2000} />
+              ) : (
+                <div className="car-descriptions">
+                  {carInfo !== undefined && (
+                    <>
+                      {accordionProps?.map((element, idx) => {
+                        return (
+                          <DarkAccordion
+                            disableGutters={true}
+                            defaultExpanded={[0, 1].includes(idx) ? true : false}
+                            key={idx}
                           >
-                            <Typography>{element.title}</Typography>
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            {carInfo?.[element.propName]?.split(`","`)?.map((el: string, idx: number) => {
-                              return (
-                                <p
-                                  key={idx}
-                                  className={`${el.includes('strong') && 'car-p-strong'}`}
-                                  dangerouslySetInnerHTML={{ __html: el.replaceAll(`"]`, '').replaceAll(`["`, '') }}
-                                ></p>
-                              );
-                            })}
-                            {accordionProps[idx].propName === 'interiorReview' ||
-                            accordionProps[idx].propName === 'exteriorReview' ? (
-                              <div style={{ marginTop: '2rem' }}>
-                                <ImageGallary
-                                  urls={
-                                    accordionProps[idx].propName === 'interiorReview'
-                                      ? imgObj.interiorReviewImgs
-                                      : imgObj.exteriorReviewImgs
-                                  }
-                                />
-                              </div>
-                            ) : (
-                              <>
-                                {accordionProps[idx].propName === 'introReview' && (
-                                  <Grid container spacing={1}>
-                                    {imgObj.introImgs?.map((img, idx) => {
-                                      let gridSize = undefined;
-                                      if (imgObj.introImgs) {
-                                        gridSize = 12 / imgObj?.introImgs?.length;
-                                      }
-                                      return (
-                                        <Grid key={idx} item sm={12} md={gridSize}>
-                                          <img className={`img-intro-item`} src={img} alt="" />
-                                        </Grid>
-                                      );
-                                    })}
-                                  </Grid>
-                                )}
-                              </>
-                            )}
-                          </AccordionDetails>
-                        </DarkAccordion>
-                      );
-                    })}
-                  </>
-                )}
-              </div>
+                            <AccordionSummary
+                              expandIcon={<ExpandMoreIcon color="primary" />}
+                              aria-controls="panel1a-content"
+                              id="panel1a-header"
+                            >
+                              <Typography>{element.title}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              {carInfo?.[element.propName]?.split(`","`)?.map((el: string, idx: number) => {
+                                return (
+                                  <p
+                                    key={idx}
+                                    className={`${el.includes('strong') && 'car-p-strong'}`}
+                                    dangerouslySetInnerHTML={{ __html: el.replaceAll(`"]`, '').replaceAll(`["`, '') }}
+                                  ></p>
+                                );
+                              })}
+                              {accordionProps[idx].propName === 'interiorReview' ||
+                              accordionProps[idx].propName === 'exteriorReview' ? (
+                                <div style={{ marginTop: '2rem' }}>
+                                  <ImageGallary
+                                    urls={
+                                      accordionProps[idx].propName === 'interiorReview'
+                                        ? imgObj.interiorReviewImgs
+                                        : imgObj.exteriorReviewImgs
+                                    }
+                                  />
+                                </div>
+                              ) : (
+                                <>
+                                  {accordionProps[idx].propName === 'introReview' && (
+                                    <Grid container spacing={1}>
+                                      {imgObj.introImgs?.map((img, idx) => {
+                                        let gridSize = undefined;
+                                        if (imgObj.introImgs) {
+                                          gridSize = 12 / imgObj?.introImgs?.length;
+                                        }
+                                        return (
+                                          <Grid key={idx} item sm={12} md={gridSize}>
+                                            <img className={`img-intro-item`} src={img} alt="" />
+                                          </Grid>
+                                        );
+                                      })}
+                                    </Grid>
+                                  )}
+                                </>
+                              )}
+                            </AccordionDetails>
+                          </DarkAccordion>
+                        );
+                      })}
+                    </>
+                  )}
+                </div>
+              )}
             </Grid>
             <Grid item sm={12} md={4}>
-              <div className="starring-container">
-                <div className="car-staring">
-                  <div className="starring-text">
-                    <p>ĐIỂM ĐÁNH GIÁ</p>
-                    <Rating name="half-rating" value={4.6} precision={0.5} readOnly />
-                  </div>
-                  <div className="starring-number">
-                    <p className="text-lg text-red-500">4.6</p>
-                    <p> / 10</p>
-                  </div>
-                </div>
-              </div>
-              <div className="related-cars-container">
-                <div className="related-cars-text-wrapper">
+              <Box className="starring-container">
+                {fetchingCarInfos ? (
+                  <Skeleton variant="rectangular" width={'100%'} height={75} />
+                ) : (
+                  <Box className="car-staring">
+                    <Box className="starring-text">
+                      <p>ĐIỂM ĐÁNH GIÁ</p>
+                      <Box className="star-rating-area">
+                        <Rating
+                          className="curr-rating"
+                          name="half-rating"
+                          value={currUserRating}
+                          precision={0.5}
+                          onChange={handleUserRatingCar}
+                        />
+                        <Rating
+                          className="others-rated"
+                          name="half-rating"
+                          disabled={true}
+                          value={+averagePoint}
+                          precision={0.5}
+                          readOnly
+                        />
+                      </Box>
+                    </Box>
+                    <Box className="starring-number">
+                      <Box className="text-lg text-red-500">{+averagePoint}</Box>
+                      <Box> / 5</Box>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+              <Box className="intro-container">
+                <div className="text-wrapper">
                   <span className="related-cars-text">Xe liên quan</span>
                 </div>
-              </div>
+                <div className="black-line"></div>
+              </Box>
+              <RelatedCarsAndBlogs
+                fetchingCarInfos={fetchingCarInfos}
+                params={params}
+                relatedCars={relatedCars}
+                relatedBlogs={relatedBlogs}
+              />
             </Grid>
           </Grid>
         </Container>
 
         <CarDetailComment
-          userStatus={userStatus}
+          unauthorized={unauthorized}
           carInfo={carInfo}
           userInfo={userInfo}
           carComments={carComments}
@@ -236,6 +394,7 @@ const CarDetail: React.FC = () => {
           commentReactions={commentReactions}
           setCommentReactions={setCommentReactions}
           params={params}
+          fetchingCarInfos={fetchingCarInfos}
         />
       </Box>
     </Container>

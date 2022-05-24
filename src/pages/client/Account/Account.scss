@@ -1,6 +1,6 @@
 .account {
   &-avatar {
-    max-width: 100%;
+    width: 16vw;
     border-radius: 100%;
     height: 30vh;
     object-fit: cover;
@@ -96,4 +96,10 @@
   background-size: contain;
   background-repeat: no-repeat;
   @apply w-3/4 h-80 mt-10;
+}
+
+.payment-tab {
+  &-receipt-sheet {
+    @apply bg-white p-8;
+  }
 }

@@ -8,8 +8,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
 import './ImgStyle.scss';
-
-export const ImageGallary: React.FC<any> = ({ urls = [] }) => {
+const TempImageGallary: React.FC<any> = ({ urls = [] }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
     <>
@@ -20,9 +19,9 @@ export const ImageGallary: React.FC<any> = ({ urls = [] }) => {
         modules={[FreeMode, Navigation, Thumbs]}
         className="img-swiper-container-1"
       >
-        {urls.map((imgUrl: string) => {
+        {urls.map((imgUrl: string, idx: number) => {
           return (
-            <SwiperSlide key={imgUrl}>
+            <SwiperSlide key={idx}>
               <img className="img-style-1" src={imgUrl} alt="" />
             </SwiperSlide>
           );
@@ -38,9 +37,9 @@ export const ImageGallary: React.FC<any> = ({ urls = [] }) => {
         modules={[Pagination]}
         className="img-swiper-container-2"
       >
-        {urls.map((imgUrl: string) => {
+        {urls.map((imgUrl: string, idx: any) => {
           return (
-            <SwiperSlide key={imgUrl}>
+            <SwiperSlide key={idx}>
               <div className="img-2-wrapper">
                 <img className="img-style-2" src={imgUrl} alt="" />
               </div>
@@ -51,3 +50,6 @@ export const ImageGallary: React.FC<any> = ({ urls = [] }) => {
     </>
   );
 };
+
+const ImageGallary = React.memo(TempImageGallary);
+export { ImageGallary };

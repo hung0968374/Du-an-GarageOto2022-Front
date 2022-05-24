@@ -1,17 +1,14 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Box, Container, Grid, Typography, TextField, Avatar, Divider, IconButton, Button } from '@mui/material';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import React from 'react';
+import { Box, Avatar, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
-import { toggleShowSubComment } from '../../../common/helper/comment';
+import '../../CarDetail.scss';
+import Comment from '../common/CommentTextField';
 
-import './CarDetail.scss';
-import Comment from './Comment';
+import MainCommentContent from './MainCommentContent';
+
 const CustomButton = styled(Button)({
   textTransform: 'none',
 });
@@ -22,7 +19,7 @@ const RenderOneComment = ({
   dislikeComment,
   replyingCommentIds,
   setReplyingCommentIds,
-  userStatus,
+  unauthorized,
   userInfo,
   carInfo,
   setCarComments,
@@ -30,68 +27,25 @@ const RenderOneComment = ({
   toggleComment,
   updateComment,
   setUpdateComment,
+  navigate,
+  fetchingCarInfos,
 }: any) => {
   return (
-    <Box className="comment-rep-wrapper">
-      <Box className={`comment-wrapper`}>
-        <Box className="user-avatar">
-          <Avatar src={comment?.userInfo?.info?.avatar} alt="" sx={{ width: 56, height: 56 }} />
-        </Box>
-        <Box className="user-comment">
-          <Box className="user-name">
-            {comment?.userInfo?.info?.firstName} {comment?.userInfo?.info?.lastName}
-          </Box>
-          <Box className="comment">{comment?.comment}</Box>
-          <Box className="user-action-area">
-            <Box className="like-area" onClick={() => likeComment(comment.id)}>
-              {comment.status === 'like' ? (
-                <>
-                  <IconButton>
-                    <ThumbUpIcon />
-                  </IconButton>
-                </>
-              ) : (
-                <>
-                  <IconButton>
-                    <ThumbUpOutlinedIcon />
-                  </IconButton>
-                </>
-              )}
-              {comment.like}
-            </Box>
-            <Box className="dislike-area" onClick={() => dislikeComment(comment.id)}>
-              {comment.status === 'dislike' ? (
-                <>
-                  <IconButton>
-                    <ThumbDownIcon />
-                  </IconButton>
-                </>
-              ) : (
-                <>
-                  <IconButton>
-                    <ThumbDownOutlinedIcon />
-                  </IconButton>
-                </>
-              )}
-              {comment.dislike}
-            </Box>
-            <Button
-              variant="text"
-              className="user-rep"
-              onClick={() => {
-                if (userStatus === 'Authorized') {
-                  setReplyingCommentIds([...replyingCommentIds, comment.id]);
-                }
-              }}
-            >
-              Phản hồi
-            </Button>
-          </Box>
-        </Box>
-        {comment.child && (
-          <Box className={`${comment.showSubComment ? 'subComment-line' : 'hide-subcomment-line'}`}></Box>
-        )}
-      </Box>
+    <Box>
+      <MainCommentContent
+        comment={comment}
+        likeComment={likeComment}
+        replyingCommentIds={replyingCommentIds}
+        unauthorized={unauthorized}
+        userInfo={userInfo}
+        dislikeComment={dislikeComment}
+        setReplyingCommentIds={setReplyingCommentIds}
+        setCarComments={setCarComments}
+        carInfo={carInfo}
+        carComments={carComments}
+        setUpdateComment={setUpdateComment}
+        updateComment={updateComment}
+      />
 
       {Array.isArray(replyingCommentIds) && replyingCommentIds.indexOf(comment.id) !== -1 && (
         <>
@@ -118,21 +72,26 @@ const RenderOneComment = ({
                 setReplyingCommentIds={setReplyingCommentIds}
                 carComments={carComments}
                 setUpdateComment={setUpdateComment}
+                fetchingCarInfos={fetchingCarInfos}
+                replyingCommentIds={replyingCommentIds}
+                updateComment={updateComment}
               />
             </Box>
           </Box>
-          <Box
-            className="cancel-reply"
-            onClick={() => {
-              setReplyingCommentIds((repIds: Array<number>) => {
-                const newArr = repIds.filter((id) => {
-                  return id !== comment.id;
+          <Box className="cancel-reply">
+            <Button
+              variant="text"
+              onClick={() => {
+                setReplyingCommentIds((repIds: Array<number>) => {
+                  const newArr = repIds.filter((id) => {
+                    return id !== comment.id;
+                  });
+                  return newArr;
                 });
-                return newArr;
-              });
-            }}
-          >
-            <Button variant="text">HỦY</Button>
+              }}
+            >
+              HỦY
+            </Button>
           </Box>
         </>
       )}
@@ -141,8 +100,8 @@ const RenderOneComment = ({
         <Box className="child" sx={{ marginLeft: '100px' }}>
           {!comment.showSubComment ? (
             <Box className="see-more-wrapper">
-              <Box onClick={() => toggleComment(true, comment.id)} className="open-hide-action">
-                <CustomButton startIcon={<ArrowDropDownRoundedIcon />}>
+              <Box className="open-hide-action">
+                <CustomButton onClick={() => toggleComment(true, comment.id)} startIcon={<ArrowDropDownRoundedIcon />}>
                   Xem {comment.child.length} phản hồi
                 </CustomButton>
               </Box>
@@ -151,8 +110,10 @@ const RenderOneComment = ({
           ) : (
             <>
               <Box className="see-more-wrapper">
-                <Box className="open-hide-action" onClick={() => toggleComment(false, comment.id)}>
-                  <CustomButton startIcon={<ArrowDropUpRoundedIcon />}>Ẩn {comment.child.length} phản hồi</CustomButton>
+                <Box className="open-hide-action">
+                  <CustomButton onClick={() => toggleComment(false, comment.id)} startIcon={<ArrowDropUpRoundedIcon />}>
+                    Ẩn {comment.child.length} phản hồi
+                  </CustomButton>
                 </Box>
               </Box>
               {comment.child.map((commentChild: any, idx: number) => {
@@ -169,7 +130,7 @@ const RenderOneComment = ({
                         dislikeComment,
                         replyingCommentIds,
                         setReplyingCommentIds,
-                        userStatus,
+                        unauthorized,
                         userInfo,
                         carInfo,
                         setCarComments,
@@ -177,6 +138,8 @@ const RenderOneComment = ({
                         toggleComment,
                         updateComment,
                         setUpdateComment,
+                        navigate,
+                        fetchingCarInfos,
                       })}
                     </Box>
                   </Box>
@@ -196,15 +159,16 @@ const RenderComents = ({
   dislikeComment,
   replyingCommentIds,
   setReplyingCommentIds,
-  userStatus,
+  unauthorized,
   userInfo,
   carInfo,
   setCarComments,
   toggleComment,
   updateComment,
   setUpdateComment,
+  navigate,
+  fetchingCarInfos,
 }: any) => {
-  console.log('carComments', carComments);
   return (
     <>
       {carComments?.map((comment: any) => {
@@ -216,7 +180,7 @@ const RenderComents = ({
               dislikeComment,
               replyingCommentIds,
               setReplyingCommentIds,
-              userStatus,
+              unauthorized,
               userInfo,
               carInfo,
               setCarComments,
@@ -224,6 +188,8 @@ const RenderComents = ({
               toggleComment,
               updateComment,
               setUpdateComment,
+              navigate,
+              fetchingCarInfos,
             })}
           </Box>
         );

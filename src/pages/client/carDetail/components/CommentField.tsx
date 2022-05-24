@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Box, Container, TextField } from '@mui/material';
+import { Box, Container } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import clientService from '../../../services/clientService';
-import { calculateCommentLikeDislike, toggleShowSubComment } from '../../../common/helper/comment';
+import clientService from '../../../../services/clientService';
+import { ClientDetailAttributes } from '../../../../reduxToolKit-Saga/common/User/ClientSlice';
+import { calculateCommentLikeDislike, toggleShowSubComment } from '../../../../common/helper/comment';
+import '../CarDetail.scss';
 
-import './CarDetail.scss';
-import RenderComents from './RenderComents';
-import Comment from './Comment';
+import Comment from './common/CommentTextField';
+import RenderComents from './components/RenderComents';
 
 export type CommentReaction = {
   carId: number;
@@ -16,7 +18,6 @@ export type CommentReaction = {
   like: number;
   userId: number;
 };
-
 export function broofa() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
@@ -25,17 +26,18 @@ export function broofa() {
   });
 }
 
-const CarDetailComment: React.FC<{
-  userStatus: string;
+const CommentArea: React.FC<{
+  unauthorized: boolean;
   carInfo: any;
-  userInfo: any;
+  userInfo: ClientDetailAttributes;
   carComments: any;
   setCarComments: any;
   commentReactions: Array<CommentReaction>;
   setCommentReactions: any;
   params: any;
+  fetchingCarInfos: boolean;
 }> = ({
-  userStatus,
+  unauthorized,
   carInfo,
   userInfo,
   carComments,
@@ -43,9 +45,11 @@ const CarDetailComment: React.FC<{
   commentReactions,
   setCommentReactions,
   params,
+  fetchingCarInfos,
 }) => {
   const [replyingCommentIds, setReplyingCommentIds] = useState<any>([]);
   const [updateComment, setUpdateComment] = useState(false);
+  const navigate = useNavigate();
 
   const findCurrUserReactedComment = (commentId: number) => {
     let comment;
@@ -61,30 +65,26 @@ const CarDetailComment: React.FC<{
   };
 
   const resetReactionComments = (reactedComment: CommentReaction) => {
-    setCommentReactions((reactions: Array<CommentReaction>) => {
-      reactions = reactions.map((reaction: CommentReaction) => {
-        if (reaction.commentId === reactedComment?.commentId && reaction.userId === reactedComment.userId) {
-          return reactedComment;
-        } else {
-          return reaction;
-        }
-      });
-
-      return reactions;
+    const newReactions = commentReactions.map((reaction: CommentReaction) => {
+      if (reaction.commentId === reactedComment?.commentId && reaction.userId === reactedComment.userId) {
+        return reactedComment;
+      } else {
+        return reaction;
+      }
     });
+    setCommentReactions(newReactions);
   };
 
   const addReactions = (reactedComment: CommentReaction) => {
-    setCommentReactions((reactions: Array<CommentReaction>) => {
-      return [...reactions, reactedComment] as Array<CommentReaction>;
-    });
+    setCommentReactions([...commentReactions, reactedComment]);
   };
 
   const likeComment = async (commentId: number) => {
     setTimeout(() => {
       setUpdateComment(!updateComment);
     }, 100);
-    if (userStatus === 'Unauthorized') {
+    if (unauthorized) {
+      navigate('/auth/user/log-in');
       return;
     }
 
@@ -116,7 +116,8 @@ const CarDetailComment: React.FC<{
     setTimeout(() => {
       setUpdateComment(!updateComment);
     }, 100);
-    if (userStatus === 'Unauthorized') {
+    if (unauthorized) {
+      navigate('/auth/user/log-in');
       return;
     }
 
@@ -145,7 +146,7 @@ const CarDetailComment: React.FC<{
   };
 
   useEffect(() => {
-    const resetComment = () => {
+    const recalculateCommentLikeDislike = () => {
       const countCommentLike: any = {};
       const countCommentDislike: any = {};
       const currUserReaction: any = {};
@@ -193,8 +194,8 @@ const CarDetailComment: React.FC<{
         return newComments;
       });
     };
-    resetComment();
-  }, [commentReactions, setCarComments, userInfo.id]);
+    recalculateCommentLikeDislike();
+  }, [commentReactions, setCarComments, userInfo?.id]);
 
   const toggleComment = (bool: boolean, commentId: number) => {
     setTimeout(() => {
@@ -214,22 +215,24 @@ const CarDetailComment: React.FC<{
           setReplyingCommentIds={setReplyingCommentIds}
           carComments={carComments}
           isMomComment={true}
-          userStatus={userStatus}
+          unauthorized={unauthorized}
         />
-        <Box className="comments-area">
+        <Box className="user-posted-comments-area">
           <RenderComents
             carComments={carComments}
             likeComment={likeComment}
             dislikeComment={dislikeComment}
             replyingCommentIds={replyingCommentIds}
             setReplyingCommentIds={setReplyingCommentIds}
-            userStatus={userStatus}
+            unauthorized={unauthorized}
             userInfo={userInfo}
             carInfo={carInfo}
             setCarComments={setCarComments}
             toggleComment={toggleComment}
             updateComment={updateComment}
             setUpdateComment={setUpdateComment}
+            navigate={navigate}
+            fetchingCarInfos={fetchingCarInfos}
           />
         </Box>
       </Container>
@@ -237,4 +240,4 @@ const CarDetailComment: React.FC<{
   );
 };
 
-export default CarDetailComment;
+export default React.memo(CommentArea);

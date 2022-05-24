@@ -10,7 +10,6 @@ interface LoginParams {
 export interface LoginReturn {
   loginMessage: string | null;
   loginStatus: number | null;
-  userInfo?: unknown;
 }
 
 export interface LoginRejectReturn extends LoginReturn {}
@@ -25,7 +24,6 @@ const initialState: LoginInitialState = {
   loginMessage: null,
   loginStatus: null,
   status: AuthenticationStatus.UnAuthorized,
-  userInfo: {},
 };
 
 export const loginSlice = createSlice({
@@ -33,6 +31,7 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     login: (state: LoginInitialState, _action: PayloadAction<LoginParams>) => {
+      console.log('_action: ', _action);
       state.isLoggingIn = true;
     },
     loginSuccess: (state: LoginInitialState, action: PayloadAction<LoginReturn>) => {
@@ -40,7 +39,6 @@ export const loginSlice = createSlice({
       state.loginMessage = action.payload.loginMessage;
       state.status = AuthenticationStatus.Authorized;
       state.loginStatus = action.payload.loginStatus;
-      state.userInfo = action.payload.userInfo;
     },
     loginReject: (state: LoginInitialState, action: PayloadAction<LoginReturn>) => {
       state.isLoggingIn = false;

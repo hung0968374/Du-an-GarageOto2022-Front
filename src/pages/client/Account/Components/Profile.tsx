@@ -97,8 +97,6 @@ const Profile: React.FC<ProfileProps> = ({ info, loadingState, setLoadingState, 
       setWard(converter);
     } catch (error) {
       console.log('error');
-    } finally {
-      console.log('done');
     }
   };
 

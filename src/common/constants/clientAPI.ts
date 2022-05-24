@@ -11,7 +11,7 @@ class ClientAPI {
   apiCheck = `${this.auth}/api-check`;
   checkValid = `${this.auth}/check-valid`;
   getAllBrand = `${this.client}/brand/get-all`;
-  getCar = (name: string, id: number) => `${this.client}/car/get-one/${name}/${id}`;
+  getCar = (brand: string, name: string, id: number) => `${this.client}/car/get-one/${brand}/${name}/${id}`;
   getCarByBrandName = (brand: string) => `${this.client}/car/brand/${brand}`;
   getBrand = (brand: string) => `${this.client}/brand/${brand}`;
   getClientData = `/${this.client}/client-data`;
@@ -23,6 +23,14 @@ class ClientAPI {
   postComment = `${this.client}/car/comment`;
   reactToComment = `${this.client}/car/comment/reaction`;
   updateCommentReaction = `${this.client}/car/comment/reaction/update`;
+  getBrandItemAttributes = (brand: string) => `${this.client}/filter-car/get-attributes/${brand}`;
+  filterBrandItem = `${this.client}/filter-car`;
+  updateClientWishList = `${this.client}/wish-list`;
+  updateClientAvatar = `${this.client}/update-client-avatar`;
+  getCarByID = (id: number) => `car/${id}`;
+  processPayment = `${this.client}/process-payment`;
+  ratingCar = `${this.client}/car/rating`;
+  deleteComment = (comment: any) => `${this.client}/car/comment/${comment.id}`;
 }
 
 export default new ClientAPI();

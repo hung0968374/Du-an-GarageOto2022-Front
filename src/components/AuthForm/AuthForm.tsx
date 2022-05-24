@@ -1,4 +1,7 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { routerPath } from '../../common/constants/routerPath';
 
 import './AuthForm.scss';
 
@@ -13,6 +16,8 @@ interface AuthFormProps {
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({ children, imageSide }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="auth-wrapper">
       <div className="auth-decorator">
@@ -24,7 +29,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ children, imageSide }) => {
       </div>
       <div className={`auth-container ${imageSide === ImageSide.LEFT ? '' : 'flex-row-reverse'} `}>
         <div
-          className={`auth-img_side ${imageSide === ImageSide.LEFT ? 'auth-img_side-left' : 'auth-img_side-right'} `}
+          className={`auth-img_side ${imageSide === ImageSide.LEFT ? 'auth-img_side-left' : 'auth-img_side-right'}`}
+          onClick={() => navigate(routerPath.common.HOME)}
         >
           <img
             src="/imgs/sign-in.svg"

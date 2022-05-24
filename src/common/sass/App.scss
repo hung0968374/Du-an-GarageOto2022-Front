@@ -58,3 +58,7 @@
 .speed-dial {
   animation: rightToLeft 500ms;
 }
+
+.text-subheader {
+  @apply text-center text-2xl font-medium pb-5;
+}

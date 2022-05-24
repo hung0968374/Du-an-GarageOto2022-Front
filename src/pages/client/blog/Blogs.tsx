@@ -1,23 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import {
-  Box,
-  Container,
-  Grid,
-  CardActionArea,
-  Pagination,
-  PaginationItem,
-  CircularProgress,
-  Link,
-  Skeleton,
-} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Container, Grid, CardActionArea, Pagination, PaginationItem, Link, Skeleton } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 import clientService from '../../../services/clientService';
 import './Blogs.scss';
-import { removeTagsFromString } from '../../../common/helper/string';
-import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
+import useBlog from '../../../common/hooks/useBlog';
 
 import { BlogItemInterface } from './BlogItem';
 
@@ -32,6 +22,7 @@ export const Blogs = () => {
   const [totalBlog, setTotalBlog] = useState(107);
 
   const { getImgFromFirebase } = useFetchImgs();
+  const { reformatBlogs } = useBlog();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -41,35 +32,12 @@ export const Blogs = () => {
       const { count } = response.data;
       setTotalPage(Math.round(count / 10));
       setTotalBlog(count);
-
-      const reformattingBlogs: any = await Promise.all(
-        res.map(async (blog: any) => {
-          const regExp = /[a-zA-Z]/g;
-          const blogImgs: string = replaceDirtyImgUrls(blog?.descriptionImgs)?.[0];
-          if (blogImgs) {
-            blog.descriptionImgs = await getImgFromFirebase(blogImgs);
-          }
-          blog.descriptions = removeTagsFromString(blog.descriptions.slice(0, 1000))
-            .split(`","`)
-            .filter((str) => {
-              return regExp.test(str);
-            })
-            .join()
-            .replaceAll(`\\`, '')
-            .replaceAll(`.,`, '. ')
-            .replaceAll('&nbsp;', '');
-          const firstTwo = blog.descriptions.slice(0, 2);
-          if (firstTwo === `["`) {
-            blog.descriptions = blog.descriptions.slice(2);
-          }
-          return blog;
-        }),
-      );
+      const reformattingBlogs: any = await Promise.all(reformatBlogs(res));
       setBlogs(reformattingBlogs);
       setLoading(() => false);
     };
     fetchBlogs();
-  }, [currentPage, getImgFromFirebase]);
+  }, [currentPage, getImgFromFirebase, reformatBlogs]);
 
   useEffect(() => {
     if (loading !== true) {
@@ -158,6 +126,7 @@ export const Blogs = () => {
           ></Pagination>
         </Box>
       </Container>
+      <MessengerCustomerChat pageId="103776409016741" appId="1201534210605638" />
     </>
   );
 };

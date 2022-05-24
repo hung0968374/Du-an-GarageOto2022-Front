@@ -3,6 +3,12 @@
   font-weight: 600;
   @apply mb-4;
 }
+.blog-item-title {
+  line-height: 3rem !important;
+  text-align: center;
+  font-weight: 600;
+  @apply mb-12 text-3xl px-16;
+}
 .blogs-container {
   user-select: none;
   & .item-container {

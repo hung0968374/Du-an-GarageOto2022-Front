@@ -5,7 +5,7 @@ export enum Theme {
   DARK = 'Dark',
 }
 
-export interface WishListState {
+export interface GeneralState {
   loading: boolean;
   theme: Theme;
   carPaymentId: number;
@@ -14,10 +14,10 @@ export interface WishListState {
   openSnackBar: boolean;
 }
 
-const initialState: WishListState = {
+const initialState: GeneralState = {
   loading: false,
-  theme: Theme.DARK,
-  carPaymentId: 0,
+  theme: Theme.LIGHT,
+  carPaymentId: 1,
   scrollBarDisplay: true,
   scrollTopDisplay: false,
   openSnackBar: false,
@@ -27,22 +27,22 @@ export const GeneralSlice = createSlice({
   name: 'general',
   initialState,
   reducers: {
-    setLoading: (state: WishListState, action: PayloadAction<boolean>) => {
+    setLoading: (state: GeneralState, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setTheme: (state: WishListState, action: PayloadAction<Theme>) => {
+    setTheme: (state: GeneralState, action: PayloadAction<Theme>) => {
       state.theme = action.payload;
     },
-    setPaymentId: (state: WishListState, action: PayloadAction<number>) => {
+    setPaymentId: (state: GeneralState, action: PayloadAction<number>) => {
       state.carPaymentId = action.payload;
     },
-    setNavbarDisplay: (state: WishListState, action: PayloadAction<boolean>) => {
+    setNavbarDisplay: (state: GeneralState, action: PayloadAction<boolean>) => {
       state.scrollBarDisplay = action.payload;
     },
-    setScrollTopDisplay: (state: WishListState, action: PayloadAction<boolean>) => {
+    setScrollTopDisplay: (state: GeneralState, action: PayloadAction<boolean>) => {
       state.scrollTopDisplay = action.payload;
     },
-    resetPaymentId: (state: WishListState) => {
+    resetPaymentId: (state: GeneralState) => {
       state.carPaymentId = 0;
     },
   },

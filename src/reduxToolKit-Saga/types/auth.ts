@@ -19,6 +19,7 @@ export interface WishList {
     carAppearance: { imgs: string };
     brand: { name: string };
   };
+  carId: number;
 }
 
 export interface Coupon {
@@ -143,6 +144,21 @@ export interface PaymentReceipt {
     };
   };
 }
+export interface GetOneCarReturn {
+  id: number;
+  brandId: number;
+  name: string;
+  price: string;
+  discountPercent: number;
+  design: string;
+  engine: string;
+  gear: string;
+  seats: string;
+  capacity: string;
+  yearOfManufacture: string;
+  imgs: string;
+  brand: string | null;
+}
 
 export type LoginErrorResponse = AxiosResponse<ErrorResponseData>;
 export type UserSignUpErrorResponse = AxiosResponse<ErrorResponseData>;
@@ -155,3 +171,4 @@ export type ProvinceInfo = AxiosResponse<ProvinceList>;
 export type DistrictInfo = AxiosResponse<DistrictList>;
 export type WardInfo = AxiosResponse<WardList>;
 export type PaymentInfo = AxiosResponse<PaymentReceipt[]>;
+export type CarAttributes = AxiosResponse<GetOneCarReturn>;

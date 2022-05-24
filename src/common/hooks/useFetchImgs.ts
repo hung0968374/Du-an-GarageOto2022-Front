@@ -8,7 +8,7 @@ type UndefinedUrlObject = {
   [key: string]: Array<string>;
 };
 
-type CarDetailImgs = {
+export type CarDetailImgs = {
   imgs?: Array<string>;
   introImgs?: Array<string>;
   exteriorReviewImgs?: Array<string>;
@@ -51,8 +51,8 @@ export function useFetchImgs() {
     }
   }, []);
 
-  const getImgFromFirebase = useCallback((originUrl: string, returnImg ='') => {
-    // returnImg: the image will be returned by the function 
+  const getImgFromFirebase = useCallback((originUrl: string, returnImg = '') => {
+    // returnImg: the image will be returned by the function
     //if firebase fails to find its own image based on the given url
     const starsRef = ref(storage, originUrl);
     const img = listItem(starsRef, returnImg);

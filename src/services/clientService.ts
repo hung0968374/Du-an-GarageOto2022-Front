@@ -8,10 +8,14 @@ import {
   ClientPasswordRecover,
   ClientSignUp,
   CommentInterface,
+  FilterBrandItemInput,
+  PaymentBody,
+  UserWishListBody,
 } from '../common/interfaces/Auth';
 import { LoginDataReturn } from '../common/interfaces/Client';
 import { BlogItemInterface } from '../pages/client/blog/BlogItem';
-import { CommentReaction } from '../pages/client/carDetail/CarDetailComment';
+import { RatingCreation } from '../pages/client/carDetail/CarDetail';
+import { CommentReaction } from '../pages/client/carDetail/components/CommentField';
 import {
   ClientInfo,
   DistrictAttributes,
@@ -59,8 +63,8 @@ class ClientService {
     return data;
   }
 
-  async getCar(name: string, id: number) {
-    const { data } = await AxiosClient.get(clientAPI.getCar(name, id));
+  async getCar(brand: string, name: string, id: number) {
+    const { data } = await AxiosClient.get(clientAPI.getCar(brand, name, id));
     return data;
   }
 
@@ -97,6 +101,7 @@ class ClientService {
   async updateCLientInfo(data: UpdateClientInfoAttributes): Promise<void> {
     await AxiosClientAPI.patch(clientAPI.updateProfile, data);
   }
+
   async getBlogs(page: number, limit = 10) {
     return AxiosClient.get(clientAPI.getBlogs(page, limit));
   }
@@ -112,13 +117,53 @@ class ClientService {
     return response.data;
   }
   async postComment(comment: CommentInterface) {
-    return AxiosClient.post(clientAPI.postComment, comment);
+    return AxiosClientAPI.post(clientAPI.postComment, comment);
+  }
+  async updateComment(comment: CommentInterface) {
+    return AxiosClientAPI.patch(clientAPI.postComment, comment);
+  }
+  async deleteComment(comment: any) {
+    return AxiosClientAPI.delete(clientAPI.deleteComment(comment));
   }
   async reactToComment(reaction: CommentReaction) {
-    return AxiosClient.post(clientAPI.reactToComment, reaction);
+    return AxiosClientAPI.post(clientAPI.reactToComment, reaction);
   }
   async updateCommentReaction(reaction: CommentReaction) {
-    return AxiosClient.patch(clientAPI.updateCommentReaction, reaction);
+    return AxiosClientAPI.patch(clientAPI.updateCommentReaction, reaction);
+  }
+  async rateCar(rating: RatingCreation) {
+    return AxiosClientAPI.post(clientAPI.ratingCar, rating);
+  }
+  async updateRating(rating: RatingCreation) {
+    return AxiosClientAPI.patch(clientAPI.ratingCar, rating);
+  }
+
+  async getAllBrandItemAttribute(brand: string) {
+    const { data } = await AxiosClient.get(clientAPI.getBrandItemAttributes(brand));
+    return data;
+  }
+
+  async filterInBrandItem(params: FilterBrandItemInput) {
+    const { data } = await AxiosClient.post(clientAPI.filterBrandItem, params);
+    return data;
+  }
+
+  async updateUserWishList(userWishListBody: UserWishListBody) {
+    const { data } = await AxiosClientAPI.patch(clientAPI.updateClientWishList, userWishListBody);
+    return data;
+  }
+
+  async callPaymentApi(paymentBody: PaymentBody) {
+    const { data } = await AxiosClientAPI.post(clientAPI.processPayment, paymentBody);
+    return data;
+  }
+
+  async uploadAvatar(form: FormData) {
+    return AxiosClientAPI.put(clientAPI.updateClientAvatar, form, {
+      headers: {
+        'Content-type': 'multipart/form-data',
+      },
+    });
   }
 }
 

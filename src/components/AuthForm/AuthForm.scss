@@ -15,7 +15,7 @@
   }
 
   &-img_side {
-    @apply w-1/2 hidden xl:block rounded-none;
+    @apply w-1/2 hidden xl:block rounded-none cursor-pointer;
 
     &-left {
       @apply rounded-l-3xl;

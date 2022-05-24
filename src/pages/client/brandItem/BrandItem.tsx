@@ -1,55 +1,20 @@
-import {
-  Autocomplete,
-  Container,
-  TextField,
-  Typography,
-  Grid,
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Stack,
-  Chip,
-  Box,
-  CardActions,
-} from '@mui/material';
+import { Container, Typography, Box } from '@mui/material';
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import './BrandItem.scss';
-import {
-  ColorSchema,
-  ContainerGrey,
-  MuiBrandButton,
-  SecondContainerWhite,
-  SubmitButtonStyle,
-  TransparentBrandButton,
-  TransparentButton,
-} from '../../../components/MuiStyling/MuiStyling';
+import { TransparentButton } from '../../../components/MuiStyling/MuiStyling';
 import clientService from '../../../services/clientService';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import { replaceDirtyImgUrls } from '../../../common/helper/image';
-import { Loading } from '../../../components/loading/Loading';
-import { allBrand, allPrice, allSeat, brandWallpapers } from '../../../common/constants/fakeData';
+import { brandWallpapers } from '../../../common/constants/fakeData';
+import { FilterBrandItemInput } from '../../../common/interfaces/Auth';
 
-const allBodyType = [
-  { label: 'Convertible' },
-  { label: 'SUV' },
-  { label: 'Sedan' },
-  { label: 'Coupe' },
-  { label: 'Hatchback' },
-];
+import { BrandItemIntroduce } from './components/BrandItemIntroduce';
+import { BrandItemMain } from './components/BrandItemMain';
+import { BrandItemDetail } from './components/BrandItemDetail';
 
-function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-interface BrandItemAttributes {
+export interface BrandItemAttributes {
   id: string;
   name: string;
   descriptions: string;
@@ -63,12 +28,28 @@ interface CarImgAttributes {
   imgs: string;
 }
 
-interface CarAttributes {
+type RatingPointAttrs = {
+  carId: number;
+  id: number;
+  ratingPoint: string;
+  userId: number;
+};
+
+export interface CarAttributes {
   id: string;
   name: string;
   price: string;
   seat: string;
   carAppearance: CarImgAttributes;
+  ratingPoints: RatingPointAttrs;
+}
+
+export interface BodyTypeAttributes {
+  design: string;
+}
+
+export interface SeatAttributes {
+  seats: string;
 }
 
 const mainImgStyle = (brand: string | undefined) => {
@@ -77,10 +58,10 @@ const mainImgStyle = (brand: string | undefined) => {
   const carBrand: string = brand;
   const img = temp[carBrand];
   return {
-    'min-height': '100vh',
+    minHeight: '100vh',
     width: '100%',
-    'background-image': `url(${img})`,
-    'background-size': 'cover',
+    backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
   };
 };
 
@@ -98,14 +79,18 @@ export const BrandItem: React.FC = () => {
   });
   const [carInfoAPI, setCarInfoAPI] = React.useState<Array<CarAttributes>>([]);
   const [imgFromFirebase, setImgFromFirebase] = useState<Array<any>>([]);
+  const [brandNameSelectValue, setBrandNameSelectValue] = React.useState<string | null>('');
+  const [bodyTypeFormAPI, setBodyTypeFormAPI] = React.useState<Array<BodyTypeAttributes>>([]);
+  const [seatFromAPI, setSeatFromAPI] = React.useState<Array<SeatAttributes>>([]);
+  const [bodyTypeInForm, setBodyTypeInForm] = useState<string | null>('');
+  const [priceInForm, setPriceInForm] = useState<string | null>('');
+  const [seatInForm, setSeatInForm] = useState<string | null>('');
+  const [radioASC, setRadioASC] = React.useState<string>('asc');
+  const [filterCarAPI, setFilterCarAPI] = useState<Array<CarAttributes>>([]);
+  const [loadingFirebaseImg, setLoadingFirebaseImg] = useState(false);
+
   const { imgObj, downloadImgsFromFirebase, getImgFromFirebase } = useFetchImgs();
   const params = useParams();
-
-  const originalImgs = useMemo(() => {
-    return replaceDirtyImgUrls(brandItemAPI?.descriptionImgs)?.map((url: string) => {
-      return '..' + url;
-    });
-  }, [brandItemAPI.descriptionImgs]);
 
   const brandImgUrls = useMemo(() => {
     return brandItemAPI.descriptionImgs.split(`","`);
@@ -119,41 +104,44 @@ export const BrandItem: React.FC = () => {
   }, [downloadImgsFromFirebase, brandImgUrls]);
 
   const carFirebaseImgs = useCallback(async () => {
-    const newImgs = await Promise.allSettled(
-      carInfoAPI.map((car: any) => {
-        let carImg = '';
-        let tinbanxeImg;
-        if (car.carAppearance.newIntroImgs.length < 5) {
-          const carIntroImgs = replaceDirtyImgUrls(car.carAppearance.imgs);
-          if (carIntroImgs) {
-            return Promise.resolve(carIntroImgs[0]);
+    if (filterCarAPI.length > 0) {
+      setLoadingFirebaseImg(true);
+      const newImgs = await Promise.allSettled(
+        filterCarAPI.map((car: any) => {
+          let carImg = '';
+          let tinbanxeImg;
+          if (car.carAppearance.newIntroImgs.length < 5) {
+            const carIntroImgs = replaceDirtyImgUrls(car.carAppearance.imgs, false);
+            if (carIntroImgs) {
+              return Promise.resolve(carIntroImgs[0]);
+            }
           }
-        }
-        const originalImgs = replaceDirtyImgUrls(car.carAppearance.newIntroImgs);
-        const tinbanxeImgs = replaceDirtyImgUrls(car.carAppearance.introImgs);
-        if (tinbanxeImgs && originalImgs) {
-          if (originalImgs?.length === 1) {
-            carImg = originalImgs[0];
-            tinbanxeImg = tinbanxeImgs[0];
-          } else {
-            carImg = originalImgs[1];
-            tinbanxeImg = tinbanxeImgs[1];
+          const firebaseImgUrls = replaceDirtyImgUrls(car.carAppearance.newIntroImgs);
+          const tinbanxeImgs = replaceDirtyImgUrls(car.carAppearance.introImgs, false);
+          if (tinbanxeImgs && firebaseImgUrls) {
+            if (firebaseImgUrls?.length === 1) {
+              carImg = firebaseImgUrls[0];
+              tinbanxeImg = tinbanxeImgs[0];
+            } else {
+              carImg = firebaseImgUrls[1];
+              tinbanxeImg = tinbanxeImgs[1];
+            }
           }
+          const carImgRes = getImgFromFirebase(carImg, tinbanxeImg);
+          return carImgRes;
+        }),
+      );
+      const availableImgs = newImgs.reduce((acc: any, promise: any) => {
+        if (promise.status === 'fulfilled') {
+          acc.push(promise.value);
+          return acc;
         }
-        const carImgRes = getImgFromFirebase(carImg, tinbanxeImg);
-        return carImgRes;
-      }),
-    );
-    const availableImgs = newImgs.reduce((acc: any, promise: any) => {
-      if (promise.status === 'fulfilled' && promise.value !== '') {
-        acc.push(promise.value);
         return acc;
-      }
-      return acc;
-    }, []) as any;
-    setImgFromFirebase(availableImgs);
-  }, [getImgFromFirebase, carInfoAPI]) as any;
-
+      }, []) as any;
+      setImgFromFirebase(availableImgs);
+      setLoadingFirebaseImg(false);
+    }
+  }, [getImgFromFirebase, filterCarAPI]) as any;
   useEffect(() => {
     carFirebaseImgs();
   }, [carFirebaseImgs]);
@@ -181,9 +169,39 @@ export const BrandItem: React.FC = () => {
       }
     };
 
+    const getBodyTypeApi = async (brand: string) => {
+      try {
+        const response = await clientService.getAllBrandItemAttribute(brand);
+        setBodyTypeFormAPI(response.result.designAttribute);
+        setSeatFromAPI(response.result.seatAttribute);
+      } catch (error: any) {
+        console.log(error.response);
+      }
+    };
+
     getBrandApi(brandName as string);
     getCarByBrandNameApi(brandName as string);
+    getBodyTypeApi(brandName as string);
   }, [brandName]);
+
+  useEffect(() => {
+    const filterInBrandItemApi = async (param: FilterBrandItemInput) => {
+      try {
+        const response = await clientService.filterInBrandItem(param);
+        setFilterCarAPI(response.filterCar);
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+
+    filterInBrandItemApi({
+      brandName: brandName as string,
+      designType: bodyTypeInForm as string,
+      price: priceInForm as string,
+      seat: seatInForm as string,
+      radio: radioASC,
+    });
+  }, [brandName, bodyTypeInForm, priceInForm, seatInForm, radioASC]);
 
   React.useEffect(() => {
     const fetchImgs = async () => {
@@ -191,56 +209,6 @@ export const BrandItem: React.FC = () => {
     };
     fetchImgs();
   }, [downloadImgsFromFirebase, brandImgUrls]);
-
-  const handleBrandName = () => {
-    if (brandName === 'bmw') return 'BMW';
-    if (brandName === 'rolls-royce') return 'Rolls Royce';
-    return capitalizeFirstLetter(brandName as string);
-  };
-
-  const shortcutDescription = (des: string) => {
-    if (des?.length >= 400) return des?.slice(0, 400) + '...';
-    return des + '...';
-  };
-
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.');
-  };
-
-  const handleBrandDescription = (description: string) => {
-    let newDes: any = description?.slice(1, -1);
-    newDes = newDes.split('\\n').map((el: any) => {
-      return el;
-    });
-    const temp = newDes.splice(0, newDes.length / 2);
-    return [...temp, ...newDes].join();
-  };
-
-  const modifiedDescription = useMemo(() => {
-    let temp = handleBrandDescription(brandItemAPI?.descriptions as string)
-      .replaceAll('>,', '>')
-      .replaceAll(`\\`, '');
-    originalImgs?.forEach((originalImg, idx) => {
-      if (imgObj?.brandImgs?.length > 0) {
-        temp = temp
-          .replaceAll(originalImg, imgObj?.brandImgs[idx])
-          .replaceAll(originalImg.split('..')[1], imgObj?.brandImgs[idx]);
-      }
-    });
-    temp = temp.slice(1, -1);
-    if (temp[temp.length - 1] === `"`) {
-      temp = temp.slice(0, -1);
-    }
-    return temp;
-  }, [brandItemAPI.descriptions, imgObj.brandImgs, originalImgs]);
-
-  // const getImgFromAPI = (img: string) => {
-  //   const handleImg1 = img.split(',');
-  //   const handleImg2 = handleImg1.map((item) =>
-  //     item.replaceAll('"', '').replaceAll('"', '').replace('[', '').replace(']', ''),
-  //   );
-  //   return handleImg2[1];
-  // };
 
   return (
     <Container maxWidth={false} className="brand_item-container mt-12">
@@ -266,149 +234,35 @@ export const BrandItem: React.FC = () => {
         </Box>
       </div>
 
-      <SecondContainerWhite maxWidth={false} ref={discoverRef}>
-        <div className="brand_item-introduction">
-          <div className="all-brand-body_type py-4">
-            <Autocomplete
-              disablePortal
-              sx={{ width: '15rem', marginLeft: '1rem' }}
-              options={allBrand}
-              renderInput={(params) => <TextField {...params} label="Brand" />}
-            />
-            <Autocomplete
-              disablePortal
-              sx={{ width: '15rem', marginLeft: '1rem' }}
-              options={allBodyType}
-              renderInput={(params) => <TextField {...params} label="Bodytype" />}
-            />
-          </div>
-          <div className="brand-short-description p-4">
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={4}>
-                <img src={brandItemAPI?.brandImg} alt="" />
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <div
-                  className="mb-4 text-justify leading-6"
-                  dangerouslySetInnerHTML={{ __html: shortcutDescription(modifiedDescription) }}
-                ></div>
-                <TransparentBrandButton
-                  className="see-more"
-                  onClick={() => brandItemRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                  variant="outlined"
-                >
-                  See more
-                </TransparentBrandButton>
-              </Grid>
-            </Grid>
-          </div>
-        </div>
-      </SecondContainerWhite>
+      <BrandItemIntroduce
+        discoverRef={discoverRef}
+        brandItemRef={brandItemRef}
+        brandItemAPI={brandItemAPI}
+        imgObj={imgObj}
+        brandNameSelectValue={brandNameSelectValue}
+        setBrandNameSelectValue={setBrandNameSelectValue}
+        brandName={brandName}
+        bodyTypeFormAPI={bodyTypeFormAPI}
+        bodyTypeInForm={bodyTypeInForm}
+        setBodyTypeInForm={setBodyTypeInForm}
+      />
 
-      <ContainerGrey maxWidth={false}>
-        <div className="brand_item-main">
-          <Typography
-            variant="h3"
-            sx={{ textAlign: 'left', color: ColorSchema.Black, marginBottom: '2rem' }}
-            fontFamily="ui-serif"
-          >
-            {handleBrandName()}
-          </Typography>
+      <BrandItemMain
+        brandName={brandName}
+        carInfoAPI={carInfoAPI}
+        imgFromFirebase={imgFromFirebase}
+        seatFromAPI={seatFromAPI}
+        priceInForm={priceInForm}
+        seatInForm={seatInForm}
+        setPriceInForm={setPriceInForm}
+        setSeatInForm={setSeatInForm}
+        radioASC={radioASC}
+        setRadioASC={setRadioASC}
+        filterCarAPI={filterCarAPI}
+        loadingFirebaseImg={loadingFirebaseImg}
+      />
 
-          {carInfoAPI.length === 0 ? (
-            <Loading />
-          ) : (
-            <Grid container>
-              <Grid item lg={12} xl={12 / 5} className="filer-responsive">
-                <div className="filer-select">
-                  <Autocomplete
-                    disablePortal
-                    sx={{ paddingRight: '2rem', maxWidth: '20rem', marginBottom: '1rem' }}
-                    options={allPrice}
-                    renderInput={(params) => <TextField {...params} label="Price" />}
-                  />
-                  <Autocomplete
-                    disablePortal
-                    sx={{ paddingRight: '2rem', maxWidth: '20rem', marginBottom: '2rem' }}
-                    options={allSeat}
-                    renderInput={(params) => <TextField {...params} label="Seat" />}
-                  />
-                </div>
-                <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label">Order by</FormLabel>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
-                    name="radio-buttons-group"
-                  >
-                    <FormControlLabel value="asc" control={<Radio />} label="ASC" />
-                    <Stack direction="row" spacing={1} className="flex-wrap">
-                      <Chip label="Car name" variant="outlined" />
-                      <Chip label="Price" variant="outlined" onDelete={handleDelete} />
-                      <Chip label="Seat" variant="outlined" onDelete={handleDelete} />
-                    </Stack>
-                    <FormControlLabel value="desc" control={<Radio />} label="DESC" />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-
-              <Grid container lg={12} xl={(12 / 5) * 4}>
-                {carInfoAPI.map((item, index) => {
-                  const cutBrandName = item.name.split(' ')[0].toLowerCase();
-                  return (
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={3} sx={{ padding: '0.5rem' }} key={index} spacing={2}>
-                      <Card>
-                        <CardActionArea>
-                          <CardMedia
-                            className="h-36 "
-                            component="img"
-                            image={
-                              // item.carAppearance.introImgs.length > 5
-                              //   ? getImgFromAPI(item.carAppearance.introImgs)
-                              //   : getImgFromAPI(item.carAppearance.imgs)
-                              imgFromFirebase[index]
-                            }
-                            alt="green iguana"
-                          />
-                          <CardContent sx={{ paddingInline: '1.5rem', minHeight: '8rem' }}>
-                            <Typography gutterBottom variant="h6" component="div">
-                              {item.name}
-                            </Typography>
-                            <Typography fontSize="0.875rem" color="text.secondary">
-                              {`From: ${item.price}`}
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                        <CardActions>
-                          <Link
-                            to={`/brand/${cutBrandName}/${item.name.toLocaleLowerCase()}/${item.id}`}
-                            className="flex w-full"
-                          >
-                            <MuiBrandButton variant="contained" type="button" style={SubmitButtonStyle}>
-                              Discover more
-                            </MuiBrandButton>
-                          </Link>
-                        </CardActions>
-                      </Card>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-          )}
-        </div>
-      </ContainerGrey>
-
-      <SecondContainerWhite>
-        <div className="brand_item-detail  mt-12" ref={brandItemRef}>
-          <div className="brand-detail-description p-4">
-            <div
-              className="render-detail mb-4 leading-7"
-              dangerouslySetInnerHTML={{ __html: modifiedDescription }}
-            ></div>
-          </div>
-        </div>
-      </SecondContainerWhite>
+      <BrandItemDetail brandItemRef={brandItemRef} brandItemAPI={brandItemAPI} imgObj={imgObj} />
     </Container>
   );
 };

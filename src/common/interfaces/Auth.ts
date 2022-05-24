@@ -37,10 +37,18 @@ export interface ClientNewPassword {
 }
 
 export interface CommentInterface {
+  id?: number;
   carId: number;
   comment: string;
   mom?: string;
   userId: number;
+}
+export interface FilterBrandItemInput {
+  brandName: string;
+  designType: string;
+  price: string;
+  seat: string;
+  radio: string;
 }
 
 export enum UserRoles {
@@ -48,6 +56,15 @@ export enum UserRoles {
   ADMIN = 'ADMIN',
   EXPERT = 'EXPERT',
   SALE = 'SALE',
+}
+
+export interface UserWishListBody {
+  listCarId: Array<number>;
+  takeAction: boolean;
+}
+export interface PaymentBody {
+  carId: number;
+  quantity: number;
 }
 
 class AuthInterfaces {

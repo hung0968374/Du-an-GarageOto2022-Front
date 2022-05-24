@@ -7,7 +7,7 @@ const assignCommentToMom = (comment: any, value: any) => {
     if (!comment.child) {
       comment.child = [];
     }
-    comment.child = [...comment.child, value];
+    comment.child = [value, ...comment.child];
     return;
   } else if (comment.child) {
     checkAllElement(comment.child, value);
@@ -32,7 +32,7 @@ export const restructureCarComments = (carComments: Array<any>) => {
       checkAllElement(result, comment);
     }
   }
-  return result;
+  return result.reverse();
 };
 
 export const addComment = (carComments: Array<any>, comment: any) => {
@@ -46,6 +46,36 @@ export const addComment = (carComments: Array<any>, comment: any) => {
     checkAllElement(carComments, comment);
     return carComments;
   }
+};
+
+const updateCommentValue = (carComment: any, comment: any) => {
+  if (carComment.id === comment.id) {
+    carComment.comment = comment.comment;
+    return;
+  } else if (carComment?.child?.length > 0) {
+    checkAllElementForUpdateComment(carComment.child, comment);
+  } else {
+    return;
+  }
+};
+
+const checkAllElementForUpdateComment = (carComments: Array<any>, comment: any) => {
+  for (const carComment of carComments) {
+    updateCommentValue(carComment, comment);
+  }
+};
+
+export const updateExistedCommentHelperFunc = (carComments: Array<any>, comment: any) => {
+  if (comment.mom === '') {
+    for (const carComment of carComments) {
+      if (carComment.id === comment.id) {
+        carComment.comment = comment.comment;
+      }
+    }
+  } else {
+    checkAllElementForUpdateComment(carComments, comment);
+  }
+  return carComments;
 };
 
 const assignCountLike = (comment: any, countCommentLike: any, countCommentDislike: any, currUserReaction: any) => {
@@ -111,7 +141,54 @@ export const toggleShowSubComment = (show: boolean, commentId: number, setCarCom
   setCarComments((comments: any) => {
     const newComments = comments;
     checkAllCommentsForToggling(show, commentId, newComments);
-    console.log('newComments', newComments);
     return newComments;
   });
+};
+
+export const deleteCommentHelperFunc = (carComments: Array<any>, comment: any) => {
+  const initialArrayLength = carComments.length;
+  carComments = carComments.filter((carComment) => {
+    return carComment.id !== comment.id;
+  });
+  const laterArrayLength = carComments.length;
+  if (initialArrayLength !== laterArrayLength) {
+    if (laterArrayLength > 0) {
+      return carComments;
+    } else {
+      return undefined;
+    }
+  } else {
+    for (const carComment of carComments) {
+      if (carComment?.child?.length > 0) {
+        carComment.child = deleteCommentHelperFunc(carComment.child, comment);
+      }
+    }
+    return carComments;
+  }
+};
+
+export const getAllCommentIdChildrenOfDeletedComment = (
+  carComments: Array<any>,
+  comment: any,
+  foundDeletedComment = false,
+) => {
+  let idsOfChildrenOfDeletedComment: Array<any> = [];
+  if (!carComments) return [];
+  for (const carComment of carComments) {
+    if (foundDeletedComment) {
+      idsOfChildrenOfDeletedComment = [...idsOfChildrenOfDeletedComment, carComment.id];
+      const ids = getAllCommentIdChildrenOfDeletedComment(carComment.child, comment, true);
+      idsOfChildrenOfDeletedComment = [...ids, ...idsOfChildrenOfDeletedComment];
+    } else {
+      if (carComment.id === comment.id) {
+        idsOfChildrenOfDeletedComment = [...idsOfChildrenOfDeletedComment, comment.id];
+        const ids = getAllCommentIdChildrenOfDeletedComment(carComment.child, comment, true);
+        idsOfChildrenOfDeletedComment = [...ids, ...idsOfChildrenOfDeletedComment];
+      } else if (carComment?.child?.length > 0) {
+        const ids = getAllCommentIdChildrenOfDeletedComment(carComment.child, comment, false);
+        idsOfChildrenOfDeletedComment = [...ids, ...idsOfChildrenOfDeletedComment];
+      }
+    }
+  }
+  return idsOfChildrenOfDeletedComment;
 };

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Skeleton, CardActionArea, Box, Grid, Link, Modal } from '@mui/material';
+import { Container, Skeleton, CardActionArea, Typography, Box, Grid, Link } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
@@ -8,6 +8,7 @@ import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import './BlogItem.scss';
 import { removeTagsFromString } from '../../../common/helper/string';
+import useBlog from '../../../common/hooks/useBlog';
 
 export interface BlogItemInterface {
   descriptionImgs: string;
@@ -33,21 +34,10 @@ export const BlogItem = () => {
   const totalBlogs = +params.totalBlog || 107;
 
   const [currBlog, setCurrBlog] = useState<BlogItemInterface>();
-  console.log('currBlog', currBlog);
   const [relatedBlogs, setRelatedBlogs] = useState<Array<BlogItemInterface>>([]);
   const { getImgFromFirebase } = useFetchImgs();
   const [loading, setLoading] = useState(false);
-  ////// edit
-  const [open, setOpen] = useState(true);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  ///// edit
+  const { reformatBlogs, reformatBlogContent } = useBlog();
 
   const getRelatedBlogs = useCallback(async () => {
     if (currBlog?.id) {
@@ -61,32 +51,10 @@ export const BlogItem = () => {
       let res = blogs.map((blog: any) => {
         return blog.data.result;
       });
-      res = await Promise.all(
-        res.map(async (blog: any) => {
-          const regExp = /[a-zA-Z]/g;
-          const blogImgs: string = replaceDirtyImgUrls(blog?.descriptionImgs)?.[0];
-          if (blogImgs) {
-            blog.descriptionImgs = await getImgFromFirebase(blogImgs);
-          }
-          blog.descriptions = removeTagsFromString(blog.descriptions.slice(0, 1000))
-            .split(`","`)
-            .filter((str) => {
-              return regExp.test(str);
-            })
-            .join()
-            .replaceAll(`\\`, '')
-            .replaceAll(`.,`, '. ')
-            .replaceAll('&nbsp;', '');
-          const firstTwo = blog.descriptions.slice(0, 2);
-          if (firstTwo === `["`) {
-            blog.descriptions = blog.descriptions.slice(2);
-          }
-          return blog;
-        }),
-      );
+      res = await Promise.all(reformatBlogs(res));
       setRelatedBlogs(res);
     }
-  }, [totalBlogs, currBlog?.id, getImgFromFirebase]);
+  }, [totalBlogs, currBlog?.id, reformatBlogs]);
 
   useEffect(() => {
     getRelatedBlogs();
@@ -96,65 +64,32 @@ export const BlogItem = () => {
     const fetchBlog = async () => {
       setLoading(true);
       if (params.title) {
-        let { data }: any = await clientService.getBlog(+params.id);
-        data = data.result;
-        let originalImgs: Array<string> = replaceDirtyImgUrls(data?.descriptionImgs);
-        if (originalImgs) {
-          const firebaseImgs = await Promise.all(
-            originalImgs.map((img: string) => {
-              return getImgFromFirebase(img);
-            }),
-          );
-          originalImgs = originalImgs.map((img: string) => {
-            return 'https://img1.oto.com.vn/' + img;
-          });
-          originalImgs.forEach((originalImg, idx) => {
-            data.descriptions = data.descriptions.replaceAll(originalImg, firebaseImgs[idx]);
-          });
-        }
-        let temp = data.descriptions;
-        temp = temp.replaceAll(`\\`, '').replaceAll(`.,`, '. ').replaceAll('&nbsp;', '').replaceAll(`","`, '<br />');
-
-        const firstTwo = temp.slice(0, 2);
-        if (firstTwo === `["`) {
-          temp = temp.slice(2);
-        }
-        const lastTwo = temp.slice(temp.length - 2, temp.length);
-        if (lastTwo === `"]`) {
-          temp = temp.slice(0, temp.length - 2);
-        }
-        temp = temp.split('<p>');
-        temp = temp.map((line: string) => {
-          if (line.includes('Xem thêm')) {
-            return line.replaceAll(`<em`, `<em class="crossText"`);
-          }
-          if (line.includes('Box chèn khuyến mại')) {
-            return line.replaceAll(`<p`, `<p class="crossText"`);
-          }
-          return line;
-        });
-        temp = temp.join(`<p>`);
-        data.descriptions = temp;
-        setCurrBlog(data);
+        const blogs = await reformatBlogContent(+params.id);
+        setCurrBlog(blogs);
         setLoading(false);
       }
     };
     fetchBlog();
-  }, [params.title, getImgFromFirebase, params.id]);
+  }, [params.title, getImgFromFirebase, reformatBlogContent, params.id]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
+  console.log('currBlog', currBlog);
   return (
     <>
       <Container maxWidth="md" sx={{ marginTop: '154px', marginBottom: '100px' }}>
+        <Box className="blog-item-title">
+          <Typography fontSize="2rem" color="text.secondary">
+            {currBlog?.title}
+          </Typography>
+        </Box>
         <Card>
           <CardContent>
             {!loading ? (
               <div
                 className="blogItem-content-container"
                 dangerouslySetInnerHTML={{ __html: currBlog?.descriptions || '' }}
-                onClick={handleOpen}
               ></div>
             ) : (
               <>

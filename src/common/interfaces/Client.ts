@@ -1,3 +1,5 @@
+import { ClientDetailAttributes } from '../../reduxToolKit-Saga/common/User/ClientSlice';
+
 interface TokenType {
   authorization: string;
 }
@@ -6,7 +8,7 @@ interface LoginDataReturn {
   statusCode: number;
   headers: TokenType;
   body: TokenType;
-  userInfo?: unknown;
+  userInfo: ClientDetailAttributes;
 }
 
 interface LoginReturn {

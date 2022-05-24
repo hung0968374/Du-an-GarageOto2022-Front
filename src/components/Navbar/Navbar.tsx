@@ -13,7 +13,7 @@ import {
   SpeedDialAction,
 } from '@mui/material';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
@@ -21,7 +21,7 @@ import { ColorSchema, MuiNavBarButton } from '../MuiStyling/MuiStyling';
 import { routerPath } from '../../common/constants/routerPath';
 import { getCookie } from '../../common/helper/storage';
 import { useAppDispatch, useAppSelector } from '../../common/hooks/ReduxHook';
-import { AuthActionType } from '../../reduxToolKit-Saga/types/auth';
+import { AuthActionType, AuthenticationStatus } from '../../reduxToolKit-Saga/types/auth';
 import CustomFooter from '../Footer/CustomFooter';
 import { useWindowWidth } from '../../common/hooks/Window';
 import { setScrollTopDisplay } from '../../reduxToolKit-Saga/common/General/GeneralSlice';
@@ -36,7 +36,7 @@ const Navbar = () => {
   const [windowWidth] = useWindowWidth();
   const navigate = useNavigate();
   const token = getCookie('token');
-  const userInfo: any = useAppSelector((globalState) => globalState.login.userInfo);
+  const userInfo = useAppSelector((globalState) => globalState.clientInfo);
   const status = useAppSelector((globalState) => globalState.login.status);
 
   const handleClose = () => {
@@ -91,9 +91,9 @@ const Navbar = () => {
       if (windowWidth < 600) {
         result = (
           <div>
-            <MenuItem>
-              <Link to={routerPath.common.HOME}>Home</Link>
-            </MenuItem>
+            <Link to={routerPath.common.HOME}>
+              <MenuItem>Home</MenuItem>
+            </Link>
             <MenuItem>
               <Link to={routerPath.common.BRAND}>Brand</Link>
             </MenuItem>
@@ -136,6 +136,15 @@ const Navbar = () => {
     );
   };
 
+  const renderAvatar = () => {
+    if (status === AuthenticationStatus.Authorized && userInfo.avatar && windowWidth > 600) {
+      return <Avatar alt="" src={userInfo.avatar} />;
+    } else if (windowWidth < 600) {
+      return <MenuIcon fontSize="large" />;
+    }
+    return <Avatar alt="" src="" />;
+  };
+
   return (
     <div>
       <AppBar position="fixed" sx={{ backgroundColor: '#fff' }}>
@@ -146,23 +155,23 @@ const Navbar = () => {
           <Container sx={{ display: 'flex', justifyContent: 'flex-end', marginInline: '0', ml: 'auto' }}>
             {windowWidth > 600 ? (
               <div>
-                <MuiNavBarButton sx={{ color: `${pathname.includes('home') ? 'black' : '#C4C4C4'}` }}>
-                  <Link to={routerPath.common.HOME}>Home</Link>
-                </MuiNavBarButton>
-                <MuiNavBarButton sx={{ color: `${pathname.includes('brand') ? 'black' : '#C4C4C4'}` }}>
-                  <Link to={routerPath.common.BRAND}>Brand</Link>
-                </MuiNavBarButton>
-                <MuiNavBarButton sx={{ color: `${pathname.includes('blog') ? 'black' : '#C4C4C4'}` }}>
-                  <Link to={routerPath.common.BLOGS}>Blog</Link>
-                </MuiNavBarButton>
+                <Link to={routerPath.common.HOME}>
+                  <MuiNavBarButton sx={{ color: `${pathname.includes('home') ? 'black' : '#C4C4C4'}` }}>
+                    Home
+                  </MuiNavBarButton>
+                </Link>
+                <Link to={routerPath.common.BRAND}>
+                  <MuiNavBarButton sx={{ color: `${pathname.includes('brand') ? 'black' : '#C4C4C4'}` }}>
+                    Brand
+                  </MuiNavBarButton>
+                </Link>
+                <Link to={routerPath.common.BLOGS}>
+                  <MuiNavBarButton sx={{ color: `${pathname.includes('blog') ? 'black' : '#C4C4C4'}` }}>
+                    Blog
+                  </MuiNavBarButton>
+                </Link>
                 <IconButton sx={{ color: 'black' }} onClick={handleClick}>
-                  {status !== 'Authorized' ? (
-                    <>
-                      <MenuIcon fontSize="large" />
-                    </>
-                  ) : (
-                    <Avatar alt="" src={userInfo?.avatar} />
-                  )}
+                  {renderAvatar()}
                   <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
                     {renderMenuItem()}
                   </Menu>
@@ -171,13 +180,7 @@ const Navbar = () => {
             ) : (
               <div>
                 <IconButton sx={{ color: 'black' }} onClick={handleClick}>
-                  {status !== 'Authorized' ? (
-                    <>
-                      <MenuIcon fontSize="large" />
-                    </>
-                  ) : (
-                    <Avatar alt="" src={userInfo?.avatar} />
-                  )}
+                  {renderAvatar()}
                   <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                     {renderMenuItem()}
                   </Menu>
@@ -202,7 +205,7 @@ const Navbar = () => {
           onClick={scrollToTop}
         />
 
-        {token && (
+        {token && pathname !== routerPath.auth.MY_ACCOUNT && (
           <SpeedDialAction
             key="Wish list"
             icon={<FavoriteIcon sx={{ color: ColorSchema.LightGreen }} />}

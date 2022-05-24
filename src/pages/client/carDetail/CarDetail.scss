@@ -29,6 +29,9 @@
     width: 90%;
     margin: auto;
   }
+  .title-wrapper {
+    @apply flex justify-between;
+  }
 }
 
 .car {
@@ -69,6 +72,9 @@
   font-size: 24px;
   color: red;
 }
+.payment-area {
+  @apply flex justify-center mt-6;
+}
 
 .car-p-strong {
   padding: 1rem 0 1rem 0;
@@ -86,53 +92,150 @@
   height: 100%;
 }
 .starring-container {
-  max-width: 100%;
-  height: auto;
+  cursor: pointer;
 }
 .car-staring {
-  height: 72px;
-  width: 95%;
   display: flex;
   margin: auto;
   border-color: #dee2e6;
-  @apply px-2 py-2 border-2 rounded-xl;
+  width: 95%;
+  height: auto;
+  @apply px-2 py-2 border-2 rounded-xl flex;
 }
 .starring-text {
   width: 50%;
-  height: 100%;
-  @apply flex  flex-col justify-evenly;
+  @apply flex flex-col justify-evenly;
+  .star-rating-area {
+    position: relative;
+    .curr-rating {
+      z-index: 1;
+    }
+    .others-rated {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 9;
+    }
+  }
 }
 .starring-number {
   width: 50%;
-  height: 100%;
-  @apply flex flex-row justify-center align-middle items-center;
+  height: inherit;
+  @apply flex flex-row justify-center text-center items-center;
 }
 
-.related-cars-container {
+.related-cars-blogs {
   width: 100%;
-  height: 500px;
+  display: block;
+  margin-top: 1rem;
+
+  .relatedCar-image {
+    img {
+      width: 100%;
+      object-fit: cover !important;
+      max-width: none;
+      border-radius: 5px;
+      max-height: 160px;
+      @media (max-width: 900px) {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        max-height: none;
+      }
+      @media (max-width: 600px) {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .relatedCar-content-wrapper,
+  .relatedBLogs-content-wrapper {
+    height: 100%;
+    @apply ml-4 flex flex-col justify-evenly;
+    @media (max-width: 900px) {
+      margin-top: 1rem;
+      @apply flex flex-col justify-center;
+      .blog-title {
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        -webkit-line-clamp: 1 !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+      }
+    }
+    .name {
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      @apply text-xl;
+    }
+    .price {
+      color: red;
+    }
+    .blog-title {
+      font-weight: 600;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      @media (max-width: 1200px) {
+        margin-top: 1rem;
+      }
+      @media (max-width: 900px) {
+        margin-top: 1rem;
+        text-align: center;
+      }
+    }
+  }
+
+  .relatedBLogs-content-wrapper {
+    img {
+      @media (max-width: 900px) {
+        width: 100% !important;
+        height: 200px !important;
+        object-fit: cover !important;
+        max-height: none !important;
+      }
+    }
+  }
 }
-.related-cars-text-wrapper {
-  height: 30px;
+
+.related-blogs {
+  @apply mt-8;
+}
+.intro-container {
+  height: auto;
   width: 100%;
-  border-color: black;
-  text-align: center;
-  @apply border-t-2 mt-10;
-}
-.related-cars-text {
   position: relative;
-  background-color: white;
-  padding: 15px;
-  bottom: 50%;
-  line-height: 30px;
-  font-size: 30px;
-  color: red;
+  margin-top: 2rem;
+  .black-line {
+    width: 100%;
+    position: absolute;
+    bottom: 50%;
+    border-top: 2px solid black;
+    z-index: -9;
+  }
+}
+.text-wrapper {
+  cursor: pointer;
+  @apply flex items-center justify-center;
+  .related-cars-text {
+    padding: 15px;
+    font-size: 30px;
+    color: red;
+    background-color: white;
+    z-index: 9;
+  }
 }
 .car-comments {
   @apply my-8;
-  .writing-comment-area {
-  }
-  .comments-area {
+  .user-posted-comments-area {
     @apply mt-8;
     .slight-gray-bg {
       background-color: #f9f9f9;
@@ -158,15 +261,38 @@
         top: 60px;
         border-left: 1px solid var(--commentLine);
         z-index: -1;
+        // @apply mt-8 flex flex-row px-8 py-4;
+      }
+      .more-action {
+        position: absolute;
+        top: calc(50% - 25.5px);
+        right: 0;
+        z-index: 999;
+        .more-action-container {
+          user-select: none;
+          cursor: pointer;
+          @apply p-8;
+        }
       }
       .user-avatar {
         width: 56px;
         @apply flex justify-start;
       }
-      .user-comment {
+      .user-main-comment-and-actions {
         width: calc(100% - 56px);
-        border-bottom: 1px solid #e8ebee;
-        margin-left: 56px;
+        margin-left: 10px;
+        @apply pl-8;
+        .user-name-time-container {
+          @apply flex;
+          .time-diff {
+            color: #606060;
+            cursor: pointer;
+            user-select: none;
+            padding-left: 1rem;
+            font-size: 14px;
+            @apply flex items-center;
+          }
+        }
         .user-name {
           font-weight: 600;
         }
@@ -180,6 +306,7 @@
             user-select: none;
             cursor: pointer;
           }
+          @apply pt-2 flex;
           .like-area {
             user-select: none;
             @apply mr-4;
@@ -223,6 +350,7 @@
       }
       .reply-text {
         width: 100%;
+        z-index: 9999;
         @apply pl-4;
       }
     }
