@@ -20,15 +20,17 @@ const useCarComment = ({
   useEffect(() => {
     //// add comment using socket io
     const addCommentCallback = (newCreatedComment: any) => {
-      setSendingComment(false);
-      const momId = newCreatedComment.mom;
-      const newArr = replyingCommentIds.filter((id: number) => {
-        return id !== momId;
-      });
-      setReplyingCommentIds(newArr);
-      setTimeout(() => {
-        setUpdateComment(!updateComment);
-      }, 100);
+      if (replyingCommentIds.length > 0){
+        setSendingComment(false);
+        const momId = newCreatedComment.mom;
+        const newArr = replyingCommentIds.filter((id: number) => {
+          return id !== momId;
+        });
+        setReplyingCommentIds(newArr);
+        setTimeout(() => {
+          setUpdateComment(!updateComment);
+        }, 100);
+      }
 
       const commentCreated = { ...newCreatedComment, like: 0, dislike: 0 };
       setCarComments((carComments: any) => {
