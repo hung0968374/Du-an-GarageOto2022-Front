@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-export const socket = io('http://localhost:5001');
+export const socket = io('https://garage-oto-back.herokuapp.com');
 
 const assignCommentToMom = (comment: any, value: any) => {
   if (+comment.id === +value.mom) {

@@ -1,13 +1,11 @@
 import { Formik as FormValidation } from 'formik';
 import React from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { AlertColor, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import './SignUp.scss';
 import Auth, { UserRoles } from '../../../../common/interfaces/Auth';
 import { AuthForm, ImageSide } from '../../../../components/AuthForm/AuthForm';
-import env from '../../../../common/config/interface/env';
 import { CustomTextField, MuiButton, SubmitButtonStyle } from '../../../../components/MuiStyling/MuiStyling';
 import clientService from '../../../../services/clientService';
 import { CustomSnackbar } from '../../../../components/Snackbar/CustomSnackbar';
@@ -19,20 +17,17 @@ interface SignUpFormInitValue {
   email: string;
   password: string;
   reTypePassword?: string;
-  gCaptcha: string;
   roles: UserRoles;
 }
 
 export const SignUp = () => {
-  const captchaRef = React.useRef<any>();
   const [loading, setLoading] = React.useState(false);
   const [showSnackbar, setShowSnackbar] = React.useState(false);
   const [responseFromAPI, setResponseFromAPI] = React.useState('');
   const [snackbarType, setSnackbarType] = React.useState<AlertColor>();
 
   const signUpSubmit = async (signUpValues: SignUpFormInitValue) => {
-    const gCaptcha: string = await captchaRef.current?.executeAsync();
-    const signUpObj = { ...signUpValues, gCaptcha };
+    const signUpObj = { ...signUpValues };
     delete signUpObj?.reTypePassword;
 
     try {
@@ -63,7 +58,6 @@ export const SignUp = () => {
             email: '',
             password: '',
             reTypePassword: '',
-            gCaptcha: '',
             roles: UserRoles.CLIENT,
           }}
           validationSchema={Auth.clientSignUpSchema}
@@ -74,14 +68,6 @@ export const SignUp = () => {
         >
           {({ handleChange, handleBlur, touched, errors, values, handleSubmit }) => (
             <form onSubmit={handleSubmit} className="sign_up-form">
-              <ReCAPTCHA
-                ref={captchaRef}
-                sitekey={env.captchaSiteKey}
-                size="invisible"
-                badge="bottomleft"
-                theme="light"
-              />
-
               <div className="sign_up-full_name">
                 <CustomTextField
                   id="first-name"

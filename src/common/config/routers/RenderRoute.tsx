@@ -75,14 +75,16 @@ const staticRoute: RouteAttributes[] = [
   },
 ];
 
-const deletedRoute: RouteAttributes[] = [
+const authRoutes: RouteAttributes[] = [
   {
+    needImmidiateAuth: true,
     authorized: false,
     element: <LogIn />,
     path: routerPath.auth.LOG_IN,
     needNavigator: false,
   },
   {
+    needImmidiateAuth: true,
     authorized: false,
     element: <PasswordRecover />,
     path: routerPath.auth.PASSWORD_RECOVER,
@@ -95,6 +97,7 @@ const deletedRoute: RouteAttributes[] = [
     needNavigator: false,
   },
   {
+    needImmidiateAuth: true,
     authorized: false,
     element: <SignUp />,
     path: routerPath.auth.SIGN_UP,
@@ -114,5 +117,5 @@ export const RenderRoute = (): RouteAttributes[] => {
   if (token) {
     return [...staticRoute];
   }
-  return [...staticRoute, ...deletedRoute];
+  return [...staticRoute, ...authRoutes];
 };

@@ -5,4 +5,5 @@ export interface RouteAttributes {
   element: ReactNode;
   authorized: boolean;
   needNavigator: boolean;
+  needImmidiateAuth?: boolean;
 }

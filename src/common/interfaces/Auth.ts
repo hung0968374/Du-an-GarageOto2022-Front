@@ -20,7 +20,6 @@ export interface ClientSignUp {
   lastName: string;
   email: string;
   password: string;
-  gCaptcha: string;
   roles: string;
 }
 
@@ -111,7 +110,6 @@ class AuthInterfaces {
         .max(30, 'Incorrect password length')
         .required('This field can not be empty')
         .oneOf([Yup.ref('password')], "Password retype doesn't match "),
-      gCaptcha: Yup.string(),
       roles: Yup.string(),
     });
 

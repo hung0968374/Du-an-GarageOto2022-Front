@@ -27,7 +27,7 @@
     height: 100%;
     @apply p-3;
     & .blog-content-title {
-      height: calc(20% -10px);
+      height: calc(20% + 10px);
       font-size: 20px;
       font-weight: 700;
       text-align: justify;
