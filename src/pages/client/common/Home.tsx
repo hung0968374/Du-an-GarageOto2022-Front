@@ -13,6 +13,7 @@ import {
   TransparentButton,
 } from '../../../components/MuiStyling/MuiStyling';
 import { OUR_TEAMS, TeamAttributes } from '../../../common/constants/fakeData';
+import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
 export const Home = () => {
   const imageArr = [
@@ -168,6 +169,7 @@ export const Home = () => {
           })}
         </Grid>
       </ContainerWhite>
+      <MessengerComponent />
     </Container>
   );
 };

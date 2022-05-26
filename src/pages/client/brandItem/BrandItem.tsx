@@ -9,6 +9,7 @@ import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import { brandWallpapers } from '../../../common/constants/fakeData';
 import { FilterBrandItemInput } from '../../../common/interfaces/Auth';
+import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
 import { BrandItemIntroduce } from './components/BrandItemIntroduce';
 import { BrandItemMain } from './components/BrandItemMain';
@@ -263,6 +264,7 @@ export const BrandItem: React.FC = () => {
       />
 
       <BrandItemDetail brandItemRef={brandItemRef} brandItemAPI={brandItemAPI} imgObj={imgObj} />
+      <MessengerComponent />
     </Container>
   );
 };

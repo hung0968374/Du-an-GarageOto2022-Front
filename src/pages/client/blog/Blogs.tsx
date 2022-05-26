@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, CardActionArea, Pagination, PaginationItem, Link, Skeleton } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 import clientService from '../../../services/clientService';
 import './Blogs.scss';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import useBlog from '../../../common/hooks/useBlog';
+import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
 import { BlogItemInterface } from './BlogItem';
 
@@ -126,7 +126,7 @@ export const Blogs = () => {
           ></Pagination>
         </Box>
       </Container>
-      <MessengerCustomerChat pageId="103776409016741" appId="1201534210605638" />
+      <MessengerComponent />
     </>
   );
 };

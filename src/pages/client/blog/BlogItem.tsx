@@ -9,6 +9,7 @@ import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import './BlogItem.scss';
 import { removeTagsFromString } from '../../../common/helper/string';
 import useBlog from '../../../common/hooks/useBlog';
+import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
 export interface BlogItemInterface {
   descriptionImgs: string;
@@ -132,6 +133,7 @@ export const BlogItem = () => {
           </Grid>
         </Box>
       </Container>
+      <MessengerComponent />
     </>
   );
 };

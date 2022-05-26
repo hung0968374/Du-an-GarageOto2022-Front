@@ -27,6 +27,7 @@ import { ImageGallary } from '../../../components/ImageGallary/ImageGallery';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
 import { restructureCarComments } from '../../../common/helper/comment';
 import useCarDetail from '../../../common/hooks/useCarDetail';
+import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
 import RelatedCarsAndBlogs from './components/RelatedCarsAndBlogs';
 import CarDetailComment, { CommentReaction } from './components/CommentField';
@@ -397,6 +398,7 @@ const CarDetail: React.FC = () => {
           fetchingCarInfos={fetchingCarInfos}
         />
       </Box>
+      <MessengerComponent />
     </Container>
   );
 };

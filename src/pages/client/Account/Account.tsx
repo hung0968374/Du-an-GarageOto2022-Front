@@ -11,6 +11,7 @@ import TimeHelper from '../../../common/helper/time';
 import { useAppSelector } from '../../../common/hooks/ReduxHook';
 import { CustomSnackbar } from '../../../components/Snackbar/CustomSnackbar';
 import { RootState } from '../../../reduxToolKit-Saga/store';
+import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
 import Profile from './Components/Profile';
 import { Payment } from './Components/Payment';
@@ -254,6 +255,7 @@ export const Account = () => {
         res={snackBarMessage}
         snackbarColor={snackBarMessage && snackBarMessage.includes('wrong') ? 'error' : 'success'}
       />
+      <MessengerComponent />
     </ContainerGrey>
   );
 };

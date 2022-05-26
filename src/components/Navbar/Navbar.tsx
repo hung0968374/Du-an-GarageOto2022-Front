@@ -194,7 +194,7 @@ const Navbar = () => {
       <CustomFooter windowWidth={windowWidth} />
       <SpeedDial
         ariaLabel="SpeedDial"
-        sx={{ position: 'fixed', bottom: 18, right: 18, display: scrollTopDisplay ? 'flex' : 'none' }}
+        sx={{ position: 'fixed', bottom: 18, left: 18, display: scrollTopDisplay ? 'flex' : 'none' }}
         icon={<SpeedDialIcon />}
         className="speed-dial"
       >
