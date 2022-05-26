@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook'
 import { restructureCarComments } from '../../../common/helper/comment';
 import useCarDetail from '../../../common/hooks/useCarDetail';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import CustomImage from '../../../components/Image/CustomImage';
 
 import RelatedCarsAndBlogs from './components/RelatedCarsAndBlogs';
 import CarDetailComment, { CommentReaction } from './components/CommentField';
@@ -320,7 +321,17 @@ const CarDetail: React.FC = () => {
                                         }
                                         return (
                                           <Grid key={idx} item sm={12} md={gridSize}>
-                                            <img className={`img-intro-item`} src={img} alt="" />
+                                            {/* <img
+                                              className={`img-intro-item`}
+                                              src={img}
+                                              alt=""
+                                              onError={({ currentTarget }: any) => {
+                                                currentTarget.onerror = null; // prevents looping
+                                                currentTarget.src =
+                                                  'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png';
+                                              }}
+                                            /> */}
+                                            <CustomImage source={img} style={{ width: '100%', height: '100%' }} />
                                           </Grid>
                                         );
                                       })}

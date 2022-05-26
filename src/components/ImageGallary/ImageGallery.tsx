@@ -22,7 +22,16 @@ const TempImageGallary: React.FC<any> = ({ urls = [] }) => {
         {urls.map((imgUrl: string, idx: number) => {
           return (
             <SwiperSlide key={idx}>
-              <img className="img-style-1" src={imgUrl} alt="" />
+              <img
+                className="img-style-1"
+                src={imgUrl}
+                alt=""
+                onError={({ currentTarget }: any) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src =
+                    'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png';
+                }}
+              />
             </SwiperSlide>
           );
         })}
@@ -41,7 +50,16 @@ const TempImageGallary: React.FC<any> = ({ urls = [] }) => {
           return (
             <SwiperSlide key={idx}>
               <div className="img-2-wrapper">
-                <img className="img-style-2" src={imgUrl} alt="" />
+                <img
+                  className="img-style-2"
+                  src={imgUrl}
+                  alt=""
+                  onError={({ currentTarget }: any) => {
+                    currentTarget.onerror = null; // prevents looping
+                    currentTarget.src =
+                      'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png';
+                  }}
+                />
               </div>
             </SwiperSlide>
           );

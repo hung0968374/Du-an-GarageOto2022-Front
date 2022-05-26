@@ -31,6 +31,7 @@ import {
 import { allPrice } from '../../../../common/constants/fakeData';
 import { getAverageStarPoint } from '../../../../common/helper/starRating';
 import { handleBrandName } from '../../../../common/helper/brand';
+import CustomImage from '../../../../components/Image/CustomImage';
 import { CarAttributes, SeatAttributes } from '../brand';
 
 import { ProductEmpty } from './ProductEmpty';
@@ -146,14 +147,11 @@ export const BrandItemMain: React.FC<BrandItemMainProps> = ({
                             {loadingFirebaseImg ? (
                               <Skeleton variant="rectangular" width={'100%'} height={'9rem'} />
                             ) : (
-                              <>
-                                <CardMedia
-                                  className="h-36 "
-                                  component="img"
-                                  image={carsImgsFromFirebase[index]}
-                                  alt={item.name}
-                                />
-                              </>
+                              <CustomImage
+                                source={carsImgsFromFirebase[index]}
+                                alt={item.name}
+                                style={{ width: '100%', height: '144px', objectFit: 'cover' }}
+                              />
                             )}
                             <CardContent sx={{ paddingInline: '1.5rem', minHeight: '8rem' }}>
                               <Typography gutterBottom variant="h6" component="div">
