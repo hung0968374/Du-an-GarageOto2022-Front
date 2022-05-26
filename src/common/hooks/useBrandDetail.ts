@@ -1,5 +1,6 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback } from 'react';
 
+import { handleBrandDescription } from '../helper/brand';
 import { replaceDirtyImgUrls } from '../helper/image';
 
 const useBrandDetail = () => {
@@ -45,7 +46,26 @@ const useBrandDetail = () => {
     },
     [],
   );
-  return { setCarsImgsFromFirebase };
+
+  const modifiedDescription = React.useCallback(({ brandDetailInfos, originalImgs, imgObj }: any) => {
+    let temp = handleBrandDescription(brandDetailInfos?.descriptions as string)
+      .replaceAll('>,', '>')
+      .replaceAll(`\\`, '');
+    originalImgs?.forEach((originalImg: any, idx: number) => {
+      if (imgObj?.brandImgs?.length > 0) {
+        temp = temp
+          .replaceAll(originalImg, imgObj?.brandImgs[idx])
+          .replaceAll(originalImg.split('..')[1], imgObj?.brandImgs[idx]);
+      }
+    });
+    temp = temp.slice(1, -1);
+    if (temp[temp.length - 1] === `"`) {
+      temp = temp.slice(0, -1);
+    }
+    return temp;
+  }, []);
+
+  return { setCarsImgsFromFirebase, modifiedDescription };
 };
 
 export default useBrandDetail;

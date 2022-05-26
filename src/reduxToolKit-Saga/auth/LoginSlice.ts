@@ -31,7 +31,6 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     login: (state: LoginInitialState, _action: PayloadAction<LoginParams>) => {
-      console.log('_action: ', _action);
       state.isLoggingIn = true;
     },
     loginSuccess: (state: LoginInitialState, action: PayloadAction<LoginReturn>) => {

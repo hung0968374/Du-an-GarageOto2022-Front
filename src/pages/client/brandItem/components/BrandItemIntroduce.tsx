@@ -3,13 +3,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { allBrand } from '../../../../common/constants/fakeData';
-import { routerPath } from '../../../../common/constants/routerPath';
+import { handleBrandInURL, handleBrandName, shortcutDescription } from '../../../../common/helper/brand';
 import { replaceDirtyImgUrls } from '../../../../common/helper/image';
+import useBrandDetail from '../../../../common/hooks/useBrandDetail';
 import { CarDetailImgs } from '../../../../common/hooks/useFetchImgs';
 import { SecondContainerWhite, TransparentBrandButton } from '../../../../components/MuiStyling/MuiStyling';
-import { BodyTypeAttributes, BrandItemAttributes } from '../BrandItem';
-
-import { capitalizeFirstLetter } from './BrandItemMain';
+import { BodyTypeAttributes, BrandItemAttributes } from '../brand';
 
 interface BrandItemIntroduceProps {
   discoverRef: React.RefObject<HTMLDivElement>;
@@ -37,66 +36,20 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
   availableBodyTypes,
 }) => {
   const navigate = useNavigate();
+  const { modifiedDescription } = useBrandDetail();
 
   const allBodyType = availableBodyTypes.map((item) => item.design);
-
-  const handleBrandDescription = (description: string) => {
-    let newDes: any = description?.slice(1, -1);
-    newDes = newDes.split('\\n').map((el: any) => {
-      return el;
-    });
-    const temp = newDes.splice(0, newDes.length / 2);
-    return [...temp, ...newDes].join();
-  };
-
   const originalImgs = React.useMemo(() => {
     return replaceDirtyImgUrls(brandDetailInfos?.descriptionImgs)?.map((url: string) => {
       return '..' + url;
     });
   }, [brandDetailInfos.descriptionImgs]);
 
-  const modifiedDescription = React.useMemo(() => {
-    let temp = handleBrandDescription(brandDetailInfos?.descriptions as string)
-      .replaceAll('>,', '>')
-      .replaceAll(`\\`, '');
-    originalImgs?.forEach((originalImg, idx) => {
-      if (imgObj?.brandImgs?.length > 0) {
-        temp = temp
-          .replaceAll(originalImg, imgObj?.brandImgs[idx])
-          .replaceAll(originalImg.split('..')[1], imgObj?.brandImgs[idx]);
-      }
-    });
-    temp = temp.slice(1, -1);
-    if (temp[temp.length - 1] === `"`) {
-      temp = temp.slice(0, -1);
-    }
-    return temp;
-  }, [brandDetailInfos.descriptions, imgObj.brandImgs, originalImgs]);
-
-  const shortcutDescription = (des: string) => {
-    if (des?.length >= 400) return des?.slice(0, 400) + '...';
-    return des + '...';
-  };
-
-  const handleBrandName = () => {
-    if (brandName === 'bmw') return 'BMW';
-    if (brandName === 'rolls-royce') return 'Rolls Royce';
-    return capitalizeFirstLetter(brandName as string);
-  };
-
-  const handleBrandInURL = (brandName: string) => {
-    const numberOfString = brandName.split(' ');
-    if (numberOfString.length === 1) {
-      return `${routerPath.common.BRAND}/${brandName.toLocaleLowerCase()}`;
-    } else {
-      const handleBrandName = numberOfString.reduce(
-        (previousValue, currentValue) => previousValue + currentValue + '-',
-        '',
-      );
-      const newBrandName = handleBrandName.slice(0, handleBrandName.length - 1); //xoá phần tử cuối của string
-      return `${routerPath.common.BRAND}/${newBrandName.toLocaleLowerCase()}`;
-    }
-  };
+  const brandDescription = modifiedDescription({
+    brandDetailInfos,
+    originalImgs,
+    imgObj,
+  });
 
   return (
     <SecondContainerWhite maxWidth={false} ref={discoverRef}>
@@ -104,7 +57,9 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
         <div className="all-brand-body_type py-4">
           <Autocomplete
             value={
-              brandNameSelectValue !== '' && brandNameSelectValue !== null ? brandNameSelectValue : handleBrandName()
+              brandNameSelectValue !== '' && brandNameSelectValue !== null
+                ? brandNameSelectValue
+                : handleBrandName(brandName)
             }
             onChange={(event: any, newValue: string | null) => {
               setBrandNameSelectValue(newValue);
@@ -113,6 +68,7 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
             sx={{ width: '15rem', marginLeft: '1rem' }}
             options={allBrand}
             renderInput={(params) => <TextField {...params} label="Brand" />}
+            blurOnSelect={true}
           />
           <Autocomplete
             value={bodyTypeInForm}
@@ -123,6 +79,7 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
             sx={{ width: '15rem', marginLeft: '1rem' }}
             options={allBodyType}
             renderInput={(params) => <TextField {...params} label="Bodytype" />}
+            blurOnSelect={true}
           />
         </div>
 
@@ -134,7 +91,7 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
             <Grid item xs={12} md={8}>
               <div
                 className="mb-4 text-justify leading-6"
-                dangerouslySetInnerHTML={{ __html: shortcutDescription(modifiedDescription) }}
+                dangerouslySetInnerHTML={{ __html: shortcutDescription(brandDescription) }}
               ></div>
               <TransparentBrandButton
                 className="see-more"

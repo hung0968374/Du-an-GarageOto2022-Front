@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { BrandItemAttributes } from '../brand';
+import { handleBrandDescription } from '../../../../common/helper/brand';
 import { replaceDirtyImgUrls } from '../../../../common/helper/image';
+import useBrandDetail from '../../../../common/hooks/useBrandDetail';
 import { CarDetailImgs } from '../../../../common/hooks/useFetchImgs';
 import { SecondContainerWhite } from '../../../../components/MuiStyling/MuiStyling';
-import { BrandItemAttributes } from '../BrandItem';
 
 interface BrandItemDetailProps {
   brandItemRef: React.RefObject<HTMLDivElement>;
@@ -12,14 +14,7 @@ interface BrandItemDetailProps {
 }
 
 export const BrandItemDetail: React.FC<BrandItemDetailProps> = ({ brandItemRef, brandDetailInfos, imgObj }) => {
-  const handleBrandDescription = (description: string) => {
-    let newDes: any = description?.slice(1, -1);
-    newDes = newDes.split('\\n').map((el: any) => {
-      return el;
-    });
-    const temp = newDes.splice(0, newDes.length / 2);
-    return [...temp, ...newDes].join();
-  };
+  const { modifiedDescription } = useBrandDetail();
 
   const originalImgs = React.useMemo(() => {
     return replaceDirtyImgUrls(brandDetailInfos?.descriptionImgs)?.map((url: string) => {
@@ -27,28 +22,17 @@ export const BrandItemDetail: React.FC<BrandItemDetailProps> = ({ brandItemRef, 
     });
   }, [brandDetailInfos.descriptionImgs]);
 
-  const modifiedDescription = React.useMemo(() => {
-    let temp = handleBrandDescription(brandDetailInfos?.descriptions as string)
-      .replaceAll('>,', '>')
-      .replaceAll(`\\`, '');
-    originalImgs?.forEach((originalImg, idx) => {
-      if (imgObj?.brandImgs?.length > 0) {
-        temp = temp
-          .replaceAll(originalImg, imgObj?.brandImgs[idx])
-          .replaceAll(originalImg.split('..')[1], imgObj?.brandImgs[idx]);
-      }
-    });
-    temp = temp.slice(1, -1);
-    if (temp[temp.length - 1] === `"`) {
-      temp = temp.slice(0, -1);
-    }
-    return temp;
-  }, [brandDetailInfos.descriptions, imgObj.brandImgs, originalImgs]);
+  const brandDescription = modifiedDescription({
+    brandDetailInfos,
+    originalImgs,
+    imgObj,
+  });
+
   return (
     <SecondContainerWhite>
       <div className="brand_item-detail  mt-12" ref={brandItemRef}>
         <div className="brand-detail-description p-4">
-          <div className="render-detail mb-4 leading-7" dangerouslySetInnerHTML={{ __html: modifiedDescription }}></div>
+          <div className="render-detail mb-4 leading-7" dangerouslySetInnerHTML={{ __html: brandDescription }}></div>
         </div>
       </div>
     </SecondContainerWhite>

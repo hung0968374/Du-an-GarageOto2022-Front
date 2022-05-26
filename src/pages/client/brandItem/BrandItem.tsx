@@ -1,58 +1,22 @@
 import { Container, Typography, Box } from '@mui/material';
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import './BrandItem.scss';
 import { TransparentButton } from '../../../components/MuiStyling/MuiStyling';
 import clientService from '../../../services/clientService';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
-import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import { brandWallpapers } from '../../../common/constants/fakeData';
 import { FilterBrandItemInput } from '../../../common/interfaces/Auth';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 import useBrandDetail from '../../../common/hooks/useBrandDetail';
+import { setBrandCars } from '../../../reduxToolKit-Saga/brand/BrandSlice';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
 
 import { BrandItemIntroduce } from './components/BrandItemIntroduce';
 import { BrandItemMain } from './components/BrandItemMain';
 import { BrandItemDetail } from './components/BrandItemDetail';
-
-export interface BrandItemAttributes {
-  id: string;
-  name: string;
-  descriptions: string;
-  shortDescriptions: string;
-  brandImg: string;
-  descriptionImgs: string;
-}
-
-interface CarImgAttributes {
-  introImgs: string;
-  imgs: string;
-}
-
-type RatingPointAttrs = {
-  carId: number;
-  id: number;
-  ratingPoint: string;
-  userId: number;
-};
-
-export interface CarAttributes {
-  id: string;
-  name: string;
-  price: string;
-  seat: string;
-  carAppearance: CarImgAttributes;
-  ratingPoints: RatingPointAttrs;
-}
-
-export interface BodyTypeAttributes {
-  design: string;
-}
-
-export interface SeatAttributes {
-  seats: string;
-}
+import { BrandItemAttributes, CarAttributes, BodyTypeAttributes, SeatAttributes } from './brand';
 
 const mainImgStyle = (brand: string | undefined) => {
   if (!brand) return;
@@ -72,6 +36,8 @@ export const BrandItem: React.FC = () => {
   const { setCarsImgsFromFirebase } = useBrandDetail();
   const params = useParams();
 
+  const brandCars = useAppSelector((state) => state.baseItemInfos.brand.cars);
+  const dispatch = useAppDispatch();
   const discoverRef = React.useRef<HTMLDivElement>(null);
   const brandItemRef = React.useRef<HTMLDivElement>(null);
   const { brandName } = useParams<string>();
@@ -86,6 +52,7 @@ export const BrandItem: React.FC = () => {
   const [carsImgsFromFirebase, setCarsImgsUsingFirebase] = useState<Array<any>>([]);
   const [filterCarAPI, setFilterCarAPI] = useState<Array<CarAttributes>>([]);
   const [loadingFirebaseImg, setLoadingFirebaseImg] = useState(false);
+  const [filteringCars, setFilteringCars] = useState(false);
 
   //// begin filter values
   const [brandNameSelectValue, setBrandNameSelectValue] = React.useState<string | null>('');
@@ -96,7 +63,6 @@ export const BrandItem: React.FC = () => {
   const [seatInForm, setSeatInForm] = useState<string | null>('');
   const [radioASC, setRadioASC] = React.useState<string>('asc');
   //// end filter values
-  console.log('filterCarAPI', filterCarAPI);
 
   const brandImgUrls = useMemo(() => {
     return brandDetailInfos.descriptionImgs.split(`","`);
@@ -115,7 +81,7 @@ export const BrandItem: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [brandName]);
 
   React.useEffect(() => {
     const getBrandApi = async (brand: string) => {
@@ -141,11 +107,32 @@ export const BrandItem: React.FC = () => {
     getBodyTypeApi(brandName as string);
   }, [brandName]);
 
+  const notTriggerFilteringCondition =
+    bodyTypeInForm === '' && priceInForm === '' && seatInForm === '' && radioASC === 'asc';
+
+  useEffect(() => {
+    if (notTriggerFilteringCondition) {
+      // @ts-expect-error: Let's ignore a compile error like this unreachable code
+      setFilterCarAPI(brandCars[brandName as string] || []);
+    }
+  }, [brandCars, brandName, notTriggerFilteringCondition, bodyTypeInForm, priceInForm, seatInForm]);
+
   useEffect(() => {
     const filterInBrandItemApi = async (param: FilterBrandItemInput) => {
+      setFilteringCars(true);
       try {
         const response = await clientService.filterInBrandItem(param);
-        setFilterCarAPI(response.filterCar);
+        // @ts-expect-error: Let's ignore a compile error like this unreachable code
+        if (notTriggerFilteringCondition && !brandCars[brandName as string]) {
+          dispatch(
+            setBrandCars({
+              [brandName as string]: response.filterCar,
+            }),
+          );
+        } else if (!notTriggerFilteringCondition) {
+          setFilterCarAPI(response.filterCar);
+        }
+        setFilteringCars(false);
       } catch (error: any) {
         console.log(error);
       }
@@ -158,7 +145,17 @@ export const BrandItem: React.FC = () => {
       seat: seatInForm as string,
       radio: radioASC,
     });
-  }, [brandName, bodyTypeInForm, priceInForm, seatInForm, radioASC]);
+  }, [
+    brandName,
+    dispatch,
+    setFilterCarAPI,
+    bodyTypeInForm,
+    priceInForm,
+    brandCars,
+    notTriggerFilteringCondition,
+    seatInForm,
+    radioASC,
+  ]);
 
   React.useEffect(() => {
     const fetchImgs = async () => {
@@ -216,6 +213,8 @@ export const BrandItem: React.FC = () => {
         setRadioASC={setRadioASC}
         filterCarAPI={filterCarAPI}
         loadingFirebaseImg={loadingFirebaseImg}
+        filteringCars={filteringCars}
+        notTriggerFilteringCondition={notTriggerFilteringCondition}
       />
 
       <BrandItemDetail brandItemRef={brandItemRef} brandDetailInfos={brandDetailInfos} imgObj={imgObj} />

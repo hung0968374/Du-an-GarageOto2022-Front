@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { CarAttributes } from '../../pages/client/brandItem/brand';
+
 interface BrandInfo {
   brandImg: string;
   descriptionImgs: string;
@@ -9,14 +11,18 @@ interface BrandInfo {
   name: string;
 }
 
+interface BrandCars {
+  brandName?: CarAttributes[];
+}
+
 export interface BrandState {
   brands: Array<BrandInfo>;
-  brandDetails: Record<string, any>;
+  cars: BrandCars;
 }
 
 const initialState: BrandState = {
   brands: [],
-  brandDetails: {},
+  cars: {},
 };
 
 export const brandSlice = createSlice({
@@ -26,9 +32,12 @@ export const brandSlice = createSlice({
     setBrandsInfos: (state: BrandState, action: PayloadAction<Array<BrandInfo>>) => {
       state.brands = action.payload;
     },
+    setBrandCars: (state: BrandState, action: PayloadAction<BrandCars>) => {
+      state.cars = { ...state.cars, ...action.payload };
+    },
   },
 });
 
-export const { setBrandsInfos } = brandSlice.actions;
+export const { setBrandsInfos, setBrandCars } = brandSlice.actions;
 
 export default brandSlice.reducer;

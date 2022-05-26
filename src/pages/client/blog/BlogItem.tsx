@@ -76,7 +76,6 @@ export const BlogItem = () => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
-  console.log('currBlog', currBlog);
   return (
     <>
       <Container maxWidth="md" sx={{ marginTop: '154px', marginBottom: '100px' }}>
