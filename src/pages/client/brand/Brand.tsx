@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { routerPath } from '../../../common/constants/routerPath';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
 import { Loading } from '../../../components/loading/Loading';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 import {
@@ -13,31 +14,28 @@ import {
   SubmitButtonStyle,
   TransparentButton,
 } from '../../../components/MuiStyling/MuiStyling';
+import { setBrandsInfos } from '../../../reduxToolKit-Saga/brand/BrandSlice';
 import clientService from '../../../services/clientService';
 import './Brand.scss';
 
-interface BrandAttributes {
-  id: string;
-  name: string;
-  brandImg: string;
-  shortDescriptions: string;
-}
-
 export const Brand: React.FC = () => {
   const divRef = useRef<HTMLDivElement>(null);
-  const [allBrandAPI, setAllBrandAPI] = React.useState<BrandAttributes[]>([]);
+  const dispatch = useAppDispatch();
+  const brandsInfos = useAppSelector((state) => state.baseItemInfos.brand.brands);
 
   React.useEffect(() => {
     const fetchBrandFromAPI = async () => {
       try {
         const response = await clientService.getAllBrand();
-        setAllBrandAPI(response.allBrand);
+        dispatch(setBrandsInfos(response.allBrand));
       } catch (error: any) {
         console.log(error);
       }
     };
-    fetchBrandFromAPI();
-  }, []);
+    if (!(brandsInfos.length > 0)) {
+      fetchBrandFromAPI();
+    }
+  }, [dispatch, brandsInfos]);
 
   const handleBrandInURL = (brandName: string) => {
     const numberOfString = brandName.split(' ');
@@ -87,11 +85,11 @@ export const Brand: React.FC = () => {
             Our brands
           </Typography>
 
-          {allBrandAPI.length === 0 ? (
+          {brandsInfos.length === 0 ? (
             <Loading />
           ) : (
             <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} spacing={2}>
-              {allBrandAPI?.map((item, index) => (
+              {brandsInfos?.map((item, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={12 / 5} sx={{ padding: '0.5rem' }} key={index}>
                   <Card>
                     <CardActionArea>

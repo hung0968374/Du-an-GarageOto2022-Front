@@ -10,6 +10,7 @@ import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import { brandWallpapers } from '../../../common/constants/fakeData';
 import { FilterBrandItemInput } from '../../../common/interfaces/Auth';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import useBrandDetail from '../../../common/hooks/useBrandDetail';
 
 import { BrandItemIntroduce } from './components/BrandItemIntroduce';
 import { BrandItemMain } from './components/BrandItemMain';
@@ -67,10 +68,14 @@ const mainImgStyle = (brand: string | undefined) => {
 };
 
 export const BrandItem: React.FC = () => {
+  const { imgObj, downloadImgsFromFirebase, getImgFromFirebase } = useFetchImgs();
+  const { setCarsImgsFromFirebase } = useBrandDetail();
+  const params = useParams();
+
   const discoverRef = React.useRef<HTMLDivElement>(null);
   const brandItemRef = React.useRef<HTMLDivElement>(null);
   const { brandName } = useParams<string>();
-  const [brandItemAPI, setBrandItemAPI] = React.useState<BrandItemAttributes>({
+  const [brandDetailInfos, setBrandDetailInfos] = React.useState<BrandItemAttributes>({
     id: '',
     name: '',
     descriptions: '',
@@ -78,24 +83,24 @@ export const BrandItem: React.FC = () => {
     brandImg: '',
     descriptionImgs: '',
   });
-  const [carInfoAPI, setCarInfoAPI] = React.useState<Array<CarAttributes>>([]);
-  const [imgFromFirebase, setImgFromFirebase] = useState<Array<any>>([]);
+  const [carsImgsFromFirebase, setCarsImgsUsingFirebase] = useState<Array<any>>([]);
+  const [filterCarAPI, setFilterCarAPI] = useState<Array<CarAttributes>>([]);
+  const [loadingFirebaseImg, setLoadingFirebaseImg] = useState(false);
+
+  //// begin filter values
   const [brandNameSelectValue, setBrandNameSelectValue] = React.useState<string | null>('');
-  const [bodyTypeFormAPI, setBodyTypeFormAPI] = React.useState<Array<BodyTypeAttributes>>([]);
-  const [seatFromAPI, setSeatFromAPI] = React.useState<Array<SeatAttributes>>([]);
+  const [availableBodyTypes, setAvailableBodyTypes] = React.useState<Array<BodyTypeAttributes>>([]);
+  const [availableSeats, setAvailableSeats] = React.useState<Array<SeatAttributes>>([]);
   const [bodyTypeInForm, setBodyTypeInForm] = useState<string | null>('');
   const [priceInForm, setPriceInForm] = useState<string | null>('');
   const [seatInForm, setSeatInForm] = useState<string | null>('');
   const [radioASC, setRadioASC] = React.useState<string>('asc');
-  const [filterCarAPI, setFilterCarAPI] = useState<Array<CarAttributes>>([]);
-  const [loadingFirebaseImg, setLoadingFirebaseImg] = useState(false);
-
-  const { imgObj, downloadImgsFromFirebase, getImgFromFirebase } = useFetchImgs();
-  const params = useParams();
+  //// end filter values
+  console.log('filterCarAPI', filterCarAPI);
 
   const brandImgUrls = useMemo(() => {
-    return brandItemAPI.descriptionImgs.split(`","`);
-  }, [brandItemAPI.descriptionImgs]);
+    return brandDetailInfos.descriptionImgs.split(`","`);
+  }, [brandDetailInfos.descriptionImgs]);
 
   React.useEffect(() => {
     const fetchImgs = async () => {
@@ -104,48 +109,9 @@ export const BrandItem: React.FC = () => {
     fetchImgs();
   }, [downloadImgsFromFirebase, brandImgUrls]);
 
-  const carFirebaseImgs = useCallback(async () => {
-    if (filterCarAPI.length > 0) {
-      setLoadingFirebaseImg(true);
-      const newImgs = await Promise.allSettled(
-        filterCarAPI.map((car: any) => {
-          let carImg = '';
-          let tinbanxeImg;
-          if (car.carAppearance.newIntroImgs.length < 5) {
-            const carIntroImgs = replaceDirtyImgUrls(car.carAppearance.imgs, false);
-            if (carIntroImgs) {
-              return Promise.resolve(carIntroImgs[0]);
-            }
-          }
-          const firebaseImgUrls = replaceDirtyImgUrls(car.carAppearance.newIntroImgs);
-          const tinbanxeImgs = replaceDirtyImgUrls(car.carAppearance.introImgs, false);
-          if (tinbanxeImgs && firebaseImgUrls) {
-            if (firebaseImgUrls?.length === 1) {
-              carImg = firebaseImgUrls[0];
-              tinbanxeImg = tinbanxeImgs[0];
-            } else {
-              carImg = firebaseImgUrls[1];
-              tinbanxeImg = tinbanxeImgs[1];
-            }
-          }
-          const carImgRes = getImgFromFirebase(carImg, tinbanxeImg);
-          return carImgRes;
-        }),
-      );
-      const availableImgs = newImgs.reduce((acc: any, promise: any) => {
-        if (promise.status === 'fulfilled') {
-          acc.push(promise.value);
-          return acc;
-        }
-        return acc;
-      }, []) as any;
-      setImgFromFirebase(availableImgs);
-      setLoadingFirebaseImg(false);
-    }
-  }, [getImgFromFirebase, filterCarAPI]) as any;
   useEffect(() => {
-    carFirebaseImgs();
-  }, [carFirebaseImgs]);
+    setCarsImgsFromFirebase({ filterCarAPI, setLoadingFirebaseImg, setCarsImgsUsingFirebase, getImgFromFirebase });
+  }, [setCarsImgsFromFirebase, filterCarAPI, setLoadingFirebaseImg, getImgFromFirebase]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -155,16 +121,7 @@ export const BrandItem: React.FC = () => {
     const getBrandApi = async (brand: string) => {
       try {
         const response = await clientService.getBrand(brand);
-        setBrandItemAPI(response.brandInfo);
-      } catch (error: any) {
-        console.log(error.response);
-      }
-    };
-
-    const getCarByBrandNameApi = async (brand: string) => {
-      try {
-        const response = await clientService.getCarByBrandName(brand);
-        setCarInfoAPI(response.cars);
+        setBrandDetailInfos(response.brandInfo);
       } catch (error: any) {
         console.log(error.response);
       }
@@ -173,15 +130,14 @@ export const BrandItem: React.FC = () => {
     const getBodyTypeApi = async (brand: string) => {
       try {
         const response = await clientService.getAllBrandItemAttribute(brand);
-        setBodyTypeFormAPI(response.result.designAttribute);
-        setSeatFromAPI(response.result.seatAttribute);
+        setAvailableBodyTypes(response.result.designAttribute);
+        setAvailableSeats(response.result.seatAttribute);
       } catch (error: any) {
         console.log(error.response);
       }
     };
 
     getBrandApi(brandName as string);
-    getCarByBrandNameApi(brandName as string);
     getBodyTypeApi(brandName as string);
   }, [brandName]);
 
@@ -238,21 +194,20 @@ export const BrandItem: React.FC = () => {
       <BrandItemIntroduce
         discoverRef={discoverRef}
         brandItemRef={brandItemRef}
-        brandItemAPI={brandItemAPI}
+        brandDetailInfos={brandDetailInfos}
         imgObj={imgObj}
         brandNameSelectValue={brandNameSelectValue}
         setBrandNameSelectValue={setBrandNameSelectValue}
         brandName={brandName}
-        bodyTypeFormAPI={bodyTypeFormAPI}
+        availableBodyTypes={availableBodyTypes}
         bodyTypeInForm={bodyTypeInForm}
         setBodyTypeInForm={setBodyTypeInForm}
       />
 
       <BrandItemMain
         brandName={brandName}
-        carInfoAPI={carInfoAPI}
-        imgFromFirebase={imgFromFirebase}
-        seatFromAPI={seatFromAPI}
+        carsImgsFromFirebase={carsImgsFromFirebase}
+        availableSeats={availableSeats}
         priceInForm={priceInForm}
         seatInForm={seatInForm}
         setPriceInForm={setPriceInForm}
@@ -263,7 +218,7 @@ export const BrandItem: React.FC = () => {
         loadingFirebaseImg={loadingFirebaseImg}
       />
 
-      <BrandItemDetail brandItemRef={brandItemRef} brandItemAPI={brandItemAPI} imgObj={imgObj} />
+      <BrandItemDetail brandItemRef={brandItemRef} brandDetailInfos={brandDetailInfos} imgObj={imgObj} />
       <MessengerComponent />
     </Container>
   );

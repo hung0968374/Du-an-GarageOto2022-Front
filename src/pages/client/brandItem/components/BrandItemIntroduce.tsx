@@ -14,32 +14,31 @@ import { capitalizeFirstLetter } from './BrandItemMain';
 interface BrandItemIntroduceProps {
   discoverRef: React.RefObject<HTMLDivElement>;
   brandItemRef: React.RefObject<HTMLDivElement>;
-  brandItemAPI: BrandItemAttributes;
+  brandDetailInfos: BrandItemAttributes;
   imgObj: CarDetailImgs;
   brandNameSelectValue: string | null;
   bodyTypeInForm: string | null;
   setBrandNameSelectValue: React.Dispatch<React.SetStateAction<string | null>>;
   setBodyTypeInForm: React.Dispatch<React.SetStateAction<string | null>>;
   brandName?: string;
-  bodyTypeFormAPI: BodyTypeAttributes[];
+  availableBodyTypes: BodyTypeAttributes[];
 }
 
 export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
   discoverRef,
   brandItemRef,
-  brandItemAPI,
+  brandDetailInfos,
   imgObj,
   brandNameSelectValue,
   bodyTypeInForm,
   brandName,
   setBrandNameSelectValue,
   setBodyTypeInForm,
-
-  bodyTypeFormAPI,
+  availableBodyTypes,
 }) => {
   const navigate = useNavigate();
 
-  const allBodyType = bodyTypeFormAPI.map((item) => item.design);
+  const allBodyType = availableBodyTypes.map((item) => item.design);
 
   const handleBrandDescription = (description: string) => {
     let newDes: any = description?.slice(1, -1);
@@ -51,13 +50,13 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
   };
 
   const originalImgs = React.useMemo(() => {
-    return replaceDirtyImgUrls(brandItemAPI?.descriptionImgs)?.map((url: string) => {
+    return replaceDirtyImgUrls(brandDetailInfos?.descriptionImgs)?.map((url: string) => {
       return '..' + url;
     });
-  }, [brandItemAPI.descriptionImgs]);
+  }, [brandDetailInfos.descriptionImgs]);
 
   const modifiedDescription = React.useMemo(() => {
-    let temp = handleBrandDescription(brandItemAPI?.descriptions as string)
+    let temp = handleBrandDescription(brandDetailInfos?.descriptions as string)
       .replaceAll('>,', '>')
       .replaceAll(`\\`, '');
     originalImgs?.forEach((originalImg, idx) => {
@@ -72,7 +71,7 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
       temp = temp.slice(0, -1);
     }
     return temp;
-  }, [brandItemAPI.descriptions, imgObj.brandImgs, originalImgs]);
+  }, [brandDetailInfos.descriptions, imgObj.brandImgs, originalImgs]);
 
   const shortcutDescription = (des: string) => {
     if (des?.length >= 400) return des?.slice(0, 400) + '...';
@@ -130,7 +129,7 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
         <div className="brand-short-description p-4">
           <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <img src={brandItemAPI?.brandImg} alt="" />
+              <img src={brandDetailInfos?.brandImg} alt="" />
             </Grid>
             <Grid item xs={12} md={8}>
               <div

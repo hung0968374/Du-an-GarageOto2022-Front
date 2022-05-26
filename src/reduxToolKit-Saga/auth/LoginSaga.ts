@@ -1,6 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import * as Sentry from '@sentry/react';
 
 import { routerPath } from '../../common/constants/routerPath';
 import { destroyCookie, destroyLocalStorageItem, setCookie, setLocalStorageItem } from '../../common/helper/storage';
@@ -44,11 +43,6 @@ function* loginSaga(action: PayloadAction<LoginParams>) {
     }
   } catch (error: any) {
     const resErr: LoginErrorResponse = error.response;
-
-    if (resErr.status === 500) {
-      Sentry.captureException({ reason: 'Error at loginSaga()', exception: resErr }, { level: Sentry.Severity.Fatal });
-      Sentry.captureMessage('Error at loginSaga()');
-    }
 
     yield put(
       loginReject({

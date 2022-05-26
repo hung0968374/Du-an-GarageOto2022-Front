@@ -7,11 +7,11 @@ import { BrandItemAttributes } from '../BrandItem';
 
 interface BrandItemDetailProps {
   brandItemRef: React.RefObject<HTMLDivElement>;
-  brandItemAPI: BrandItemAttributes;
+  brandDetailInfos: BrandItemAttributes;
   imgObj: CarDetailImgs;
 }
 
-export const BrandItemDetail: React.FC<BrandItemDetailProps> = ({ brandItemRef, brandItemAPI, imgObj }) => {
+export const BrandItemDetail: React.FC<BrandItemDetailProps> = ({ brandItemRef, brandDetailInfos, imgObj }) => {
   const handleBrandDescription = (description: string) => {
     let newDes: any = description?.slice(1, -1);
     newDes = newDes.split('\\n').map((el: any) => {
@@ -22,13 +22,13 @@ export const BrandItemDetail: React.FC<BrandItemDetailProps> = ({ brandItemRef, 
   };
 
   const originalImgs = React.useMemo(() => {
-    return replaceDirtyImgUrls(brandItemAPI?.descriptionImgs)?.map((url: string) => {
+    return replaceDirtyImgUrls(brandDetailInfos?.descriptionImgs)?.map((url: string) => {
       return '..' + url;
     });
-  }, [brandItemAPI.descriptionImgs]);
+  }, [brandDetailInfos.descriptionImgs]);
 
   const modifiedDescription = React.useMemo(() => {
-    let temp = handleBrandDescription(brandItemAPI?.descriptions as string)
+    let temp = handleBrandDescription(brandDetailInfos?.descriptions as string)
       .replaceAll('>,', '>')
       .replaceAll(`\\`, '');
     originalImgs?.forEach((originalImg, idx) => {
@@ -43,7 +43,7 @@ export const BrandItemDetail: React.FC<BrandItemDetailProps> = ({ brandItemRef, 
       temp = temp.slice(0, -1);
     }
     return temp;
-  }, [brandItemAPI.descriptions, imgObj.brandImgs, originalImgs]);
+  }, [brandDetailInfos.descriptions, imgObj.brandImgs, originalImgs]);
   return (
     <SecondContainerWhite>
       <div className="brand_item-detail  mt-12" ref={brandItemRef}>

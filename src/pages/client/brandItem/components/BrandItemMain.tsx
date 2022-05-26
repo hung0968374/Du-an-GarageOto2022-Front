@@ -40,9 +40,8 @@ export function capitalizeFirstLetter(string: string) {
 
 interface BrandItemMainProps {
   brandName?: string;
-  carInfoAPI: CarAttributes[];
-  imgFromFirebase: any[];
-  seatFromAPI: SeatAttributes[];
+  carsImgsFromFirebase: any[];
+  availableSeats: SeatAttributes[];
   priceInForm: string | null;
   seatInForm: string | null;
   radioASC: string;
@@ -55,9 +54,8 @@ interface BrandItemMainProps {
 
 export const BrandItemMain: React.FC<BrandItemMainProps> = ({
   brandName,
-  carInfoAPI,
-  imgFromFirebase,
-  seatFromAPI,
+  carsImgsFromFirebase,
+  availableSeats,
   priceInForm,
   seatInForm,
   radioASC,
@@ -68,7 +66,7 @@ export const BrandItemMain: React.FC<BrandItemMainProps> = ({
   loadingFirebaseImg,
 }) => {
   //convert data to seat asc
-  const seatFormDB = seatFromAPI.map((item) => parseInt(item.seats));
+  const seatFormDB = availableSeats.map((item) => parseInt(item.seats));
   const sortSeatFromDB = seatFormDB.sort();
   const allSeat = sortSeatFromDB.map(String);
 
@@ -89,7 +87,7 @@ export const BrandItemMain: React.FC<BrandItemMainProps> = ({
           {handleBrandName()}
         </Typography>
 
-        {carInfoAPI.length === 0 ? (
+        {filterCarAPI.length === 0 ? (
           <Loading />
         ) : (
           <Grid container>
@@ -154,7 +152,7 @@ export const BrandItemMain: React.FC<BrandItemMainProps> = ({
                               <CardMedia
                                 className="h-36 "
                                 component="img"
-                                image={imgFromFirebase[index]}
+                                image={carsImgsFromFirebase[index]}
                                 alt={item.name}
                               />
                             </>
