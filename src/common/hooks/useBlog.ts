@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 
+import { BlogItemInterface } from '../../pages/client/blog/BlogItem';
 import clientService from '../../services/clientService';
 import { replaceDirtyImgUrls } from '../helper/image';
 import { removeTagsFromString } from '../helper/string';
@@ -11,7 +12,8 @@ const useBlog = () => {
   const [fetchingBlogs, setFetchingBlogs] = useState(false);
 
   const reformatBlogs = useCallback(
-    (blogs: Array<any>) => {
+    (blogs: Array<BlogItemInterface>) => {
+      if (!(blogs?.length > 0)) return;
       setFetchingBlogs(true);
       const newBlogs = blogs?.map(async (blog: any) => {
         const regExp = /[a-zA-Z]/g;

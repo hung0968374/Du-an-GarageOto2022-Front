@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import {
   Autocomplete,
   Card,
@@ -52,21 +52,24 @@ interface BrandItemMainProps {
   notTriggerFilteringCondition: boolean;
 }
 
-export const BrandItemMain: React.FC<BrandItemMainProps> = ({
-  brandName,
-  carsImgsFromFirebase,
-  availableSeats,
-  priceInForm,
-  seatInForm,
-  radioASC,
-  setPriceInForm,
-  setSeatInForm,
-  setRadioASC,
-  filterCarAPI,
-  loadingFirebaseImg,
-  filteringCars,
-  notTriggerFilteringCondition,
-}) => {
+export const BrandItemMain = (
+  {
+    brandName,
+    carsImgsFromFirebase,
+    availableSeats,
+    priceInForm,
+    seatInForm,
+    radioASC,
+    setPriceInForm,
+    setSeatInForm,
+    setRadioASC,
+    filterCarAPI,
+    loadingFirebaseImg,
+    filteringCars,
+    notTriggerFilteringCondition,
+  }: BrandItemMainProps,
+  brandCarsRef: any,
+) => {
   //convert data to seat asc
   const seatFormDB = availableSeats.map((item) => parseInt(item.seats));
   const sortSeatFromDB = seatFormDB.sort();
@@ -128,7 +131,7 @@ export const BrandItemMain: React.FC<BrandItemMainProps> = ({
             </FormControl>
           </Grid>
 
-          <Grid container lg={12} xl={(12 / 5) * 4}>
+          <Grid ref={brandCarsRef} container lg={12} xl={(12 / 5) * 4}>
             {filterCarAPI.length === 0 && !filteringCars ? (
               <ProductEmpty />
             ) : (
@@ -191,3 +194,5 @@ export const BrandItemMain: React.FC<BrandItemMainProps> = ({
     </ContainerGrey>
   );
 };
+
+export default forwardRef(BrandItemMain);

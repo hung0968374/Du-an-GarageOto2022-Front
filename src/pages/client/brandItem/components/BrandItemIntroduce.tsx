@@ -1,5 +1,5 @@
 import { Autocomplete, Grid, TextField } from '@mui/material';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { allBrand } from '../../../../common/constants/fakeData';
@@ -10,7 +10,7 @@ import { CarDetailImgs } from '../../../../common/hooks/useFetchImgs';
 import { SecondContainerWhite, TransparentBrandButton } from '../../../../components/MuiStyling/MuiStyling';
 import { BodyTypeAttributes, BrandItemAttributes } from '../brand';
 
-interface BrandItemIntroduceProps {
+type Props = {
   discoverRef: React.RefObject<HTMLDivElement>;
   brandItemRef: React.RefObject<HTMLDivElement>;
   brandDetailInfos: BrandItemAttributes;
@@ -21,20 +21,24 @@ interface BrandItemIntroduceProps {
   setBodyTypeInForm: React.Dispatch<React.SetStateAction<string | null>>;
   brandName?: string;
   availableBodyTypes: BodyTypeAttributes[];
-}
+};
 
-export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
-  discoverRef,
-  brandItemRef,
-  brandDetailInfos,
-  imgObj,
-  brandNameSelectValue,
-  bodyTypeInForm,
-  brandName,
-  setBrandNameSelectValue,
-  setBodyTypeInForm,
-  availableBodyTypes,
-}) => {
+const BrandItemIntroduce = (
+  {
+    discoverRef,
+    brandItemRef,
+    brandDetailInfos,
+    imgObj,
+    brandNameSelectValue,
+    bodyTypeInForm,
+    brandName,
+    setBrandNameSelectValue,
+    setBodyTypeInForm,
+    availableBodyTypes,
+  }: Props,
+  brandCarsRef: any,
+) => {
+  console.log('brandCarsRef', brandCarsRef);
   const navigate = useNavigate();
   const { modifiedDescription } = useBrandDetail();
 
@@ -72,7 +76,13 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
           />
           <Autocomplete
             value={bodyTypeInForm}
-            onChange={(event: any, newValue: string | null) => {
+            onChange={(_event: any, newValue: string | null) => {
+              const element = brandCarsRef.current?.getBoundingClientRect()?.top + window.scrollY - 150;
+              window.scroll({
+                top: element,
+                behavior: 'smooth',
+              });
+
               if (newValue === null) newValue = '';
               setBodyTypeInForm(newValue);
             }}
@@ -107,3 +117,5 @@ export const BrandItemIntroduce: React.FC<BrandItemIntroduceProps> = ({
     </SecondContainerWhite>
   );
 };
+
+export default forwardRef(BrandItemIntroduce);

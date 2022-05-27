@@ -5,9 +5,7 @@ import CardContent from '@mui/material/CardContent';
 
 import clientService from '../../../services/clientService';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
-import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import './BlogItem.scss';
-import { removeTagsFromString } from '../../../common/helper/string';
 import useBlog from '../../../common/hooks/useBlog';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
@@ -17,17 +15,6 @@ export interface BlogItemInterface {
   title: string;
   id?: number;
 }
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 export const BlogItem = () => {
   const urlSearchParams = new URLSearchParams(window.location.search);
@@ -39,6 +26,18 @@ export const BlogItem = () => {
   const { getImgFromFirebase } = useFetchImgs();
   const [loading, setLoading] = useState(false);
   const { reformatBlogs, reformatBlogContent } = useBlog();
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      setLoading(true);
+      if (params.title) {
+        const blogs = await reformatBlogContent(+params.id);
+        setCurrBlog(blogs);
+        setLoading(false);
+      }
+    };
+    fetchBlog();
+  }, [params.title, getImgFromFirebase, reformatBlogContent, params.id]);
 
   const getRelatedBlogs = useCallback(async () => {
     if (currBlog?.id) {
@@ -52,7 +51,7 @@ export const BlogItem = () => {
       let res = blogs.map((blog: any) => {
         return blog.data.result;
       });
-      res = await Promise.all(reformatBlogs(res));
+      res = await Promise.all(reformatBlogs(res) as Array<Promise<BlogItemInterface>>);
       setRelatedBlogs(res);
     }
   }, [totalBlogs, currBlog?.id, reformatBlogs]);
@@ -60,18 +59,6 @@ export const BlogItem = () => {
   useEffect(() => {
     getRelatedBlogs();
   }, [getRelatedBlogs]);
-
-  useEffect(() => {
-    const fetchBlog = async () => {
-      setLoading(true);
-      if (params.title) {
-        const blogs = await reformatBlogContent(+params.id);
-        setCurrBlog(blogs);
-        setLoading(false);
-      }
-    };
-    fetchBlog();
-  }, [params.title, getImgFromFirebase, reformatBlogContent, params.id]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });

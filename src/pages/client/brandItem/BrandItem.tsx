@@ -13,8 +13,8 @@ import useBrandDetail from '../../../common/hooks/useBrandDetail';
 import { setBrandCars } from '../../../reduxToolKit-Saga/brand/BrandSlice';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
 
-import { BrandItemIntroduce } from './components/BrandItemIntroduce';
-import { BrandItemMain } from './components/BrandItemMain';
+import BrandItemIntroduce from './components/BrandItemIntroduce';
+import BrandItemMain from './components/BrandItemMain';
 import { BrandItemDetail } from './components/BrandItemDetail';
 import { BrandItemAttributes, CarAttributes, BodyTypeAttributes, SeatAttributes } from './brand';
 
@@ -40,6 +40,7 @@ export const BrandItem: React.FC = () => {
   const dispatch = useAppDispatch();
   const discoverRef = React.useRef<HTMLDivElement>(null);
   const brandItemRef = React.useRef<HTMLDivElement>(null);
+  const brandCarsRef = React.useRef<any>(null);
   const { brandName } = useParams<string>();
   const [brandDetailInfos, setBrandDetailInfos] = React.useState<BrandItemAttributes>({
     id: '',
@@ -199,9 +200,11 @@ export const BrandItem: React.FC = () => {
         availableBodyTypes={availableBodyTypes}
         bodyTypeInForm={bodyTypeInForm}
         setBodyTypeInForm={setBodyTypeInForm}
+        ref={brandCarsRef}
       />
 
       <BrandItemMain
+        ref={brandCarsRef}
         brandName={brandName}
         carsImgsFromFirebase={carsImgsFromFirebase}
         availableSeats={availableSeats}
