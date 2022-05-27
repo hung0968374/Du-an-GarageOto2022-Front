@@ -12,7 +12,6 @@ import { Brand } from '../../../pages/client/brand/Brand';
 import { BrandItem } from '../../../pages/client/brandItem/BrandItem';
 import CarDetail from '../../../pages/client/carDetail/CarDetail';
 import { Home } from '../../../pages/client/common/Home';
-import ErrorPages from '../../../pages/Error/ErrorPages';
 import { routerPath } from '../../constants/routerPath';
 import { getRefreshToken } from '../../helper/storage';
 import { RouteAttributes } from '../interface/route';
@@ -24,12 +23,6 @@ const staticRoute: RouteAttributes[] = [
     element: <Home />,
     path: routerPath.common.HOME,
     needNavigator: true,
-  },
-  {
-    authorized: false,
-    element: <ErrorPages />,
-    path: routerPath.common.ERROR,
-    needNavigator: false,
   },
   {
     authorized: false,

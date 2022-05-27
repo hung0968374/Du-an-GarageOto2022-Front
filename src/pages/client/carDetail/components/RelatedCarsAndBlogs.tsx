@@ -3,6 +3,7 @@ import { Box, Grid, Card, CardActionArea, CardContent, Rating, Skeleton } from '
 import { Link } from 'react-router-dom';
 
 import '../CarDetail.scss';
+import CustomImage from '../../../../components/Image/CustomImage';
 
 const RelatedCarsAndBlogs: React.FC<any> = ({ relatedBlogs, fetchingCarInfos, relatedCars, params }) => {
   const brandName = params.brandName.split(' ')[0].toLowerCase();
@@ -24,7 +25,7 @@ const RelatedCarsAndBlogs: React.FC<any> = ({ relatedBlogs, fetchingCarInfos, re
                             <Grid container>
                               <Grid item sm={12} lg={7}>
                                 <Box className="relatedCar-image">
-                                  <img alt="" src={relatedCar.introImg} />
+                                  <CustomImage source={relatedCar.introImg} />
                                 </Box>
                               </Grid>
                               <Grid item sm={12} lg={5}>

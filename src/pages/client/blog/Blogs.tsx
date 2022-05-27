@@ -8,36 +8,58 @@ import './Blogs.scss';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import useBlog from '../../../common/hooks/useBlog';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
-
-import { BlogItemInterface } from './BlogItem';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
+import { setBlogValues } from '../../../reduxToolKit-Saga/blog/BlogSlice';
 
 export const Blogs = () => {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
-  const currentPage = params.page || 1;
-
-  const [blogs, setBlogs] = useState<Array<BlogItemInterface>>([]);
-  const [loading, setLoading] = useState(false);
-  const [totalPage, setTotalPage] = useState(11);
-  const [totalBlog, setTotalBlog] = useState(107);
+  const availableBlogs = useAppSelector((state) => state.baseItemInfos.blog.blogs);
+  const dispatch = useAppDispatch();
 
   const { getImgFromFirebase } = useFetchImgs();
   const { reformatBlogs } = useBlog();
+  const [blogs, setBlogs] = useState([]);
+
+  const currentPage = params.page || '1';
+
+  useEffect(() => {
+    const setInitialBlogs = async () => {
+      const rawBlogs = availableBlogs[currentPage].map((blog) => {
+        return { ...blog };
+      });
+      if (rawBlogs?.length > 0) {
+        const reformattedBlogs: any = await Promise.all(reformatBlogs(rawBlogs) as any);
+        setBlogs(reformattedBlogs);
+      }
+    };
+    setInitialBlogs();
+  }, [reformatBlogs, availableBlogs, currentPage]);
+  const [fetching, setFetching] = useState(false);
+  const loading = fetching && blogs?.length === 0;
+  const [totalPage, setTotalPage] = useState(11);
+  const [totalBlog, setTotalBlog] = useState(107);
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      setLoading(() => true);
+      setFetching(() => true);
       const response = await clientService.getBlogs(+currentPage);
-      const res = response.data.rows || [];
+      const blogsResponse = response.data.rows || [];
       const { count } = response.data;
       setTotalPage(Math.round(count / 10));
       setTotalBlog(count);
-      const reformattingBlogs: any = await Promise.all(reformatBlogs(res));
-      setBlogs(reformattingBlogs);
-      setLoading(() => false);
+
+      if (!Object.keys(availableBlogs).includes(currentPage as string) || blogs.length === 0) {
+        dispatch(
+          setBlogValues({
+            [currentPage]: blogsResponse,
+          }),
+        );
+      }
+      setFetching(() => false);
     };
     fetchBlogs();
-  }, [currentPage, getImgFromFirebase, reformatBlogs]);
+  }, [currentPage, dispatch, getImgFromFirebase, reformatBlogs, availableBlogs, blogs]);
 
   useEffect(() => {
     if (loading !== true) {

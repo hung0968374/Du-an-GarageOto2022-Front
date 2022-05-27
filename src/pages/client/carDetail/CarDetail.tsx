@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useMemo } from 'react';
 import { Box, Container, Button, Grid, IconButton, Typography, Skeleton } from '@mui/material';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -28,6 +28,8 @@ import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook'
 import { restructureCarComments } from '../../../common/helper/comment';
 import useCarDetail from '../../../common/hooks/useCarDetail';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import CustomImage from '../../../components/Image/CustomImage';
+import { setCarAttributes } from '../../../reduxToolKit-Saga/car/CarSlice';
 
 import RelatedCarsAndBlogs from './components/RelatedCarsAndBlogs';
 import CarDetailComment, { CommentReaction } from './components/CommentField';
@@ -60,26 +62,30 @@ export interface RatingInterFace {
 export type RatingCreation = Omit<RatingInterFace, 'id'>;
 
 const CarDetail: React.FC = () => {
-  const [carInfo, setCarInfo] = useState<any>(undefined);
   const { imgObj, downloadImgsFromFirebase } = useFetchImgs();
   const { reformatCars } = useCarDetail();
   const { reformatBlogs } = useBlog();
-
   const navigate = useNavigate();
   const params: any = useParams();
-  const currCarId = +params.id;
-
-  const [carComments, setCarComments] = useState<any>([]);
-  const [commentReactions, setCommentReactions] = useState<Array<CommentReaction>>([]);
-  const [relatedCars, setRelatedCars] = useState<any>([]);
-  const [relatedBlogs, setRelatedBlogs] = useState<any>([]);
-  const [currUserRating, setCurrUserRating] = useState<number | null>(0);
-  const [ratingPoints, setRatingPoints] = useState<Array<RatingInterFace>>([]);
-  const [fetchingCarInfos, setFetchingCarInfos] = useState(false);
-
+  const carInfos = useAppSelector((state) => state.baseItemInfos.car.cars);
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((globalState) => globalState.clientInfo);
   const userStatus: any = useAppSelector((globalState) => globalState.login.status);
+
+  const carInfo = useMemo(() => {
+    return carInfos[+params.id]?.info;
+  }, [params?.id, carInfos]);
+
+  const relatedCars = carInfos[+params.id]?.relatedCars || [];
+  const relatedBlogs = carInfos[+params.id]?.relatedBlogs || [];
+
+  const currCarId = +params.id;
+  const [carComments, setCarComments] = useState<any>([]);
+  const [commentReactions, setCommentReactions] = useState<Array<CommentReaction>>([]);
+  const [currUserRating, setCurrUserRating] = useState<number | null>(0);
+  const [ratingPoints, setRatingPoints] = useState<Array<RatingInterFace>>([]);
+  const [fetching, setFetching] = useState(false);
+  const fetchingCarInfos = fetching && !carInfo;
 
   const unauthorized = userStatus === 'Unauthorized';
   const userWishList: Array<any> = userInfo.wishlist;
@@ -94,27 +100,28 @@ const CarDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchCar = async () => {
-      setFetchingCarInfos(true);
+      setFetching(true);
       const { comments, carInfo, commentReactions, relatedCars, relatedBlogs, ratingPoints } =
         await clientService.getCar(params.brandName, params.car as string, +params?.id as any);
-      setCarInfo(carInfo);
       const sortedComments = comments.sort((a: any, b: any) => {
         const aDate = new Date(a.createdAt);
         const bDate = new Date(b.createdAt);
         return bDate.getTime() - aDate.getTime();
       });
-      const newComments = restructureCarComments(sortedComments);
-      setCarComments(() => newComments);
-      for (const rating of ratingPoints) {
-        if (rating.userId === userInfo?.id && rating.carId === +params.id) {
-          setCurrUserRating(rating.ratingPoint);
-        }
+      const cars = await reformatCars(relatedCars);
+      const blogs = await Promise.all(reformatBlogs(relatedBlogs) as any);
+      if (!Object.keys(carInfos).includes(params.id) || !relatedCars || !relatedBlogs) {
+        dispatch(
+          setCarAttributes({
+            [carInfo.id]: {
+              info: carInfo,
+              relatedBlogs: blogs,
+              relatedCars: cars,
+            },
+          }),
+        );
       }
       setRatingPoints(ratingPoints);
-      const cars = await reformatCars(relatedCars);
-      setRelatedCars(cars);
-      const blogs = await Promise.all(reformatBlogs(relatedBlogs));
-      setRelatedBlogs(blogs);
       const newReactions = commentReactions.map((reaction: any) => {
         delete reaction.car_id;
         delete reaction.comment_id;
@@ -122,10 +129,29 @@ const CarDetail: React.FC = () => {
         return reaction;
       });
       setCommentReactions(newReactions);
-      setFetchingCarInfos(false);
+      setFetching(false);
+
+      ///handle comment
+      const newComments = restructureCarComments(sortedComments);
+      setCarComments(() => newComments);
+      for (const rating of ratingPoints) {
+        if (rating.userId === userInfo?.id && rating.carId === +params.id) {
+          setCurrUserRating(rating.ratingPoint);
+        }
+      }
     };
     fetchCar();
-  }, [params.car, params.id, params.brandName, reformatCars, unauthorized, userInfo?.id, reformatBlogs]);
+  }, [
+    params.car,
+    params.id,
+    params.brandName,
+    reformatCars,
+    dispatch,
+    unauthorized,
+    userInfo?.id,
+    carInfos,
+    reformatBlogs,
+  ]);
 
   useEffect(() => {
     const fetchAllImgs = async () => {
@@ -320,7 +346,7 @@ const CarDetail: React.FC = () => {
                                         }
                                         return (
                                           <Grid key={idx} item sm={12} md={gridSize}>
-                                            <img className={`img-intro-item`} src={img} alt="" />
+                                            <CustomImage source={img} style={{ width: '100%', height: '100%' }} />
                                           </Grid>
                                         );
                                       })}
@@ -363,9 +389,12 @@ const CarDetail: React.FC = () => {
                         />
                       </Box>
                     </Box>
-                    <Box className="starring-number">
-                      <Box className="text-lg text-red-500">{+averagePoint}</Box>
-                      <Box> / 5</Box>
+                    <Box className="starring-right">
+                      <Box className="starring-number">
+                        <Box className="text-lg text-red-500">{+averagePoint}</Box>
+                        <Box> / 5</Box>
+                      </Box>
+                      <Box>({ratingPoints.length} đánh giá tất cả)</Box>
                     </Box>
                   </Box>
                 )}

@@ -9,5 +9,4 @@ export default {
   productionAPI: process.env.REACT_APP_PRODUCTION_API || 'localhost',
   environment: process.env.REACT_APP_ENVIRONMENT || Environment.Develop,
   captchaSiteKey: process.env.REACT_APP_GOOGLE_SITE_KEY || 'testSiteKey',
-  reactSentryDNS: process.env.REACT_APP_SENTRY_DNS,
 };

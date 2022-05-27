@@ -5,10 +5,9 @@ import { combineReducers, configureStore, Reducer, Store } from '@reduxjs/toolki
 import env, { Environment } from '../common/config/interface/env';
 
 import rootSaga from './rootSaga';
-import persistConfig from './persistConfig';
+import persistConfig, { baseItemsSlice } from './persistConfig';
 import CounterSlice from './common/Counter/CounterSlice';
 import loginSlice from './auth/LoginSlice';
-import { sentryReduxEnhancer } from './sentry';
 import GeneralSlice from './common/General/GeneralSlice';
 import ClientSlice from './common/User/ClientSlice';
 
@@ -19,6 +18,7 @@ const combinedReducer = combineReducers({
   login: loginSlice,
   general: GeneralSlice,
   clientInfo: ClientSlice,
+  baseItemInfos: baseItemsSlice,
 });
 
 export const store: Store = configureStore({
@@ -27,8 +27,7 @@ export const store: Store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(sagaMiddleware),
-  devTools: env.environment === Environment.Production ? false : true,
-  enhancers: [sentryReduxEnhancer],
+  // devTools: env.environment === Environment.Production ? false : true,
 });
 
 sagaMiddleware.run(rootSaga);

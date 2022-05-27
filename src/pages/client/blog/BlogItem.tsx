@@ -5,9 +5,7 @@ import CardContent from '@mui/material/CardContent';
 
 import clientService from '../../../services/clientService';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
-import { replaceDirtyImgUrls } from '../../../common/helper/image';
 import './BlogItem.scss';
-import { removeTagsFromString } from '../../../common/helper/string';
 import useBlog from '../../../common/hooks/useBlog';
 import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
 
@@ -17,17 +15,6 @@ export interface BlogItemInterface {
   title: string;
   id?: number;
 }
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 export const BlogItem = () => {
   const urlSearchParams = new URLSearchParams(window.location.search);
@@ -39,27 +26,6 @@ export const BlogItem = () => {
   const { getImgFromFirebase } = useFetchImgs();
   const [loading, setLoading] = useState(false);
   const { reformatBlogs, reformatBlogContent } = useBlog();
-
-  const getRelatedBlogs = useCallback(async () => {
-    if (currBlog?.id) {
-      const id = +currBlog.id + 20;
-      const ids = [(id - 2) % totalBlogs, (id - 1) % totalBlogs, (id + 1) % totalBlogs, (id + 2) % totalBlogs];
-      const blogs = await Promise.all(
-        ids.map((id: number) => {
-          return clientService.getBlogByOffset(+id);
-        }),
-      );
-      let res = blogs.map((blog: any) => {
-        return blog.data.result;
-      });
-      res = await Promise.all(reformatBlogs(res));
-      setRelatedBlogs(res);
-    }
-  }, [totalBlogs, currBlog?.id, reformatBlogs]);
-
-  useEffect(() => {
-    getRelatedBlogs();
-  }, [getRelatedBlogs]);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -73,10 +39,30 @@ export const BlogItem = () => {
     fetchBlog();
   }, [params.title, getImgFromFirebase, reformatBlogContent, params.id]);
 
+  const getRelatedBlogs = useCallback(async () => {
+    if (currBlog?.id) {
+      const id = +currBlog.id + 20;
+      const ids = [(id - 2) % totalBlogs, (id - 1) % totalBlogs, (id + 1) % totalBlogs, (id + 2) % totalBlogs];
+      const blogs = await Promise.all(
+        ids.map((id: number) => {
+          return clientService.getBlogByOffset(+id);
+        }),
+      );
+      let res = blogs.map((blog: any) => {
+        return blog.data.result;
+      });
+      res = await Promise.all(reformatBlogs(res) as Array<Promise<BlogItemInterface>>);
+      setRelatedBlogs(res);
+    }
+  }, [totalBlogs, currBlog?.id, reformatBlogs]);
+
+  useEffect(() => {
+    getRelatedBlogs();
+  }, [getRelatedBlogs]);
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
-  console.log('currBlog', currBlog);
   return (
     <>
       <Container maxWidth="md" sx={{ marginTop: '154px', marginBottom: '100px' }}>

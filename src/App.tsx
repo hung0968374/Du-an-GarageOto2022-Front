@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navigate, Route as Channel, Routes as Switch } from 'react-router-dom';
 import '../src/common/sass/App.scss';
-import { withProfiler } from '@sentry/react';
 
 import { ProtectedRouting } from './common/config/routers/ProtectedRouting';
 import { RouteAttributes } from './common/config/interface/route';
@@ -48,4 +47,4 @@ function App() {
   );
 }
 
-export default withProfiler(App);
+export default App;

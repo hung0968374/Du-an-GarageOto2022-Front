@@ -118,10 +118,13 @@
     }
   }
 }
-.starring-number {
-  width: 50%;
-  height: inherit;
-  @apply flex flex-row justify-center text-center items-center;
+.starring-right {
+  @apply flex flex-col items-center;
+  .starring-number {
+    width: 50%;
+    height: inherit;
+    @apply flex flex-row justify-center text-center items-center;
+  }
 }
 
 .related-cars-blogs {
