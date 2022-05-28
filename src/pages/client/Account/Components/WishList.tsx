@@ -3,13 +3,13 @@ import React from 'react';
 import { ModeEdit, Save, Cancel } from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from '../../../../common/hooks/ReduxHook';
-import { ColorSchema } from '../../../../components/MuiStyling/MuiStyling';
-import { RootState } from '../../../../reduxToolKit-Saga/store';
-import { setLoading } from '../../../../reduxToolKit-Saga/common/General/GeneralSlice';
-import { CustomSnackbar } from '../../../../components/Snackbar/CustomSnackbar';
+import { ColorSchema } from '../../../../common/components/MuiStyling/MuiStyling';
+import { RootState } from '../../../../redux/store';
+import { setLoading } from '../../../../redux/common/General/GeneralSlice';
+import { CustomSnackbar } from '../../../../common/components/Snackbar/CustomSnackbar';
 import { useFetch } from '../../../../common/hooks/DataFeching';
 import clientAPI from '../../../../common/constants/clientAPI';
-import { adjustList, resetSafeDeleteList } from '../../../../reduxToolKit-Saga/common/User/ClientSlice';
+import { adjustList, resetSafeDeleteList } from '../../../../redux/common/User/ClientSlice';
 
 import { WishListItem } from './WishListItem';
 

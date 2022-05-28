@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { routerPath } from '../../../../common/constants/routerPath';
-import { AuthForm, ImageSide } from '../../../../components/AuthForm/AuthForm';
-import { MuiButton, SubmitButtonStyle } from '../../../../components/MuiStyling/MuiStyling';
+import { AuthForm, ImageSide } from '../../../../common/components/AuthForm/AuthForm';
+import { MuiButton, SubmitButtonStyle } from '../../../../common/components/MuiStyling/MuiStyling';
 import clientService from '../../../../services/clientService';
 import './SignUpSuccess.scss';
 

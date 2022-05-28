@@ -4,8 +4,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { Grid } from '@mui/material';
 import moment from 'moment';
 
-import { ColorSchema } from '../../../../components/MuiStyling/MuiStyling';
-import { PaymentReceipt } from '../../../../reduxToolKit-Saga/types/auth';
+import { ColorSchema } from '../../../../common/components/MuiStyling/MuiStyling';
+import { PaymentReceipt } from '../../../../redux/types/auth';
 
 interface HistoryItemProps {
   receipts: PaymentReceipt;

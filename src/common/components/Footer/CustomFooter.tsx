@@ -3,7 +3,7 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import { ArrowForwardIos } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
-import { routerPath } from '../../common/constants/routerPath';
+import { routerPath } from '../../constants/routerPath';
 
 interface CustomFooterProps {
   windowWidth: number;

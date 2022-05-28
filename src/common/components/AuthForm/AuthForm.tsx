@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routerPath } from '../../common/constants/routerPath';
+import { routerPath } from '../../constants/routerPath';
 
 import './AuthForm.scss';
 

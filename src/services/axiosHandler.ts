@@ -3,7 +3,7 @@ import { httpStatus } from '../common/constants/httpsStatus';
 import messages from '../common/constants/messages';
 import { routerPath } from '../common/constants/routerPath';
 import { destroyCookie, destroyLocalStorageItem, setLocalStorageItem } from '../common/helper/storage';
-import { ClientRequestAccessToken, InterceptorErrorResponse } from '../reduxToolKit-Saga/types/auth';
+import { ClientRequestAccessToken, InterceptorErrorResponse } from '../redux/types/auth';
 
 import { AxiosClientRequestAccessTokenAPI } from './axiosConnection';
 

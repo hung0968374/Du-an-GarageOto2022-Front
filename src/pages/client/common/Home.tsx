@@ -11,9 +11,9 @@ import {
   ContainerWhite,
   LightGreenButton,
   TransparentButton,
-} from '../../../components/MuiStyling/MuiStyling';
+} from '../../../common/components/MuiStyling/MuiStyling';
 import { OUR_TEAMS, TeamAttributes } from '../../../common/constants/fakeData';
-import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
 
 export const Home = () => {
   const imageArr = [

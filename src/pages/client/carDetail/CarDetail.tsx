@@ -15,21 +15,21 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
 
-import { setWishList } from '../../../reduxToolKit-Saga/common/User/ClientSlice';
-import { setPaymentId } from '../../../reduxToolKit-Saga/common/General/GeneralSlice';
+import { setWishList } from '../../../redux/common/User/ClientSlice';
+import { setPaymentId } from '../../../redux/common/General/GeneralSlice';
 import useBlog from '../../../common/hooks/useBlog';
 import { getAverageStarPoint } from '../../../common/helper/starRating';
 import { UndefinedObject } from '../../../common/interfaces/Client';
-import { DarkAccordion } from '../../../components/MuiStyling/MuiStyling';
+import { DarkAccordion } from '../../../common/components/MuiStyling/MuiStyling';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import clientService from '../../../services/clientService';
-import { ImageGallary } from '../../../components/ImageGallary/ImageGallery';
+import { ImageGallary } from '../../../common/components/ImageGallary/ImageGallery';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
 import { restructureCarComments } from '../../../common/helper/comment';
 import useCarDetail from '../../../common/hooks/useCarDetail';
-import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
-import CustomImage from '../../../components/Image/CustomImage';
-import { setCarAttributes } from '../../../reduxToolKit-Saga/car/CarSlice';
+import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
+import CustomImage from '../../../common/components/Image/CustomImage';
+import { setCarAttributes } from '../../../redux/car/CarSlice';
 
 import RelatedCarsAndBlogs from './components/RelatedCarsAndBlogs';
 import CarDetailComment, { CommentReaction } from './components/CommentField';

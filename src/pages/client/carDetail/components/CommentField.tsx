@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import clientService from '../../../../services/clientService';
-import { ClientDetailAttributes } from '../../../../reduxToolKit-Saga/common/User/ClientSlice';
+import { ClientDetailAttributes } from '../../../../redux/common/User/ClientSlice';
 import { calculateCommentLikeDislike, toggleShowSubComment } from '../../../../common/helper/comment';
 import '../CarDetail.scss';
 

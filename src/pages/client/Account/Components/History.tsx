@@ -2,9 +2,9 @@ import React from 'react';
 import { Skeleton, Grid } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../../../common/hooks/ReduxHook';
-import { setLoading } from '../../../../reduxToolKit-Saga/common/General/GeneralSlice';
-import { RootState } from '../../../../reduxToolKit-Saga/store';
-import { PaymentReceipt } from '../../../../reduxToolKit-Saga/types/auth';
+import { setLoading } from '../../../../redux/common/General/GeneralSlice';
+import { RootState } from '../../../../redux/store';
+import { PaymentReceipt } from '../../../../redux/types/auth';
 import clientService from '../../../../services/clientService';
 
 import { HistoryItem } from './HistoryItem';

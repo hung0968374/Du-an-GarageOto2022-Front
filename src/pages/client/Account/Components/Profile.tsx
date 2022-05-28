@@ -7,9 +7,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import clientService from '../../../../services/clientService';
-import { ColorSchema, CustomStep, MuiButton } from '../../../../components/MuiStyling/MuiStyling';
-import { ClientInfoAttributes } from '../../../../reduxToolKit-Saga/types/auth';
-import { CustomSnackbar } from '../../../../components/Snackbar/CustomSnackbar';
+import { ColorSchema, CustomStep, MuiButton } from '../../../../common/components/MuiStyling/MuiStyling';
+import { ClientInfoAttributes } from '../../../../redux/types/auth';
+import { CustomSnackbar } from '../../../../common/components/Snackbar/CustomSnackbar';
 import { Refresher } from '../Account';
 
 interface ProvinceDisplay {

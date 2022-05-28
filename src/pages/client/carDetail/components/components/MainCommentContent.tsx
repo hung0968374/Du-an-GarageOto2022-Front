@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { getAllCommentIdChildrenOfDeletedComment } from '../../../../../common/helper/comment';
 import TimeHelper from '../../../../../common/helper/time';
-import CustomDialog from '../../../../../components/Dialog/CustomDialog';
+import CustomDialog from '../../../../../common/components/Dialog/CustomDialog';
 import useCarComment from '../../../../../common/hooks/useCarComment';
 import Comment from '../common/CommentTextField';
 

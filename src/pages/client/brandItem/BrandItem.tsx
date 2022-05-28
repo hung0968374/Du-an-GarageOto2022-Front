@@ -3,14 +3,14 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import './BrandItem.scss';
-import { TransparentButton } from '../../../components/MuiStyling/MuiStyling';
+import { TransparentButton } from '../../../common/components/MuiStyling/MuiStyling';
 import clientService from '../../../services/clientService';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import { brandWallpapers } from '../../../common/constants/fakeData';
 import { FilterBrandItemInput } from '../../../common/interfaces/Auth';
-import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
 import useBrandDetail from '../../../common/hooks/useBrandDetail';
-import { setBrandCars } from '../../../reduxToolKit-Saga/brand/BrandSlice';
+import { setBrandCars } from '../../../redux/brand/BrandSlice';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
 
 import BrandItemIntroduce from './components/BrandItemIntroduce';

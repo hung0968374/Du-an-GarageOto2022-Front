@@ -28,7 +28,7 @@ import {
   User,
   WardAttributes,
   WardInfo,
-} from '../reduxToolKit-Saga/types/auth';
+} from '../redux/types/auth';
 
 import { AxiosClient, AxiosClientAPI } from './axiosConnection';
 

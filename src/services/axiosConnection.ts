@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { getLocalStorageItem, getRefreshToken } from '../common/helper/storage';
-import { InterceptorErrorResponse } from '../reduxToolKit-Saga/types/auth';
+import { InterceptorErrorResponse } from '../redux/types/auth';
 import { httpStatus } from '../common/constants/httpsStatus';
 import ClientMessages from '../common/constants/messages';
 

@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 
 import './SignUp.scss';
 import Auth, { UserRoles } from '../../../../common/interfaces/Auth';
-import { AuthForm, ImageSide } from '../../../../components/AuthForm/AuthForm';
-import { CustomTextField, MuiButton, SubmitButtonStyle } from '../../../../components/MuiStyling/MuiStyling';
+import { AuthForm, ImageSide } from '../../../../common/components/AuthForm/AuthForm';
+import { CustomTextField, MuiButton, SubmitButtonStyle } from '../../../../common/components/MuiStyling/MuiStyling';
 import clientService from '../../../../services/clientService';
-import { CustomSnackbar } from '../../../../components/Snackbar/CustomSnackbar';
-import { UserSignUpErrorResponse } from '../../../../reduxToolKit-Saga/types/auth';
+import { CustomSnackbar } from '../../../../common/components/Snackbar/CustomSnackbar';
+import { UserSignUpErrorResponse } from '../../../../redux/types/auth';
 import { routerPath } from '../../../../common/constants/routerPath';
 interface SignUpFormInitValue {
   firstName: string;

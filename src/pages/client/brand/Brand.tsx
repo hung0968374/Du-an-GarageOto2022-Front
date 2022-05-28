@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 
 import { routerPath } from '../../../common/constants/routerPath';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
-import { Loading } from '../../../components/loading/Loading';
-import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import { Loading } from '../../../common/components/loading/Loading';
+import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
 import {
   ColorSchema,
   ContainerGrey,
   MuiBrandButton,
   SubmitButtonStyle,
   TransparentButton,
-} from '../../../components/MuiStyling/MuiStyling';
-import { setBrandsInfos } from '../../../reduxToolKit-Saga/brand/BrandSlice';
+} from '../../../common/components/MuiStyling/MuiStyling';
+import { setBrandsInfos } from '../../../redux/brand/BrandSlice';
 import clientService from '../../../services/clientService';
 import './Brand.scss';
 

@@ -4,13 +4,13 @@ import { AirlineStops } from '@mui/icons-material/';
 import { Formik as FormValidation } from 'formik';
 import { Link } from 'react-router-dom';
 
-import { AuthForm, ImageSide } from '../../../../components/AuthForm/AuthForm';
+import { AuthForm, ImageSide } from '../../../../common/components/AuthForm/AuthForm';
 import Auth from '../../../../common/interfaces/Auth';
 import './Login.scss';
 import { routerPath } from '../../../../common/constants/routerPath';
-import { CustomTextField, MuiButton, SubmitButtonStyle } from '../../../../components/MuiStyling/MuiStyling';
+import { CustomTextField, MuiButton, SubmitButtonStyle } from '../../../../common/components/MuiStyling/MuiStyling';
 import { useAppDispatch, useAppSelector } from '../../../../common/hooks/ReduxHook';
-import { AuthActionType } from '../../../../reduxToolKit-Saga/types/auth';
+import { AuthActionType } from '../../../../redux/types/auth';
 
 interface SignInObject {
   email: string;

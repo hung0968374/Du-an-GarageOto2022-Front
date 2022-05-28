@@ -7,7 +7,7 @@ import { handleBrandInURL, handleBrandName, shortcutDescription } from '../../..
 import { replaceDirtyImgUrls } from '../../../../common/helper/image';
 import useBrandDetail from '../../../../common/hooks/useBrandDetail';
 import { CarDetailImgs } from '../../../../common/hooks/useFetchImgs';
-import { SecondContainerWhite, TransparentBrandButton } from '../../../../components/MuiStyling/MuiStyling';
+import { SecondContainerWhite, TransparentBrandButton } from '../../../../common/components/MuiStyling/MuiStyling';
 import { BodyTypeAttributes, BrandItemAttributes } from '../brand';
 
 type Props = {

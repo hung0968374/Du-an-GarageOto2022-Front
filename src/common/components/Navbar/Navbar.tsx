@@ -18,14 +18,14 @@ import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import { ColorSchema, MuiNavBarButton } from '../MuiStyling/MuiStyling';
-import { routerPath } from '../../common/constants/routerPath';
-import { getCookie } from '../../common/helper/storage';
-import { useAppDispatch, useAppSelector } from '../../common/hooks/ReduxHook';
-import { AuthActionType, AuthenticationStatus } from '../../reduxToolKit-Saga/types/auth';
+import { routerPath } from '../../constants/routerPath';
+import { getCookie } from '../../helper/storage';
+import { useAppDispatch, useAppSelector } from '../../hooks/ReduxHook';
+import { AuthActionType, AuthenticationStatus } from '../../../redux/types/auth';
 import CustomFooter from '../Footer/CustomFooter';
-import { useWindowWidth } from '../../common/hooks/Window';
-import { setScrollTopDisplay } from '../../reduxToolKit-Saga/common/General/GeneralSlice';
-import { Tab } from '../../pages/client/Account/Account';
+import { useWindowWidth } from '../../hooks/Window';
+import { setScrollTopDisplay } from '../../../redux/common/General/GeneralSlice';
+import { Tab } from '../../../pages/client/Account/Account';
 
 const Navbar = () => {
   const { pathname } = useLocation();

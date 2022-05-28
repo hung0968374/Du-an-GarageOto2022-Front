@@ -7,7 +7,7 @@ import clientService from '../../../services/clientService';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import './BlogItem.scss';
 import useBlog from '../../../common/hooks/useBlog';
-import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
 
 export interface BlogItemInterface {
   descriptionImgs: string;

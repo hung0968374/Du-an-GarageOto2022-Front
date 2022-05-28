@@ -1,4 +1,4 @@
-import { ClientDetailAttributes } from '../../reduxToolKit-Saga/common/User/ClientSlice';
+import { ClientDetailAttributes } from '../../redux/common/User/ClientSlice';
 
 interface TokenType {
   authorization: string;

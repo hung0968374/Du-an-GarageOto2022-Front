@@ -5,7 +5,7 @@ import { handleBrandDescription } from '../../../../common/helper/brand';
 import { replaceDirtyImgUrls } from '../../../../common/helper/image';
 import useBrandDetail from '../../../../common/hooks/useBrandDetail';
 import { CarDetailImgs } from '../../../../common/hooks/useFetchImgs';
-import { SecondContainerWhite } from '../../../../components/MuiStyling/MuiStyling';
+import { SecondContainerWhite } from '../../../../common/components/MuiStyling/MuiStyling';
 
 interface BrandItemDetailProps {
   brandItemRef: React.RefObject<HTMLDivElement>;

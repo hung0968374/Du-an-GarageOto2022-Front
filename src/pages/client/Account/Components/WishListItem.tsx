@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { WishList } from '../../../../reduxToolKit-Saga/types/auth';
-import { ColorSchema } from '../../../../components/MuiStyling/MuiStyling';
+import { WishList } from '../../../../redux/types/auth';
+import { ColorSchema } from '../../../../common/components/MuiStyling/MuiStyling';
 import { useAppDispatch } from '../../../../common/hooks/ReduxHook';
-import { setSafeDeleteList } from '../../../../reduxToolKit-Saga/common/User/ClientSlice';
+import { setSafeDeleteList } from '../../../../redux/common/User/ClientSlice';
 
 interface WishListItemProp {
   item: WishList;

@@ -3,15 +3,15 @@ import React from 'react';
 import CameraIcon from '@mui/icons-material/Camera';
 import { useLocation } from 'react-router-dom';
 
-import { ContainerGrey } from '../../../components/MuiStyling/MuiStyling';
-import { User } from '../../../reduxToolKit-Saga/types/auth';
+import { ContainerGrey } from '../../../common/components/MuiStyling/MuiStyling';
+import { User } from '../../../redux/types/auth';
 import clientService from '../../../services/clientService';
 import './Account.scss';
 import TimeHelper from '../../../common/helper/time';
 import { useAppSelector } from '../../../common/hooks/ReduxHook';
-import { CustomSnackbar } from '../../../components/Snackbar/CustomSnackbar';
-import { RootState } from '../../../reduxToolKit-Saga/store';
-import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import { CustomSnackbar } from '../../../common/components/Snackbar/CustomSnackbar';
+import { RootState } from '../../../redux/store';
+import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
 
 import Profile from './Components/Profile';
 import { Payment } from './Components/Payment';

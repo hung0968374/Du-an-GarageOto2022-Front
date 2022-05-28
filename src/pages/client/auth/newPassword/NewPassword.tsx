@@ -3,13 +3,13 @@ import { Formik as FormValidation } from 'formik';
 import { AlertColor, CircularProgress } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { AuthForm, ImageSide } from '../../../../components/AuthForm/AuthForm';
+import { AuthForm, ImageSide } from '../../../../common/components/AuthForm/AuthForm';
 import './NewPassword.scss';
 import Auth from '../../../../common/interfaces/Auth';
-import { CustomTextField, MuiButton, SubmitButtonStyle } from '../../../../components/MuiStyling/MuiStyling';
-import { UserNewPasswordResponse } from '../../../../reduxToolKit-Saga/types/auth';
+import { CustomTextField, MuiButton, SubmitButtonStyle } from '../../../../common/components/MuiStyling/MuiStyling';
+import { UserNewPasswordResponse } from '../../../../redux/types/auth';
 import clientService from '../../../../services/clientService';
-import { CustomSnackbar } from '../../../../components/Snackbar/CustomSnackbar';
+import { CustomSnackbar } from '../../../../common/components/Snackbar/CustomSnackbar';
 import { routerPath } from '../../../../common/constants/routerPath';
 
 interface NewPasswordInitValue {

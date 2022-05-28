@@ -7,9 +7,9 @@ import clientService from '../../../services/clientService';
 import './Blogs.scss';
 import { useFetchImgs } from '../../../common/hooks/useFetchImgs';
 import useBlog from '../../../common/hooks/useBlog';
-import MessengerComponent from '../../../components/MessengerChat/MessengerComponent';
+import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
-import { setBlogValues } from '../../../reduxToolKit-Saga/blog/BlogSlice';
+import { setBlogValues } from '../../../redux/blog/BlogSlice';
 
 export const Blogs = () => {
   const urlSearchParams = new URLSearchParams(window.location.search);

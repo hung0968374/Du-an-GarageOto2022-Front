@@ -3,7 +3,7 @@ import { Box, Grid, Card, CardActionArea, CardContent, Rating, Skeleton } from '
 import { Link } from 'react-router-dom';
 
 import '../CarDetail.scss';
-import CustomImage from '../../../../components/Image/CustomImage';
+import CustomImage from '../../../../common/components/Image/CustomImage';
 
 const RelatedCarsAndBlogs: React.FC<any> = ({ relatedBlogs, fetchingCarInfos, relatedCars, params }) => {
   const brandName = params.brandName.split(' ')[0].toLowerCase();

@@ -6,7 +6,7 @@ import { ProtectedRouting } from './common/config/routers/ProtectedRouting';
 import { RouteAttributes } from './common/config/interface/route';
 import { RenderRoute } from './common/config/routers/RenderRoute';
 import { routerPath } from './common/constants/routerPath';
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './common/components/Navbar/Navbar';
 import { CheckAuthConstantly } from './common/config/routers/CheckAuthConstantly';
 
 function App() {

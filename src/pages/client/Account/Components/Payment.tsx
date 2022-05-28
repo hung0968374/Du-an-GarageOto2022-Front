@@ -6,10 +6,10 @@ import clientAPI from '../../../../common/constants/clientAPI';
 import { routerPath } from '../../../../common/constants/routerPath';
 import { useFetch } from '../../../../common/hooks/DataFeching';
 import { useAppDispatch, useAppSelector } from '../../../../common/hooks/ReduxHook';
-import { ColorSchema, MuiButton } from '../../../../components/MuiStyling/MuiStyling';
-import { resetPaymentId } from '../../../../reduxToolKit-Saga/common/General/GeneralSlice';
-import { RootState } from '../../../../reduxToolKit-Saga/store';
-import { GetOneCarReturn } from '../../../../reduxToolKit-Saga/types/auth';
+import { ColorSchema, MuiButton } from '../../../../common/components/MuiStyling/MuiStyling';
+import { resetPaymentId } from '../../../../redux/common/General/GeneralSlice';
+import { RootState } from '../../../../redux/store';
+import { GetOneCarReturn } from '../../../../redux/types/auth';
 import { Tab } from '../Account';
 
 interface PaymentProps {

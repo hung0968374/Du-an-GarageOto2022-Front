@@ -1,11 +1,11 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
-import { ModalComponents } from '../../../components/Modal/ModalComponents';
-import { AuthenticationStatus } from '../../../reduxToolKit-Saga/types/auth';
+import { ModalComponents } from '../../components/Modal/ModalComponents';
+import { AuthenticationStatus } from '../../../redux/types/auth';
 import { getCookie } from '../../helper/storage';
 import { useAppDispatch, useAppSelector } from '../../hooks/ReduxHook';
-import { logOut } from '../../../reduxToolKit-Saga/auth/LoginSlice';
+import { logOut } from '../../../redux/auth/LoginSlice';
 
 export const ProtectedRouting: React.FunctionComponent = () => {
   const token = getCookie('token');
