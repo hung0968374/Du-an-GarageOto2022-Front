@@ -28,7 +28,6 @@ const RenderOneComment = ({
   updateComment,
   setUpdateComment,
   navigate,
-  fetchingCarInfos,
 }: any) => {
   return (
     <Box>
@@ -72,7 +71,6 @@ const RenderOneComment = ({
                 setReplyingCommentIds={setReplyingCommentIds}
                 carComments={carComments}
                 setUpdateComment={setUpdateComment}
-                fetchingCarInfos={fetchingCarInfos}
                 replyingCommentIds={replyingCommentIds}
                 updateComment={updateComment}
               />
@@ -139,7 +137,6 @@ const RenderOneComment = ({
                         updateComment,
                         setUpdateComment,
                         navigate,
-                        fetchingCarInfos,
                       })}
                     </Box>
                   </Box>
@@ -167,7 +164,6 @@ const RenderComents = ({
   updateComment,
   setUpdateComment,
   navigate,
-  fetchingCarInfos,
 }: any) => {
   return (
     <>
@@ -189,7 +185,6 @@ const RenderComents = ({
               updateComment,
               setUpdateComment,
               navigate,
-              fetchingCarInfos,
             })}
           </Box>
         );

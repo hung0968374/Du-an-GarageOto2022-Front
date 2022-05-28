@@ -97,7 +97,7 @@ export const BrandItemMain = (
                 }}
                 sx={{ paddingRight: '2rem', maxWidth: '20rem', marginBottom: '1rem' }}
                 options={allPrice}
-                renderInput={(params) => <TextField {...params} label="Price" />}
+                renderInput={(params) => <TextField {...params} label="Giá" />}
                 blurOnSelect={true}
               />
               <Autocomplete
@@ -108,12 +108,12 @@ export const BrandItemMain = (
                 }}
                 sx={{ paddingRight: '2rem', maxWidth: '20rem', marginBottom: '2rem' }}
                 options={allSeat}
-                renderInput={(params) => <TextField {...params} label="Seat" />}
+                renderInput={(params) => <TextField {...params} label="Chỗ ngồi" />}
                 blurOnSelect={true}
               />
             </div>
             <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">Order by</FormLabel>
+              <FormLabel id="demo-radio-buttons-group-label">Sắp xếp theo:</FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
                 defaultValue="asc"
@@ -121,12 +121,9 @@ export const BrandItemMain = (
                 value={radioASC}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRadioASC((e.target as HTMLInputElement).value)}
               >
-                <FormControlLabel value="asc" control={<Radio />} label="ASC" />
-                <Stack direction="row" spacing={1} className="flex-wrap">
-                  <Chip label="Car name" variant="outlined" />
-                  <Chip label="Price" variant="outlined" />
-                </Stack>
-                <FormControlLabel value="desc" control={<Radio />} label="DESC" />
+                <FormControlLabel value="asc" control={<Radio />} label="Tăng" />
+
+                <FormControlLabel value="desc" control={<Radio />} label="Giảm" />
               </RadioGroup>
             </FormControl>
           </Grid>

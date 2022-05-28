@@ -22,7 +22,6 @@ const MainCommentContent: React.FC<any> = ({
   setReplyingCommentIds,
   replyingCommentIds,
   setCarComments,
-  fetchingCarInfos,
   carInfo,
   carComments,
   setUpdateComment,
@@ -41,12 +40,6 @@ const MainCommentContent: React.FC<any> = ({
     replyingCommentIds,
     updateComment,
   });
-
-  useEffect(() => {
-    setTimeout(() => {
-      setSelfUpdate(!selfUpdate);
-    }, 100);
-  }, [fetchingCarInfos]);
 
   const open = Boolean(anchorEl);
 
@@ -112,7 +105,6 @@ const MainCommentContent: React.FC<any> = ({
                 setReplyingCommentIds={setReplyingCommentIds}
                 carComments={carComments}
                 setUpdateComment={setUpdateComment}
-                fetchingCarInfos={fetchingCarInfos}
                 isUpdateComment={true}
                 commentContent={comment?.comment}
                 commentId={comment?.id}

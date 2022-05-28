@@ -17,7 +17,7 @@ export interface WishList {
     name: string;
     price: string;
     carAppearance: { imgs: string };
-    brand: { name: string };
+    brand: { id: number };
   };
   carId: number;
 }

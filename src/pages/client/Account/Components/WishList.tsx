@@ -31,12 +31,11 @@ const WishList = () => {
   );
   const { loading } = useAppSelector((globalState: RootState) => globalState.general);
   const dispatch = useAppDispatch();
-  console.log('outputData: ', outputData);
 
   const renderEmptyList = (): JSX.Element => {
     return (
       <div className="flex flex-col items-center">
-        <p className="mb-2">Haven&apos;t got something in mind?</p>
+        <p className="mb-2">Haven&apos;t got anything in mind?</p>
         <p>Add some then come back here</p>
         <div className="wishlist-image"></div>
       </div>

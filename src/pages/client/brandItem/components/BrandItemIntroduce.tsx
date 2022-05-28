@@ -71,7 +71,7 @@ const BrandItemIntroduce = (
             }}
             sx={{ width: '15rem', marginLeft: '1rem' }}
             options={allBrand}
-            renderInput={(params) => <TextField {...params} label="Brand" />}
+            renderInput={(params) => <TextField {...params} label="Hãng" />}
             blurOnSelect={true}
           />
           <Autocomplete
@@ -88,7 +88,7 @@ const BrandItemIntroduce = (
             }}
             sx={{ width: '15rem', marginLeft: '1rem' }}
             options={allBodyType}
-            renderInput={(params) => <TextField {...params} label="Bodytype" />}
+            renderInput={(params) => <TextField {...params} label="Thiết kế" />}
             blurOnSelect={true}
           />
         </div>

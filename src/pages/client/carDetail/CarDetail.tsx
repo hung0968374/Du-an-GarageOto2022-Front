@@ -30,9 +30,11 @@ import useCarDetail from '../../../common/hooks/useCarDetail';
 import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
 import CustomImage from '../../../common/components/Image/CustomImage';
 import { setCarAttributes } from '../../../redux/car/CarSlice';
+import { WishList } from '../../../redux/types/auth';
+import { replaceDirtyImgUrls } from '../../../common/helper/image';
 
 import RelatedCarsAndBlogs from './components/RelatedCarsAndBlogs';
-import CarDetailComment, { CommentReaction } from './components/CommentField';
+import CommentField, { CommentReaction } from './components/CommentField';
 
 const accordionProps: Array<UndefinedObject> = [
   {
@@ -183,21 +185,47 @@ const CarDetail: React.FC = () => {
     });
   };
 
+  const checkWhetherUserLikedCar = (userWishList: WishList[]) => {
+    for (const car of userWishList) {
+      if (car.carId === currCarId) {
+        return true;
+      }
+    }
+    return false;
+  };
   const handleUserToggleWishList = async () => {
     if (unauthorized) {
       navigate('/auth/user/log-in');
       return;
     }
     let newWishList;
-    if (userWishList.includes(currCarId)) {
-      newWishList = userWishList.filter((el: number) => {
-        return el !== currCarId;
+    if (checkWhetherUserLikedCar(userWishList)) {
+      newWishList = userWishList.filter((el: WishList) => {
+        return el.carId !== currCarId;
       });
     } else {
-      newWishList = [...userWishList, currCarId];
+      newWishList = [
+        ...userWishList,
+        {
+          carId: currCarId,
+          cars: {
+            name: carInfo.name,
+            price: carInfo.price,
+            brand: {
+              id: carInfo.brandId,
+            },
+            carAppearance: {
+              imgs: replaceDirtyImgUrls(carInfo.carAppearance.imgs, false)[0],
+            },
+          },
+        },
+      ];
     }
     dispatch(setWishList(newWishList));
-    await clientService.updateUserWishList({ listCarId: newWishList, takeAction: true });
+    const carsIdsInWishlist = newWishList.map((el: WishList) => {
+      return el.carId;
+    });
+    await clientService.updateUserWishList({ listCarId: carsIdsInWishlist, takeAction: true });
   };
 
   const handleUserBuyingCar = async () => {
@@ -240,7 +268,7 @@ const CarDetail: React.FC = () => {
                           <strong>{carInfo?.name}</strong>
                         </h1>
                         <IconButton onClick={handleUserToggleWishList}>
-                          {userWishList.includes(+params.id) ? (
+                          {checkWhetherUserLikedCar(userWishList) ? (
                             <>
                               <FavoriteIcon sx={{ color: 'red' }} />
                             </>
@@ -415,7 +443,7 @@ const CarDetail: React.FC = () => {
           </Grid>
         </Container>
 
-        <CarDetailComment
+        <CommentField
           unauthorized={unauthorized}
           carInfo={carInfo}
           userInfo={userInfo}
@@ -424,7 +452,7 @@ const CarDetail: React.FC = () => {
           commentReactions={commentReactions}
           setCommentReactions={setCommentReactions}
           params={params}
-          fetchingCarInfos={fetchingCarInfos}
+          fetching={fetching}
         />
       </Box>
       <MessengerComponent />

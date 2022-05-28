@@ -27,7 +27,7 @@ export const store: Store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(sagaMiddleware),
-  devTools: env.environment === Environment.Production ? false : true,
+  // devTools: env.environment === Environment.Production ? false : true,
 });
 
 sagaMiddleware.run(rootSaga);
