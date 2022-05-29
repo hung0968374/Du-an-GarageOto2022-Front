@@ -96,7 +96,6 @@ export const EditorComponent = () => {
     setEditorState(state);
   };
   const value = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-  console.log('value', value);
   return (
     <div style={{ marginTop: '300px', width: '1000px' }}>
       <Editor

@@ -9,9 +9,9 @@ import clientService from '../../../services/clientService';
 import './Account.scss';
 import TimeHelper from '../../../common/helper/time';
 import { useAppSelector } from '../../../common/hooks/ReduxHook';
-import { CustomSnackbar } from '../../../common/components/Snackbar/CustomSnackbar';
 import { RootState } from '../../../redux/store';
 import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
+import { CustomSnackbar } from '../../../common/components/Snackbar/CustomSnackbar';
 
 import Profile from './Components/Profile';
 import { Payment } from './Components/Payment';
@@ -38,6 +38,7 @@ const tabExist = [Tab.PROFILE, Tab.WISH_LIST, Tab.HISTORY, Tab.PAYMENT];
 
 export const Account = () => {
   const formData = new FormData();
+
   const [client, setClient] = React.useState<User | null>(null);
   const { state }: any = useLocation();
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -48,7 +49,9 @@ export const Account = () => {
   const smoothScrollDiv = React.useRef<HTMLDivElement>(null);
   const [avatar, setAvatar] = React.useState<File>();
   const { carPaymentId } = useAppSelector((globalState: RootState) => globalState.general);
-  const previousPageUrlInfos = new URL(document.referrer);
+  const previousPageUrlInfos = new URL(
+    document.referrer ? document.referrer : 'https://garage-oto-duancuoiki2022.netlify.app/',
+  );
 
   React.useEffect(() => {
     if (previousPageUrlInfos.pathname.includes('brand')) {
@@ -213,7 +216,7 @@ export const Account = () => {
                           <span className="font-poppin font-semibold">Joined Date:</span>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          {TimeHelper.formatDate(String(client?.createdAt))}
+                          {client?.createdAt}
                         </TableCell>
                       </TableRow>
                       <TableRow>

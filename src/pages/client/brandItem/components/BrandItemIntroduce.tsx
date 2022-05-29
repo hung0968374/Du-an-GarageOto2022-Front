@@ -38,7 +38,6 @@ const BrandItemIntroduce = (
   }: Props,
   brandCarsRef: any,
 ) => {
-  console.log('brandCarsRef', brandCarsRef);
   const navigate = useNavigate();
   const { modifiedDescription } = useBrandDetail();
 
