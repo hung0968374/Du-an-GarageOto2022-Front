@@ -16,6 +16,7 @@ import { routerPath } from '../../constants/routerPath';
 import { getRefreshToken } from '../../helper/storage';
 import { RouteAttributes } from '../interface/route';
 import { EditorComponent } from '../../../pages/client/blog/Editor';
+import { ThreeD } from '../../../pages/client/3d/ThreeD';
 
 const staticRoute: RouteAttributes[] = [
   {
@@ -23,6 +24,12 @@ const staticRoute: RouteAttributes[] = [
     element: <Home />,
     path: routerPath.common.HOME,
     needNavigator: true,
+  },
+  {
+    authorized: false,
+    element: <ThreeD />,
+    path: routerPath.common.THREE,
+    needNavigator: false,
   },
   {
     authorized: false,

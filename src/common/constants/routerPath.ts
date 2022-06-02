@@ -9,6 +9,7 @@ export const routerPath = {
   },
   common: {
     HOME: '/home',
+    THREE: '/3d',
     ERROR: '/error',
     BRAND: '/brand',
     BLOGS: '/blogs',
