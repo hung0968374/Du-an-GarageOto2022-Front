@@ -48,31 +48,13 @@
 
 .avatar-image-holder {
   height: 15rem;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .text-center-import {
   text-align: center !important;
-}
-
-.avatar-image {
-  &-Quang {
-    background-image: url('../../../../public/imgs/members/Quang.jpg');
-    background-size: cover;
-  }
-  &-Hieu {
-    background-image: url('../../../../public/imgs/members/Hieu.jpg');
-    background-size: cover;
-  }
-  &-Hau {
-    background-image: url('../../../../public/imgs/members/Hau.jpg');
-    background-size: cover;
-  }
-  &-Hung {
-    background-image: url('../../../../public/imgs/members/Hung.jpg');
-    background-size: cover;
-  }
-  &-Khiem {
-    background-image: url('../../../../public/imgs/members/Khiem.jpg');
-    background-size: cover;
-  }
 }

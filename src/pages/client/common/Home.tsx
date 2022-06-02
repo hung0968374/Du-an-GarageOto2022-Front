@@ -1,27 +1,26 @@
 import React from 'react';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { ShoppingCart, Book, Forum, Category, FacebookOutlined } from '@mui/icons-material';
-import SimpleImageSlider from 'react-simple-image-slider';
 import { Link } from 'react-router-dom';
 
 import './Home.scss';
-import {
-  ColorSchema,
-  ContainerGrey,
-  ContainerWhite,
-  LightGreenButton,
-  TransparentButton,
-} from '../../../common/components/MuiStyling/MuiStyling';
+import { ColorSchema, ContainerGrey, ContainerWhite } from '../../../common/components/MuiStyling/MuiStyling';
 import { OUR_TEAMS, TeamAttributes } from '../../../common/constants/fakeData';
 import MessengerComponent from '../../../common/components/MessengerChat/MessengerComponent';
+import KhaiAvatar from '../../../../src/assets/imgs/members/Khai.png';
+import HungAvatar from '../../../../src/assets/imgs/members/Hung.jpg';
+import HungwAvatar from '../../../../src/assets/imgs/members/Hungw.jpg';
+import LongAvatar from '../../../../src/assets/imgs/members/Long.jpg';
+import HieuAvatar from '../../../../src/assets/imgs/members/Hieu.jpg';
 
+const avatar: any = {
+  Hung: HungAvatar,
+  Hungw: HungwAvatar,
+  Long: LongAvatar,
+  Khai: KhaiAvatar,
+  Hieu: HieuAvatar,
+};
 export const Home = () => {
-  const imageArr = [
-    { url: 'https://myphammioskin.com.vn/gia-lamborghini-tai-my/imager_106188.jpg' },
-    { url: 'https://cand.com.vn/Files/Image/hientk/2019/07/06/thumb_660_9c5ae940-c90d-4130-9c90-91c9751f1366.jpeg' },
-    { url: 'https://photo-baomoi.bmcdn.me/w720x480/2019_08_25_304_31951787/82aced073547dc198556.jpg' },
-  ];
-
   return (
     <Container maxWidth={false} className="home-container">
       <Box sx={{ minHeight: '100vh' }} className="home-background">
@@ -30,12 +29,7 @@ export const Home = () => {
             paddingTop: '28vh',
             paddingLeft: '4vw',
           }}
-        >
-          <Typography variant="h3" color={'#ffffff'} mb={9} fontFamily="sans-serif">
-            Explore the road ahead
-          </Typography>
-          <TransparentButton variant="outlined">Discover</TransparentButton>
-        </Box>
+        ></Box>
       </Box>
 
       <ContainerGrey maxWidth={false}>
@@ -43,8 +37,8 @@ export const Home = () => {
           Why are Gara-auto
         </Typography>
         <p className="home-paragraph-center">
-          First of all, this website int&apos;t for commercial purpose, we made this website to improve our
-          skill.Seconds, our product here int&apos;t 100% true about the price or many thing concern.Hope you have a
+          First of all, this website int&apos;t for commercial purpose, we made this website to improve our skill.
+          Seconds, our product here int&apos;t 100% true about the price or many thing concern. Hope you have a
           wonderful time here with us. For further information contact us through Email
         </p>
         <Grid container sx={{ marginTop: '4rem' }}>
@@ -58,9 +52,6 @@ export const Home = () => {
               things with us. If any bug occur when you using ur web, please fill the box, we will fix it as soon as
               possible. Sign up with button below!
             </p>
-            <LightGreenButton variant="outlined" sx={{ marginTop: '6rem' }}>
-              Discover
-            </LightGreenButton>
           </Grid>
         </Grid>
       </ContainerGrey>
@@ -117,29 +108,6 @@ export const Home = () => {
         </Grid>
       </ContainerWhite>
 
-      <ContainerGrey maxWidth={false}>
-        <Typography variant="h4" sx={{ textAlign: 'center', color: ColorSchema.LightGreen }}>
-          Our Recommendations
-        </Typography>
-        <p className="home-paragraph-center">
-          The products below is in our best seller of each month or most comment ones. Should you take a look? Its worth
-          for a glance
-        </p>
-        <div className="w-full mt-12">
-          {
-            // TODO: fix this to fit size
-          }
-          <SimpleImageSlider
-            width={'80%'}
-            height={'40rem'}
-            images={imageArr}
-            showBullets={true}
-            showNavs={true}
-            style={{ objectFit: 'contain', margin: '0' }}
-          />
-        </div>
-      </ContainerGrey>
-
       <ContainerWhite>
         <Typography variant="h4" sx={{ textAlign: 'center', color: ColorSchema.LightGreen }}>
           Our teams
@@ -151,12 +119,14 @@ export const Home = () => {
             return (
               <Grid sm={12} md={4} sx={{ padding: '2rem' }} key={index}>
                 <Box className="shadow-md ">
-                  <div className={`avatar-image-holder avatar-image-${member.shortHand}`}></div>
+                  <div className={`avatar-image-holder avatar-image-${member.shortHand}`}>
+                    {/* <img src={require(member.imgLink)} alt={member.name} /> */}
+                    <img src={avatar[member.shortHand]} />
+                  </div>
                   <div className="p-11">
                     <p className="h3-text text-center-import h-14 flex-center-horizontal-vertical text-black-import">
                       {member.name}
                     </p>
-                    <p className="text-center h-16">{member.description}</p>
                     <div className="flex-center-horizontal-vertical mt-6">
                       <Link to={member.facebookLink} className="text-center">
                         <FacebookOutlined fontSize="medium" sx={{ color: ColorSchema.LightGreen }} />
