@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Coll from './Collada';
 import ThreeDcomponent from './ThreeDcomponent';
 import ThreeD_Test from './ThreeD_TestComponent';
 
@@ -8,6 +9,7 @@ const Test3D = () => {
   return (
     <div ref={threeRef}>
       <ThreeD_Test />
+      {/* <Coll /> */}
     </div>
   );
 };

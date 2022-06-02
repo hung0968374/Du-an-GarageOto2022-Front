@@ -41,7 +41,7 @@ const ThreeD_Test = () => {
       const manager = new THREE.LoadingManager();
 
       const loader = new ThreeMFLoader(manager);
-      loader.load('models/truck2.3mf', function (object: any) {
+      loader.load('models/racer.3mf', function (object: any) {
         // loader.load('models/porsche/porsche.obj', function (object: any) {
         object.quaternion.setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0)); // z-up conversion
 
