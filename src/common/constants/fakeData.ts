@@ -1,40 +1,40 @@
 export interface TeamAttributes {
   name: string;
-  description: string;
   facebookLink: string;
   shortHand: string;
+  imgLink: string;
 }
 
 export const OUR_TEAMS: TeamAttributes[] = [
   {
-    name: 'Nguyễn Đức Quang',
-    description: 'Team lead, Frontend Developer, Dev-ops',
-    facebookLink: 'https://www.facebook.com/profile.php?id=100080053136869',
-    shortHand: 'Quang',
+    name: 'Bùi Quang Khải',
+    facebookLink: 'https://www.facebook.com/buiquangkhai297',
+    shortHand: 'Khai',
+    imgLink: '../../../../public/imgs/members/Khai.png',
   },
   {
-    name: 'Bùi Trung Hùng',
-    description: 'Data design, Data fetcher, Backend Developer',
+    name: 'Nguyễn Hữu Hùng',
     facebookLink: 'https://www.facebook.com/BTHung.2807',
     shortHand: 'Hung',
+    imgLink: '../../../../public/imgs/members/Hung.jpg',
   },
   {
-    name: 'Viết Minh Hiếu',
-    description: 'Frontend Developer, Backend Developer',
-    facebookLink: 'https://www.facebook.com/profile.php?id=100005054109835',
+    name: 'Nguyễn Hoàng Long',
+    facebookLink: 'https://www.facebook.com/long.nguyenhoang.9237',
+    shortHand: 'Long',
+    imgLink: '../../../../public/imgs/members/Long.jpg',
+  },
+  {
+    name: 'Phùng Tiến Hưng',
+    facebookLink: 'https://www.facebook.com/tienhung2k',
+    shortHand: 'Hungw',
+    imgLink: '../../../../public/imgs/members/Hungw.jpg',
+  },
+  {
+    name: 'Vũ Minh Hiếu',
+    facebookLink: 'https://www.facebook.com/vuminhhieu1305',
     shortHand: 'Hieu',
-  },
-  {
-    name: 'Trần Quang Khiêm',
-    description: 'Tester, Quality Assurance',
-    facebookLink: 'https://www.facebook.com/khiemquangtran2312',
-    shortHand: 'Khiem',
-  },
-  {
-    name: 'Trần Hậu',
-    description: 'Graphic design, UX/UI designer',
-    facebookLink: 'https://www.facebook.com/tranhau.17',
-    shortHand: 'Hau',
+    imgLink: '../../../../public/imgs/members/Hieu.jpg',
   },
 ];
 
