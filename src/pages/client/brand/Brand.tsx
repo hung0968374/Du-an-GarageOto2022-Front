@@ -69,7 +69,9 @@ export const Brand: React.FC = () => {
             </Typography>
             <TransparentButton
               variant="outlined"
-              onClick={() => divRef.current?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                divRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               Discover
             </TransparentButton>

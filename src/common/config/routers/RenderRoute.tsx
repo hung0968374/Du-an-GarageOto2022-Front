@@ -16,6 +16,7 @@ import { routerPath } from '../../constants/routerPath';
 import { getRefreshToken } from '../../helper/storage';
 import { RouteAttributes } from '../interface/route';
 import { EditorComponent } from '../../../pages/client/blog/Editor';
+import Test3D from '../../../pages/client/test3D/Test3D';
 
 const staticRoute: RouteAttributes[] = [
   {
@@ -23,6 +24,12 @@ const staticRoute: RouteAttributes[] = [
     element: <Home />,
     path: routerPath.common.HOME,
     needNavigator: true,
+  },
+  {
+    authorized: false,
+    element: <Test3D />,
+    path: routerPath.common.TEST3D,
+    needNavigator: false,
   },
   {
     authorized: false,

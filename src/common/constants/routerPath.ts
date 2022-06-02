@@ -14,6 +14,7 @@ export const routerPath = {
     BLOGS: '/blogs',
     BLOG_ITEM: '/blog',
     EDIT: '/edit',
+    TEST3D: '/3d',
     BRAND_ITEM: '/brand/:brandName',
     CAR_DETAIL: '/brand/:brandName/:car/:id',
   },
