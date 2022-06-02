@@ -7,8 +7,6 @@ const Test3D = () => {
   const threeRef = React.useRef<any>();
   return (
     <div ref={threeRef}>
-      Test3D
-      {/* <ThreeDcomponent /> */}
       <ThreeD_Test />
     </div>
   );

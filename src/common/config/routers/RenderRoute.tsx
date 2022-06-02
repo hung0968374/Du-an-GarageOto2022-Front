@@ -11,7 +11,7 @@ import { BlogItem } from '../../../pages/client/blog/BlogItem';
 import { Brand } from '../../../pages/client/brand/Brand';
 import { BrandItem } from '../../../pages/client/brandItem/BrandItem';
 import CarDetail from '../../../pages/client/carDetail/CarDetail';
-import { Home } from '../../../pages/client/common/Home';
+import { Home } from '../../../pages/client/home/Home';
 import { routerPath } from '../../constants/routerPath';
 import { getRefreshToken } from '../../helper/storage';
 import { RouteAttributes } from '../interface/route';
