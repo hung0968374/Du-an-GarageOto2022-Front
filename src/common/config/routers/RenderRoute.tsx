@@ -16,7 +16,7 @@ import { routerPath } from '../../constants/routerPath';
 import { getRefreshToken } from '../../helper/storage';
 import { RouteAttributes } from '../interface/route';
 import { EditorComponent } from '../../../pages/client/blog/Editor';
-import Test3D from '../../../pages/client/3D/Test3D';
+import Test3D from '../../../pages/client/home/3D/Test3D';
 
 const staticRoute: RouteAttributes[] = [
   {

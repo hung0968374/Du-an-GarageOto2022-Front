@@ -17,7 +17,7 @@ import {
 import { setBrandsInfos } from '../../../redux/brand/BrandSlice';
 import clientService from '../../../services/clientService';
 import './Brand.scss';
-import Gtlf from '../3D/Gtlf';
+import Gtlf from '../home/3D/Gtlf';
 
 export const Brand: React.FC = () => {
   const divRef = useRef<HTMLDivElement>(null);
@@ -39,9 +39,10 @@ export const Brand: React.FC = () => {
   }, [dispatch, brandsInfos]);
 
   const handleBrandInURL = (brandName: string) => {
+    console.log('brandName', brandName);
     const numberOfString = brandName.split(' ');
     if (numberOfString.length === 1) {
-      return `${routerPath.common.BRAND}/${brandName}`;
+      return `/${brandName}`;
     }
 
     const handleBrandName = numberOfString.reduce(
@@ -49,14 +50,14 @@ export const Brand: React.FC = () => {
       '',
     );
     const newBrandName = handleBrandName.slice(0, handleBrandName.length - 1); //xoá phần tử cuối của string
-    return `${routerPath.common.BRAND}/${newBrandName}`;
+    return `/${newBrandName}`;
   };
 
   return (
     <>
       <Container maxWidth={false} className="brand-container">
         <Box sx={{ minHeight: '100vh' }} className="brand-background">
-          {/* <Box
+          <Box
             sx={{
               paddingTop: '28vh',
               paddingLeft: '4vw',
@@ -76,8 +77,7 @@ export const Brand: React.FC = () => {
             >
               Discover
             </TransparentButton>
-          </Box> */}
-          <Gtlf brand="tesla" />
+          </Box>
         </Box>
 
         <ContainerGrey maxWidth={false} ref={divRef}>

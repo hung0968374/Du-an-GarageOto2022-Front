@@ -12,7 +12,8 @@ import HungAvatar from '../../../../src/assets/imgs/members/Hung.jpg';
 import HungwAvatar from '../../../../src/assets/imgs/members/Hungw.jpg';
 import LongAvatar from '../../../../src/assets/imgs/members/Long.jpg';
 import HieuAvatar from '../../../../src/assets/imgs/members/Hieu.jpg';
-import Gtlf from '../3D/Gtlf';
+
+import Gtlf from './3D/Gtlf';
 
 const avatar: any = {
   Hung: HungAvatar,

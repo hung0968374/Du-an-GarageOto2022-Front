@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
-import { mapBrandsToThreeDInfo } from '../../../common/constants/mapBrandToThreeD';
-import { gltfLoader } from '../../../common/helper/gltf/gltfYou';
+import { mapBrandsToThreeDInfo } from '../../../../common/constants/mapBrandToThreeD';
+import { gltfLoader } from '../../../../common/helper/gltf/gltfYou';
 
 type GLTF = {
   brand: string;

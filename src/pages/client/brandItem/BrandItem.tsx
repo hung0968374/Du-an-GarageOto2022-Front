@@ -12,6 +12,7 @@ import MessengerComponent from '../../../common/components/MessengerChat/Messeng
 import useBrandDetail from '../../../common/hooks/useBrandDetail';
 import { setBrandCars } from '../../../redux/brand/BrandSlice';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/ReduxHook';
+import Gtlf from '../home/3D/Gtlf';
 
 import BrandItemIntroduce from './components/BrandItemIntroduce';
 import BrandItemMain from './components/BrandItemMain';
@@ -167,7 +168,7 @@ export const BrandItem: React.FC = () => {
 
   return (
     <Container maxWidth={false} className="brand_item-container mt-12">
-      <div style={mainImgStyle(params?.brandName)}>
+      {/* <div style={mainImgStyle(params?.brandName)}>
         <Box
           sx={{
             paddingTop: '28vh',
@@ -187,7 +188,8 @@ export const BrandItem: React.FC = () => {
             Discover
           </TransparentButton>
         </Box>
-      </div>
+      </div> */}
+      <Gtlf brand={params.brandName || 'tesla'} />
 
       <BrandItemIntroduce
         discoverRef={discoverRef}
