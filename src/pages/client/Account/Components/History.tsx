@@ -11,7 +11,6 @@ import { HistoryItem } from './HistoryItem';
 
 const History = () => {
   const [receipts, setReceipts] = React.useState<PaymentReceipt[]>();
-  console.log('receipts', receipts);
   const { loading } = useAppSelector((globalState: RootState) => globalState.general);
   const dispatch = useAppDispatch();
 

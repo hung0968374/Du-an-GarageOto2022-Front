@@ -39,7 +39,6 @@ export const Brand: React.FC = () => {
   }, [dispatch, brandsInfos]);
 
   const handleBrandInURL = (brandName: string) => {
-    console.log('brandName', brandName);
     const numberOfString = brandName.split(' ');
     if (numberOfString.length === 1) {
       return `/${brandName}`;
