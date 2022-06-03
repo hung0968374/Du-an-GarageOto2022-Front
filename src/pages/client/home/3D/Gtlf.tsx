@@ -10,8 +10,14 @@ type GLTF = {
 const Gtlf = ({ brand }: GLTF) => {
   const containerRef = useRef<any>();
   const obj = mapBrandsToThreeDInfo[brand];
+
   useEffect(() => {
-    gltfLoader({ container: containerRef.current, obj });
+    if (containerRef.current) {
+      while (containerRef.current.firstChild) {
+        containerRef.current.removeChild(containerRef.current.lastChild);
+      }
+      gltfLoader({ container: containerRef.current, obj });
+    }
   }, [obj]);
 
   return (
@@ -21,4 +27,6 @@ const Gtlf = ({ brand }: GLTF) => {
   );
 };
 
-export default Gtlf;
+const MemoGtlf = React.memo(Gtlf);
+
+export default MemoGtlf;

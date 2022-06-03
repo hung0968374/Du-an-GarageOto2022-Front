@@ -189,7 +189,9 @@ export const BrandItem: React.FC = () => {
           </TransparentButton>
         </Box>
       </div> */}
-      <Gtlf brand={params.brandName || 'tesla'} />
+      <Box className="brandItem_scene">
+        <Gtlf brand={params.brandName || 'tesla'} />
+      </Box>
 
       <BrandItemIntroduce
         discoverRef={discoverRef}

@@ -39,14 +39,14 @@ export function capitalizeFirstLetter(string: string) {
 export const handleBrandInURL = (brandName: string) => {
   const numberOfString = brandName.split(' ');
   if (numberOfString.length === 1) {
-    return `${routerPath.common.BRAND}/${brandName.toLocaleLowerCase()}`;
+    return `/${brandName.toLocaleLowerCase()}`;
   } else {
     const handleBrandName = numberOfString.reduce(
       (previousValue, currentValue) => previousValue + currentValue + '-',
       '',
     );
     const newBrandName = handleBrandName.slice(0, handleBrandName.length - 1); //xoá phần tử cuối của string
-    return `${routerPath.common.BRAND}/${newBrandName.toLocaleLowerCase()}`;
+    return `/${newBrandName.toLocaleLowerCase()}`;
   }
 };
 
