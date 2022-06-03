@@ -11,6 +11,7 @@ import { HistoryItem } from './HistoryItem';
 
 const History = () => {
   const [receipts, setReceipts] = React.useState<PaymentReceipt[]>();
+  console.log('receipts', receipts);
   const { loading } = useAppSelector((globalState: RootState) => globalState.general);
   const dispatch = useAppDispatch();
 
@@ -18,7 +19,11 @@ const History = () => {
     try {
       dispatch(setLoading(true));
       const response = await clientService.getPaymentReceipt();
-      setReceipts(response);
+      response.sort((a, b) => {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      });
+      const res = response.reverse();
+      setReceipts(res);
     } catch (error) {
       console.log('error: ', error);
     } finally {

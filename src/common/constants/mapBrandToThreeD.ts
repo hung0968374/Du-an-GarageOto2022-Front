@@ -13,8 +13,10 @@ type ScaleType = {
 };
 export type MapBrandTo3DValue = {
   link: string;
-  camera?: CameraType;
-  scale?: ScaleType;
+  camera: CameraType;
+  scale: ScaleType;
+  directLightIntensity?: number;
+  needAdditionalLight?: boolean;
 };
 export type MapBrandToThreeDInfo = {
   [key: string]: MapBrandTo3DValue[];
@@ -22,6 +24,7 @@ export type MapBrandToThreeDInfo = {
 export const mapBrandsToThreeDInfo: MapBrandToThreeDInfo = {
   bentley: [
     {
+      directLightIntensity: 1,
       link: 'models/bentley/scene.gltf',
       camera: {
         position: {
@@ -39,7 +42,27 @@ export const mapBrandsToThreeDInfo: MapBrandToThreeDInfo = {
   ],
   bmw: [
     {
+      directLightIntensity: -1,
       link: 'models/bmw/scene.gltf',
+      camera: {
+        position: {
+          x: -50,
+          y: 50,
+          z: 200,
+        },
+      },
+      scale: {
+        x: 1,
+        y: 1,
+        z: 1,
+      },
+    },
+  ],
+  bugatti: [
+    {
+      needAdditionalLight: true,
+      directLightIntensity: 500,
+      link: 'models/bugatti/scene.gltf',
       camera: {
         position: {
           x: -50,
@@ -48,26 +71,9 @@ export const mapBrandsToThreeDInfo: MapBrandToThreeDInfo = {
         },
       },
       scale: {
-        x: 20,
-        y: 20,
-        z: 20,
-      },
-    },
-  ],
-  bugatti: [
-    {
-      link: 'models/bugatti/scene.gltf',
-      camera: {
-        position: {
-          x: -50,
-          y: 300,
-          z: 1000,
-        },
-      },
-      scale: {
-        x: 2,
-        y: 2,
-        z: 2,
+        x: 18,
+        y: 18,
+        z: 18,
       },
     },
   ],
@@ -90,6 +96,7 @@ export const mapBrandsToThreeDInfo: MapBrandToThreeDInfo = {
   ],
   lamborghini: [
     {
+      directLightIntensity: 1,
       link: 'models/lamborghini/scene.gltf',
       camera: {
         position: {
@@ -99,14 +106,15 @@ export const mapBrandsToThreeDInfo: MapBrandToThreeDInfo = {
         },
       },
       scale: {
-        x: 2,
-        y: 2,
-        z: 2,
+        x: 1.5,
+        y: 1.5,
+        z: 1.5,
       },
     },
   ],
   mercedes: [
     {
+      directLightIntensity: 1,
       link: 'models/mercedes/amg/scene.gltf',
       camera: {
         position: {
@@ -116,9 +124,9 @@ export const mapBrandsToThreeDInfo: MapBrandToThreeDInfo = {
         },
       },
       scale: {
-        x: 2,
-        y: 2,
-        z: 2,
+        x: 1,
+        y: 1,
+        z: 1,
       },
     },
     {
@@ -184,6 +192,7 @@ export const mapBrandsToThreeDInfo: MapBrandToThreeDInfo = {
         y: 100,
         z: 100,
       },
+      directLightIntensity: 200,
     },
   ],
   tesla: [

@@ -1,11 +1,11 @@
 Model Information:
-* title:	Bugatti - La Voiture Noire
-* source:	https://sketchfab.com/3d-models/bugatti-la-voiture-noire-b713f2e7c48842c194084cf42b0b7a5f
-* author:	SINNIK (https://sketchfab.com/sinnik)
+* title:	Bugatti Bolide 2020
+* source:	https://sketchfab.com/3d-models/bugatti-bolide-2020-cf03a0ca4fdc4e83a3091e67f0ebfa43
+* author:	AbhinavRaj50 (https://sketchfab.com/AbhinavRaj50)
 
 Model License:
 * license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 * requirements:	Author must be credited. Commercial use is allowed.
 
 If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on "Bugatti - La Voiture Noire" (https://sketchfab.com/3d-models/bugatti-la-voiture-noire-b713f2e7c48842c194084cf42b0b7a5f) by SINNIK (https://sketchfab.com/sinnik) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+This work is based on "Bugatti Bolide 2020" (https://sketchfab.com/3d-models/bugatti-bolide-2020-cf03a0ca4fdc4e83a3091e67f0ebfa43) by AbhinavRaj50 (https://sketchfab.com/AbhinavRaj50) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

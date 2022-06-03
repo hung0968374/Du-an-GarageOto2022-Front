@@ -20,6 +20,10 @@ export const gltfLoader = ({ container, obj }: GLTFloader) => {
     renderer: any,
     car: any,
     ground: any,
+    light1: any,
+    light2: any,
+    light3: any,
+    light4: any,
     isMouseDown = false;
 
   function init() {
@@ -46,7 +50,7 @@ export const gltfLoader = ({ container, obj }: GLTFloader) => {
     controls.addEventListener('change', renderer);
 
     // light
-    const hlight = new THREE.AmbientLight(0x404040, 50);
+    const hlight = new THREE.AmbientLight(0x404040, brandInfo?.directLightIntensity || 50);
     scene.add(hlight);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 10);
@@ -54,7 +58,26 @@ export const gltfLoader = ({ container, obj }: GLTFloader) => {
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
+    if (brandInfo.needAdditionalLight) {
+      light1 = new THREE.PointLight(0xc4c4c4, 10);
+      light1.position.set(0, 300, 500);
+      scene.add(light1);
+
+      light2 = new THREE.PointLight(0xc4c4c4, 10);
+      light2.position.set(500, 0, 0);
+      scene.add(light2);
+
+      light3 = new THREE.PointLight(0xc4c4c4, 10);
+      light3.position.set(0, 10, -500);
+      scene.add(light3);
+
+      light4 = new THREE.PointLight(0xc4c4c4, 10);
+      light4.position.set(-500, 300, 500);
+      scene.add(light4);
+    }
+
     container.appendChild(renderer.domElement);
+
     //
     // load 3d car
     const loader = new GLTFLoader();

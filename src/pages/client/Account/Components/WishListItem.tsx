@@ -21,7 +21,7 @@ export const WishListItem: React.FC<WishListItemProp> = ({ item }) => {
           <Grid item md={8} sm={12} className="bought-card-info">
             <p>{item.cars.name}</p>
             <p>Price: {item.cars.price}</p>
-            <p>Brand: {item.cars.brand.id ? mapBrandIdToName(item.cars.brand.id) : 'Updating'}</p>
+            <p>Brand: {item.cars.brand?.id ? mapBrandIdToName(item.cars.brand?.id) : 'Updating'}</p>
           </Grid>
         </Grid>
       );
@@ -31,7 +31,9 @@ export const WishListItem: React.FC<WishListItemProp> = ({ item }) => {
 
   return (
     <>
-      <Link to={`/brand/${mapBrandIdToName(item.cars.brand.id)}/${item.cars.name.toLocaleLowerCase()}/${item.carId}`}>
+      <Link
+        to={`/brand/${mapBrandIdToName(item?.cars?.brand?.id)}/${item.cars.name.toLocaleLowerCase()}/${item.carId}`}
+      >
         {renderItem()}
       </Link>
     </>

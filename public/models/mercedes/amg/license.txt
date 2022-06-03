@@ -1,11 +1,11 @@
 Model Information:
-* title:	Mercedes AMG Project ONE
-* source:	https://sketchfab.com/3d-models/mercedes-amg-project-one-287716b5aeb24b0b934452526827eb52
-* author:	hashikemu (https://sketchfab.com/hashikemu)
+* title:	Mercedes-Benz Vision Duet Concept
+* source:	https://sketchfab.com/3d-models/mercedes-benz-vision-duet-concept-89e49efda47a49c99506b4883b3c8943
+* author:	Lujie Huang (https://sketchfab.com/lhuang8)
 
 Model License:
-* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
-* requirements:	Author must be credited. No commercial use.
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
 
 If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on "Mercedes AMG Project ONE" (https://sketchfab.com/3d-models/mercedes-amg-project-one-287716b5aeb24b0b934452526827eb52) by hashikemu (https://sketchfab.com/hashikemu) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+This work is based on "Mercedes-Benz Vision Duet Concept" (https://sketchfab.com/3d-models/mercedes-benz-vision-duet-concept-89e49efda47a49c99506b4883b3c8943) by Lujie Huang (https://sketchfab.com/lhuang8) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -167,31 +167,39 @@ export const BrandItem: React.FC = () => {
   }, [downloadImgsFromFirebase, brandImgUrls]);
 
   return (
-    <Container maxWidth={false} className="brand_item-container mt-12">
-      {/* <div style={mainImgStyle(params?.brandName)}>
-        <Box
-          sx={{
-            paddingTop: '28vh',
-            paddingLeft: '4vw',
-          }}
-        >
-          <Typography variant="h2" color={'#ffffff'} mb={3} fontFamily="ui-serif">
-            The new S-Brand
-          </Typography>
-          <Typography sx={{ opacity: '0.8' }} variant="h6" color={'#ffffff'} mb={10}>
-            Cares for what matters.
-          </Typography>
-          <TransparentButton
-            onClick={() => discoverRef.current?.scrollIntoView({ behavior: 'smooth' })}
-            variant="outlined"
-          >
-            Discover
-          </TransparentButton>
-        </Box>
-      </div> */}
-      <Box className="brandItem_scene">
-        <Gtlf brand={params.brandName || 'tesla'} />
-      </Box>
+    <Container maxWidth={false} className="brand_item-container">
+      {params?.brandName === 'vinfast' ? (
+        <>
+          <div style={mainImgStyle(params?.brandName)}>
+            <Box
+              sx={{
+                paddingTop: '28vh',
+                paddingLeft: '4vw',
+              }}
+            >
+              <Typography variant="h2" color={'#ffffff'} mb={3} fontFamily="ui-serif">
+                The new S-Brand
+              </Typography>
+              <Typography sx={{ opacity: '0.8' }} variant="h6" color={'#ffffff'} mb={10}>
+                Cares for what matters.
+              </Typography>
+              <TransparentButton
+                onClick={() => discoverRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                variant="outlined"
+              >
+                Discover
+              </TransparentButton>
+            </Box>
+          </div>
+        </>
+      ) : (
+        <>
+          <Box className="home-threeD_world">3D world</Box>
+          <Box className="brandItem_scene">
+            <Gtlf brand={params.brandName || 'tesla'} />
+          </Box>
+        </>
+      )}
 
       <BrandItemIntroduce
         discoverRef={discoverRef}

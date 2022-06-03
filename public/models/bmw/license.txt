@@ -1,11 +1,11 @@
 Model Information:
-* title:	Bmw 8 3D model
-* source:	https://sketchfab.com/3d-models/bmw-8-3d-model-b22f72e755ec4f3b8327c81c1fa24f05
-* author:	RADEONGAMER (https://sketchfab.com/RADEONGAMER)
+* title:	BMW i8 vision
+* source:	https://sketchfab.com/3d-models/bmw-i8-vision-16136c2c47b54b39ae7fffb3a1415f30
+* author:	hartwelkisaka (https://sketchfab.com/hartwelkisaka)
 
 Model License:
 * license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 * requirements:	Author must be credited. Commercial use is allowed.
 
 If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on "Bmw 8 3D model" (https://sketchfab.com/3d-models/bmw-8-3d-model-b22f72e755ec4f3b8327c81c1fa24f05) by RADEONGAMER (https://sketchfab.com/RADEONGAMER) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+This work is based on "BMW i8 vision" (https://sketchfab.com/3d-models/bmw-i8-vision-16136c2c47b54b39ae7fffb3a1415f30) by hartwelkisaka (https://sketchfab.com/hartwelkisaka) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

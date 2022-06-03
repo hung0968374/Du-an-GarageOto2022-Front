@@ -1,7 +1,11 @@
 .home_scene {
-  margin-top: 95px;
-  background: url(https://cdn.wallpapersafari.com/4/29/hUWI45.jpg);
+  // background: url(https://i.pinimg.com/originals/d6/b9/22/d6b9221f02ac31cc4b94381f6b55fc0f.jpg);
+  background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj2-q4vrElLyjUv_x2oVf0TSdkDXXvJWrdSZUM9ArbDZuRE7ya4m0PKqh8uKQ0J6oBCmc&usqp=CAU);
   background-size: cover;
+}
+.home-threeD_world {
+  height: 100px;
+  @apply text-5xl flex items-center justify-center;
 }
 
 .home-background {
@@ -12,6 +16,7 @@
 .home-container {
   padding: 0 !important;
   overflow-x: hidden;
+  margin-top: 150px;
 }
 
 .home-paragraph-center {
