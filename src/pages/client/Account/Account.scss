@@ -1,0 +1,105 @@
+.account {
+  &-avatar {
+    width: 16vw;
+    border-radius: 100%;
+    height: 30vh;
+    object-fit: cover;
+
+    @apply shadow-lg;
+  }
+
+  &-change-avatar-btn {
+    position: absolute !important;
+    bottom: 0%;
+    right: 10%;
+    border-radius: 50% !important;
+    min-width: 0px !important;
+    padding: 10px !important;
+    background-color: #008c7a !important;
+  }
+
+  &-text-headline {
+    color: #008c7a;
+    @apply text-2xl font-bold tracking-wide mt-6;
+  }
+
+  &-tab {
+    @apply mx-6 mt-6 bg-white px-5 py-4 cursor-pointer;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: #008c7a;
+      color: #ffffff;
+    }
+
+    &-active {
+      border-left: 6px #008c7a solid;
+      border-top: 6px #008c7a solid;
+    }
+  }
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+  color: #008c7a !important;
+}
+
+.text-guild-line {
+  color: #008c7a;
+  @apply text-center uppercase text-3xl font-semibold my-10;
+}
+
+.text-support {
+  background-color: #008c7a;
+  color: #ffffff;
+  @apply px-3 py-2 mb-4;
+}
+
+.bought {
+  &-card {
+    @apply bg-white rounded-md shadow-md p-6 mb-6;
+
+    &-image {
+      img {
+        @apply w-full h-36 object-contain;
+      }
+      @apply flex justify-center;
+    }
+
+    &-info {
+      transition: 600ms ease-in;
+
+      p:first-child {
+        color: #008c7a;
+        @apply text-xl mb-3 font-semibold;
+      }
+      p {
+        @apply mb-1;
+      }
+      p:last-child {
+        @apply text-sm cursor-pointer;
+      }
+
+      @apply px-8;
+    }
+  }
+}
+
+.wishlist-image {
+  background-image: url('../../../../public/imgs/wishlist.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  @apply w-3/4 h-80 mt-10;
+}
+
+.bought-history-image {
+  background-image: url('../../../../public/imgs/buy.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  @apply w-3/4 h-80 mt-10;
+}
+
+.payment-tab {
+  &-receipt-sheet {
+    @apply bg-white p-8;
+  }
+}

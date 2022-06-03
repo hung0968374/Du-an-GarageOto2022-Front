@@ -1,0 +1,23 @@
+.sign_up {
+  &-container {
+    @apply xl:px-28 py-10;
+  }
+
+  &-heading {
+    color: #008c7a;
+    @apply font-bold text-5xl text-center tracking-wide mt-4;
+  }
+
+  &-form {
+    @apply flex flex-col;
+  }
+
+  &-full_name {
+    @apply w-full flex justify-between items-center mb-6 mt-8;
+
+    .first-name,
+    .last-name {
+      width: 48%;
+    }
+  }
+}

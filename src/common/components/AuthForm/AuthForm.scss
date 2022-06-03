@@ -1,0 +1,80 @@
+.auth {
+  &-wrapper {
+    background-color: #333333;
+    @apply w-full h-screen -z-10 flex items-center;
+  }
+
+  &-decorator {
+    overflow: hidden;
+    @apply w-full h-screen z-0 flex absolute;
+  }
+
+  &-container {
+    min-height: 50%;
+    @apply w-10/12 bg-white flex mx-auto rounded-3xl z-20;
+  }
+
+  &-img_side {
+    @apply w-1/2 hidden xl:block rounded-none cursor-pointer;
+
+    &-left {
+      @apply rounded-l-3xl;
+    }
+
+    &-right {
+      @apply rounded-r-3xl;
+    }
+  }
+
+  &-form_side {
+    @apply w-full xl:w-1/2 xl:mx-0 mx-10 h-full;
+  }
+}
+
+.decor {
+  &-circle {
+    overflow: hidden;
+    @apply rounded-full absolute;
+
+    &_1 {
+      background-color: #555555;
+      transform: translate(-50%, -60%);
+      z-index: 1;
+      @apply w-60 h-60;
+    }
+
+    &_2 {
+      background-color: #444444;
+      transform: translate(-50%, -60%);
+      width: 40rem;
+      height: 40rem;
+    }
+
+    &_3 {
+      background-color: #666666;
+      z-index: 3;
+      width: 60rem;
+      height: 60rem;
+      right: -30%;
+      top: 70%;
+    }
+
+    &_4 {
+      background-color: #555555;
+      right: -40%;
+      top: 50%;
+      width: 80rem;
+      height: 80rem;
+      z-index: 2;
+    }
+
+    &_5 {
+      background-color: #444444;
+      right: -50%;
+      top: 30%;
+      width: 100rem;
+      height: 100rem;
+      z-index: 1;
+    }
+  }
+}

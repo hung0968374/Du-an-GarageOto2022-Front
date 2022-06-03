@@ -1,0 +1,403 @@
+.car-container {
+  height: 500px;
+  @media (max-width: 900px) {
+    height: auto;
+  }
+}
+.car-main-params-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -5%;
+  @media (max-width: 900px) {
+    margin-top: 5%;
+    height: auto;
+    margin-bottom: 5%;
+  }
+}
+.car-main-params {
+  margin-left: 5%;
+  height: 70%;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  @media (max-width: 900px) {
+    height: 100%;
+    width: 90%;
+    margin: auto;
+  }
+  .title-wrapper {
+    @apply flex justify-between;
+  }
+}
+
+.car {
+  &-title {
+    font-size: 24px;
+  }
+  &-price {
+    font-size: 20px;
+    color: red;
+  }
+  &-table-main-param {
+    width: (100%);
+    font-size: 14px;
+    & tr {
+      border: 1px solid #dee2e6 !important;
+    }
+    & .table-first-el {
+      width: 30% !important;
+      padding: 5px 10px;
+    }
+  }
+  &-swiper-2 {
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+  &-descriptions {
+    min-height: 100px;
+  }
+}
+.img-gallary {
+  height: 100%;
+}
+
+.table-title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  color: red;
+}
+.payment-area {
+  @apply flex justify-center mt-6;
+}
+
+.car-p-strong {
+  padding: 1rem 0 1rem 0;
+}
+.introImg-wrapper {
+  margin-top: 2rem;
+  width: 100%;
+  height: 280px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.img-intro-item {
+  width: 100%;
+  height: 100%;
+}
+.starring-container {
+  cursor: pointer;
+}
+.car-staring {
+  display: flex;
+  margin: auto;
+  border-color: #dee2e6;
+  width: 95%;
+  height: auto;
+  @apply px-2 py-2 border-2 rounded-xl flex;
+}
+.starring-text {
+  width: 50%;
+  @apply flex flex-col justify-evenly;
+  .star-rating-area {
+    position: relative;
+    .curr-rating {
+      z-index: 1;
+    }
+    .others-rated {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 9;
+    }
+  }
+}
+.starring-right {
+  @apply flex flex-col items-center;
+  .starring-number {
+    width: 50%;
+    height: inherit;
+    @apply flex flex-row justify-center text-center items-center;
+  }
+}
+
+.related-cars-blogs {
+  width: 100%;
+  display: block;
+  margin-top: 1rem;
+
+  .relatedCar-image {
+    img {
+      width: 100%;
+      object-fit: cover !important;
+      max-width: none;
+      border-radius: 5px;
+      max-height: 160px;
+      @media (max-width: 900px) {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        max-height: none;
+      }
+      @media (max-width: 600px) {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .relatedCar-content-wrapper,
+  .relatedBLogs-content-wrapper {
+    height: 100%;
+    @apply ml-4 flex flex-col justify-evenly;
+    @media (max-width: 900px) {
+      margin-top: 1rem;
+      @apply flex flex-col justify-center;
+      .blog-title {
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        -webkit-line-clamp: 1 !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+      }
+    }
+    .name {
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      @apply text-xl;
+    }
+    .price {
+      color: red;
+    }
+    .blog-title {
+      font-weight: 600;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      @media (max-width: 1200px) {
+        margin-top: 1rem;
+      }
+      @media (max-width: 900px) {
+        margin-top: 1rem;
+        text-align: center;
+      }
+    }
+  }
+
+  .relatedBLogs-content-wrapper {
+    img {
+      @media (max-width: 900px) {
+        width: 100% !important;
+        height: 200px !important;
+        object-fit: cover !important;
+        max-height: none !important;
+      }
+    }
+  }
+}
+
+.related-blogs {
+  @apply mt-8;
+}
+.intro-container {
+  height: auto;
+  width: 100%;
+  position: relative;
+  margin-top: 2rem;
+  .black-line {
+    width: 100%;
+    position: absolute;
+    bottom: 50%;
+    border-top: 2px solid black;
+    z-index: -9;
+  }
+}
+.text-wrapper {
+  cursor: pointer;
+  @apply flex items-center justify-center;
+  .related-cars-text {
+    padding: 15px;
+    font-size: 30px;
+    color: red;
+    background-color: white;
+    z-index: 9;
+  }
+}
+.car-comments {
+  @apply my-8;
+  .user-posted-comments-area {
+    @apply mt-8;
+    .slight-gray-bg {
+      background-color: #f9f9f9;
+    }
+    .comment-wrapper {
+      position: relative;
+      z-index: 999;
+      @apply mt-8 flex flex-row;
+      .subComment-line {
+        position: absolute;
+        height: calc(100% + 2rem - 10px);
+        width: 100%;
+        left: 28px;
+        top: 60px;
+        border-left: 1px solid var(--commentLine);
+        z-index: -1;
+      }
+      .hide-subcomment-line {
+        position: absolute;
+        height: calc(100% - 60px);
+        width: 100%;
+        left: 28px;
+        top: 60px;
+        border-left: 1px solid var(--commentLine);
+        z-index: -1;
+        // @apply mt-8 flex flex-row px-8 py-4;
+      }
+      .more-action {
+        position: absolute;
+        top: calc(50% - 25.5px);
+        right: 0;
+        z-index: 999;
+        .more-action-container {
+          user-select: none;
+          cursor: pointer;
+          @apply p-8;
+        }
+      }
+      .user-avatar {
+        width: 56px;
+        @apply flex justify-start;
+      }
+      .user-main-comment-and-actions {
+        width: calc(100% - 56px);
+        margin-left: 10px;
+        @apply pl-8;
+        .user-name-time-container {
+          @apply flex;
+          .time-diff {
+            color: #606060;
+            cursor: pointer;
+            user-select: none;
+            padding-left: 1rem;
+            font-size: 14px;
+            @apply flex items-center;
+          }
+        }
+        .user-name {
+          font-weight: 600;
+        }
+        .comment {
+          @apply pt-2;
+        }
+        .user-action-area {
+          @apply flex items-center;
+          .user-rep {
+            margin-left: 2rem;
+            user-select: none;
+            cursor: pointer;
+          }
+          @apply pt-2 flex;
+          .like-area {
+            user-select: none;
+            @apply mr-4;
+          }
+          .dislike-area {
+            user-select: none;
+          }
+        }
+      }
+    }
+
+    .reply-area {
+      margin-left: 56px;
+      width: calc(100% - 56px);
+      position: relative;
+      @apply flex pt-4 items-center;
+      .reply-line {
+        position: absolute;
+        width: 20px;
+        left: -28px;
+        border-left: 1px solid var(--commentLine);
+        height: calc(100% + 4rem + 5px);
+        width: 10px;
+        top: 0;
+        // background-color: antiquewhite;
+      }
+      .reply-line-has-mom-no-child {
+        height: calc(100% + 2rem);
+      }
+      .reply-line-has-mom-has-child {
+        height: calc(100% + 2rem);
+      }
+      .reply-line-has-mom-show-child {
+        height: calc(100% + 6rem + 5px);
+      }
+      .reply-line-mom-show-child {
+        height: calc(100% + 6rem + 5px);
+      }
+      .reply-line-mom-not-show-child {
+        height: calc(100% + 2rem + 5px);
+      }
+      .reply-text {
+        width: 100%;
+        z-index: 9999;
+        @apply pl-4;
+      }
+    }
+    .cancel-reply {
+      @apply flex justify-end;
+    }
+  }
+}
+.child {
+  .child-wrapper {
+    position: relative;
+  }
+  .see-more-wrapper {
+    position: relative;
+    height: 30px;
+    z-index: 999;
+    @apply flex items-center;
+    .open-hide-action {
+      width: 100%;
+      @apply px-8;
+    }
+    .curly-line {
+      bottom: 50% !important;
+      z-index: -9;
+    }
+  }
+  .line {
+    position: absolute;
+    height: calc(100% + 2rem);
+    width: 100%;
+    right: 72px;
+    border-left: 1px solid var(--commentLine);
+  }
+  .curly-line {
+    position: absolute;
+    height: 28px;
+    width: 100px;
+    left: -72px;
+    border-bottom-left-radius: 10px;
+    border-left: 1px solid var(--commentLine);
+    border-bottom: 1px solid var(--commentLine);
+    z-index: -9;
+  }
+  .cut-curly-line {
+    width: 60px !important;
+  }
+}

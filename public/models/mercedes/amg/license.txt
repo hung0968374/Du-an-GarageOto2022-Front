@@ -1,0 +1,11 @@
+Model Information:
+* title:	Mercedes AMG Project ONE
+* source:	https://sketchfab.com/3d-models/mercedes-amg-project-one-287716b5aeb24b0b934452526827eb52
+* author:	hashikemu (https://sketchfab.com/hashikemu)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Mercedes AMG Project ONE" (https://sketchfab.com/3d-models/mercedes-amg-project-one-287716b5aeb24b0b934452526827eb52) by hashikemu (https://sketchfab.com/hashikemu) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

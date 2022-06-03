@@ -1,0 +1,64 @@
+// IMPORTANT: if you want to import sass/scss module you need to import it before import tailwind
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App {
+  width: 100vw;
+  height: 100vh;
+
+  @apply bg-slate-100 m-0 p-0 box-border flex justify-center items-center;
+}
+
+.separator {
+  height: 0.8px;
+  background-color: #989898;
+  @apply w-full my-8;
+}
+
+.footer-text {
+  color: #d2d1d1;
+}
+
+.flex-center-horizontal-vertical {
+  @apply flex justify-center items-center;
+}
+
+.font-poppin {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+@keyframes rightToLeft {
+  0% {
+    transform: translateX(120px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+.scroll-top-container {
+  animation-name: rightToLeft;
+  animation-duration: 500ms;
+  @apply fixed right-6 bottom-6 z-50 cursor-pointer;
+}
+
+.up-button {
+  padding: 1rem;
+  background-color: #008c7a;
+
+  @apply rounded-full;
+}
+
+.speed-dial > button {
+  background-color: #008c7a !important;
+}
+
+.speed-dial {
+  animation: rightToLeft 500ms;
+}
+
+.text-subheader {
+  @apply text-center text-2xl font-medium pb-5;
+}
