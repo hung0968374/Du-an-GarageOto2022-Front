@@ -25,7 +25,6 @@ const avatar: any = {
 export const Home = () => {
   return (
     <Container maxWidth={false} className="home-container">
-      <Box className="home-threeD_world">3D world</Box>
       <Box sx={{ minHeight: '100vh' }} className="home_scene">
         <Gtlf brand="tesla" />
       </Box>

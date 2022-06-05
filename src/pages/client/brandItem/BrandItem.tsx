@@ -194,7 +194,6 @@ export const BrandItem: React.FC = () => {
         </>
       ) : (
         <>
-          <Box className="home-threeD_world">3D world</Box>
           <Box className="brandItem_scene">
             <Gtlf brand={params.brandName || 'tesla'} />
           </Box>
