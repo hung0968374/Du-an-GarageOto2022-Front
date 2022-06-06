@@ -25,15 +25,7 @@ export const SignUpSuccess: React.FC = () => {
         <div className="sign_up_success-heading">Gara-Auto Dream</div>
         <img className="sign_up_success-img" src="/imgs/sign-in-success.svg" alt="" width={200} />
         <div className="sign_up_success-title">Your account has been activated</div>
-        <div className="sign_up_success-description">Now you can log in to your account to use</div>
-        <MuiButton
-          onClick={handleClickSignInButton}
-          variant="contained"
-          type="submit"
-          style={SubmitButtonStyle && { display: 'block', margin: 'auto' }}
-        >
-          Sign in
-        </MuiButton>
+        <div className="sign_up_success-description">Now you can log in to your account</div>
       </div>
     </AuthForm>
   );
